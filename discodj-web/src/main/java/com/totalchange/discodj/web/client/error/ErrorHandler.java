@@ -4,8 +4,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 
 import com.totalchange.discodj.web.client.views.ErrorView;
 
@@ -13,14 +11,11 @@ import com.totalchange.discodj.web.client.views.ErrorView;
 public class ErrorHandler {
     private ErrorView errorView;
     private ErrorConstants errorConstants;
-    private Validator validator;
 
     @Inject
-    public ErrorHandler(ErrorView errorView, ErrorConstants errorConstants,
-            Validator validator) {
+    public ErrorHandler(ErrorView errorView, ErrorConstants errorConstants) {
         this.errorView = errorView;
         this.errorConstants = errorConstants;
-        this.validator = validator;
     }
 
     private String stackTraceToString(Throwable th) {
@@ -59,24 +54,6 @@ public class ErrorHandler {
         errorView.setErrorMessage(th.getMessage());
         errorView.setStackTrace(stackTraceToString(th));
         errorView.show();
-    }
-
-    public boolean validatedOk(Object obj) {
-        Set<ConstraintViolation<Object>> violations = validator.validate(obj);
-        if (violations.size() > 0) {
-            StringBuilder err = new StringBuilder();
-            for (ConstraintViolation<Object> violation : violations) {
-                if (err.length() > 0) {
-                    err.append("\n\n");
-                }
-                err.append(violation.getMessage());
-            }
-
-            argh(err.toString());
-            return false;
-        } else {
-            return true;
-        }
     }
 
     public void loadingError(Throwable th) {
