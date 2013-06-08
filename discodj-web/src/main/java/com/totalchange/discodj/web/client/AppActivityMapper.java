@@ -20,8 +20,10 @@ import javax.inject.Inject;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
+import com.totalchange.discodj.web.client.activities.DjActivity;
 import com.totalchange.discodj.web.client.activities.HomeActivity;
 import com.totalchange.discodj.web.client.activities.PlayerActivity;
+import com.totalchange.discodj.web.client.places.DjPlace;
 import com.totalchange.discodj.web.client.places.HomePlace;
 import com.totalchange.discodj.web.client.places.PlayerPlace;
 
@@ -32,6 +34,9 @@ public class AppActivityMapper implements ActivityMapper {
     @Inject
     HomeActivity homeActivity;
 
+    @Inject
+    DjActivity djActivity;
+
     @Override
     public Activity getActivity(Place place) {
         if (place instanceof PlayerPlace) {
@@ -39,6 +44,9 @@ public class AppActivityMapper implements ActivityMapper {
         }
         if (place instanceof HomePlace) {
             return homeActivity;
+        }
+        if (place instanceof DjPlace) {
+            return djActivity;
         }
         return null;
     }

@@ -25,6 +25,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.totalchange.discodj.web.client.places.DjPlace;
 import com.totalchange.discodj.web.client.places.PlayerPlace;
 import com.totalchange.discodj.web.client.views.HomeView;
 
@@ -61,8 +62,7 @@ public class HomeActivity extends AbstractActivity implements
 
     @Override
     public void goToDj() {
-        // TODO Auto-generated method stub
-        
+        placeController.goTo(new DjPlace());
     }
 
     @Override

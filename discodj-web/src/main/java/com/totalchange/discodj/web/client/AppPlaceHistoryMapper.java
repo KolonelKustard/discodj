@@ -17,10 +17,12 @@ package com.totalchange.discodj.web.client;
 
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.place.shared.WithTokenizers;
+import com.totalchange.discodj.web.client.places.DjPlace;
 import com.totalchange.discodj.web.client.places.HomePlace;
 import com.totalchange.discodj.web.client.places.PlayerPlace;
 
-@WithTokenizers({ PlayerPlace.Tokenizer.class, HomePlace.Tokenizer.class })
+@WithTokenizers({ PlayerPlace.Tokenizer.class, HomePlace.Tokenizer.class,
+        DjPlace.Tokenizer.class })
 public interface AppPlaceHistoryMapper extends PlaceHistoryMapper {
 
 }
