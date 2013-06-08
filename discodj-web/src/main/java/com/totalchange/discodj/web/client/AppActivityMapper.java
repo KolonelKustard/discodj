@@ -27,7 +27,7 @@ import com.totalchange.discodj.web.client.places.PlayerPlace;
 
 public class AppActivityMapper implements ActivityMapper {
     @Inject
-    PlayerActivity initJizzActivity;
+    PlayerActivity playerActivity;
 
     @Inject
     HomeActivity homeActivity;
@@ -35,7 +35,7 @@ public class AppActivityMapper implements ActivityMapper {
     @Override
     public Activity getActivity(Place place) {
         if (place instanceof PlayerPlace) {
-            return initJizzActivity;
+            return playerActivity;
         }
         if (place instanceof HomePlace) {
             return homeActivity;

@@ -31,7 +31,7 @@
 	<set-property-fallback name="locale" value="en_GB" />
 
 	<!-- Specify the app entry point class -->
-	<entry-point class="com.totalchange.jizz.web.client.DiscoDj" />
+	<entry-point class="com.totalchange.discodj.web.client.DiscoDj" />
 
 	<!-- Specify the paths for translatable code -->
 	<source path="client" />

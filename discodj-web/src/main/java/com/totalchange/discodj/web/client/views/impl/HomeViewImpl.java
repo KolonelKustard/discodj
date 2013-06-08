@@ -18,7 +18,9 @@ package com.totalchange.discodj.web.client.views.impl;
 import javax.inject.Singleton;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.totalchange.discodj.web.client.views.HomeView;
@@ -37,10 +39,20 @@ public class HomeViewImpl extends Composite implements HomeView {
         initWidget(uiBinder.createAndBindUi(this));
     }
 
+    @UiHandler("playerLink")
+    void handlePlayerLinkClick(ClickEvent ev) {
+        presenter.goToPlayer();
+    }
+
+    @UiHandler("djLink")
+    void handleDjLinkClick(ClickEvent ev) {
+        presenter.goToDj();
+    }
+
     @Override
     public void render() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -51,12 +63,12 @@ public class HomeViewImpl extends Composite implements HomeView {
     @Override
     public void setLibraryLocation(String library) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void setReIndexStatus(int progress, String status) {
         // TODO Auto-generated method stub
-        
+
     }
 }

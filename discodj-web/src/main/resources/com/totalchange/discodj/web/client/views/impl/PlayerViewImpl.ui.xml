@@ -3,8 +3,7 @@
     ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
     ui:generateKeys="com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator"
     ui:generateLocales="default"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:dp="urn:import:com.google.gwt.user.datepicker.client">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
 		
 	</ui:style>

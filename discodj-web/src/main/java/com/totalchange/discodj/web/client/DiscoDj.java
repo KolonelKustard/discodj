@@ -26,7 +26,7 @@ import com.totalchange.discodj.web.client.inject.MyGinInjector;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class Jizz implements EntryPoint {
+public class DiscoDj implements EntryPoint {
     private static MyGinInjector injector = GWT.create(MyGinInjector.class);
 
     /**

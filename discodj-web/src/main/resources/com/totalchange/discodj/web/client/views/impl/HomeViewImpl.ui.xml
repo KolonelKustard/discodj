@@ -3,12 +3,12 @@
     ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
     ui:generateKeys="com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator"
     ui:generateLocales="default"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:cv="urn:import:com.google.gwt.user.cellview.client">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
 		
 	</ui:style>
 	<g:HTMLPanel>
-		
+		<g:Anchor ui:field="playerLink"><ui:msg>Player</ui:msg></g:Anchor>
+		<g:Anchor ui:field="djLink"><ui:msg>DJ Deck</ui:msg></g:Anchor>
 	</g:HTMLPanel>
 </ui:UiBinder>
