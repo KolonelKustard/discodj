@@ -4,26 +4,61 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.totalchange.discodj</groupId>
-	<artifactId>discodj</artifactId>
+	<artifactId>discodj-parent</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>pom</packaging>
 	<name>Disco DJ</name>
 	<description>A simple application for a requests based playlist suited for wedding DJ type scenarios</description>
 	<url>http://kolonelkustard.github.io/discodj/</url>
+
+	<modules>
+		<module>discodj-web</module>
+		<module>discodj-acceptance</module>
+	</modules>
 	
-	<organization>
-		<name>TotalChange</name>
-		<url>http://www.totalchange.com/</url>
-	</organization>
-	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		
+		<slf4j.version>1.6.6</slf4j.version>
+	</properties>
+
+	<issueManagement>
+		<system>Github</system>
+		<url>https://github.com/KolonelKustard/discodj/issues</url>
+	</issueManagement>
+
+	<developers>
+		<developer>
+			<id>kolonel</id>
+			<name>Ralph Jones</name>
+			<email>ralph@totalchange.com</email>
+			<organization>TotalChange</organization>
+			<organizationUrl>http://www.totalchange.com</organizationUrl>
+			<roles>
+				<role>Project Admin</role>
+				<role>Developer</role>
+			</roles>
+			<timezone>0</timezone>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>Apache License Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
+
 	<scm>
 		<connection>scm:git:https://github.com/KolonelKustard/discodj.git</connection>
 		<url>https://github.com/KolonelKustard/discodj</url>
 	</scm>
 	
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+	<organization>
+		<name>TotalChange</name>
+		<url>http://www.totalchange.com/</url>
+	</organization>
 	
 	<build>
 		<plugins>
@@ -40,42 +75,35 @@
 		</plugins>
 	</build>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-jdk14</artifactId>
-			<version>1.7.5</version>
-			<scope>runtime</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.google.inject</groupId>
-			<artifactId>guice</artifactId>
-			<version>3.0</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org</groupId>
-			<artifactId>jaudiotagger</artifactId>
-			<version>2.0.3</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymock</artifactId>
-			<version>3.1</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.totalchange.discodj</groupId>
+				<artifactId>discodj-web</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-jdk14</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.10</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

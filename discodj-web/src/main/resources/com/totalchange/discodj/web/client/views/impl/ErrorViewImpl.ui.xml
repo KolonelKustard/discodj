@@ -1,0 +1,27 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+	ui:generateKeys="com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator"
+	ui:generateLocales="default"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+	<g:DialogBox modal="true">
+		<g:caption><ui:msg>ARGH</ui:msg></g:caption>
+		<g:HTMLPanel>
+			<g:HTMLPanel ui:field="messagePanel">
+				<h3><g:Label ui:field="messageLabel" /></h3>
+			</g:HTMLPanel>
+			
+			<g:HTMLPanel ui:field="errorPanel">
+				<p><g:Label ui:field="errorLabel" /></p>
+			</g:HTMLPanel>
+			
+			<g:DisclosurePanel ui:field="stackTracePanel">
+				<g:header><ui:msg>Detailed Error Stuff</ui:msg></g:header>
+				<g:Label ui:field="stackTraceLabel" />
+			</g:DisclosurePanel>
+			
+			<g:Button ui:field='okButton'>Ok</g:Button>
+		</g:HTMLPanel>
+	</g:DialogBox>
+</ui:UiBinder>

@@ -3,48 +3,21 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.totalchange.discodj</groupId>
+	<parent>
+		<artifactId>discodj-parent</artifactId>
+		<groupId>com.totalchange.discodj</groupId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
 	<artifactId>discodj-acceptance</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>Disco DJ</name>
-	<description>A simple application for a requests based playlist suited for wedding DJ type scenarios</description>
-	<url>http://kolonelkustard.github.io/discodj/</url>
-	
-	<organization>
-		<name>TotalChange</name>
-		<url>http://www.totalchange.com/</url>
-	</organization>
-	
-	<scm>
-		<connection>scm:git:https://github.com/KolonelKustard/discodj.git</connection>
-		<url>https://github.com/KolonelKustard/discodj</url>
-	</scm>
-	
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-			
-		</plugins>
-	</build>
+	<name>Disco DJ Acceptance Tests</name>
+	<description>BDD tests for the Disco DJ using Cucumber-JVM and Selenium</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
