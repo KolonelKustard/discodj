@@ -3,12 +3,14 @@
     ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
     ui:generateKeys="com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator"
     ui:generateLocales="default"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:m="urn:import:com.google.gwt.media.client">
 	<ui:style>
 		
 	</ui:style>
 	
 	<g:HTMLPanel>
-		
+		<m:Audio ui:field="audio" />
+		<m:Video ui:field="video" />
 	</g:HTMLPanel>
 </ui:UiBinder>

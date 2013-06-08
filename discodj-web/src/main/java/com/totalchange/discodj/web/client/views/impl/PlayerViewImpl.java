@@ -16,7 +16,12 @@
 package com.totalchange.discodj.web.client.views.impl;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.event.dom.client.EndedEvent;
+import com.google.gwt.media.client.Audio;
+import com.google.gwt.media.client.Video;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.totalchange.discodj.web.client.views.PlayerView;
@@ -29,9 +34,25 @@ public class PlayerViewImpl extends Composite implements PlayerView {
             .create(PlayerViewUiBinder.class);
 
     private Presenter presenter;
+    
+    @UiField
+    Audio audio;
+    
+    @UiField
+    Video video;
 
     public PlayerViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
+    }
+    
+    @UiHandler("audio")
+    void audioEnded(EndedEvent ev) {
+        presenter.finishedPlayingCurrent();
+    }
+    
+    @UiHandler("video")
+    void videoEnded(EndedEvent ev) {
+        presenter.finishedPlayingCurrent();
     }
 
     @Override
@@ -42,19 +63,18 @@ public class PlayerViewImpl extends Composite implements PlayerView {
 
     @Override
     public void setPresenter(Presenter presenter) {
-        // TODO Auto-generated method stub
-        
+        this.presenter = presenter;
     }
 
     @Override
     public void playVideo(String url) {
-        // TODO Auto-generated method stub
-        
+        video.setSrc(url);
+        video.play();
     }
 
     @Override
     public void playAudio(String url) {
-        // TODO Auto-generated method stub
-        
+        audio.setSrc(url);
+        audio.play();
     }
 }
