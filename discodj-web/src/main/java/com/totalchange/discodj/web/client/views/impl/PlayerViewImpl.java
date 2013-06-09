@@ -20,11 +20,13 @@ import com.google.gwt.event.dom.client.EndedEvent;
 import com.google.gwt.media.client.Audio;
 import com.google.gwt.media.client.Video;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.totalchange.discodj.web.client.views.PlayerView;
+import com.totalchange.discodj.web.shared.player.Media;
 
 public class PlayerViewImpl extends Composite implements PlayerView {
     interface PlayerViewUiBinder extends UiBinder<Widget, PlayerViewImpl> {
@@ -34,22 +36,32 @@ public class PlayerViewImpl extends Composite implements PlayerView {
             .create(PlayerViewUiBinder.class);
 
     private Presenter presenter;
-    
+
     @UiField
     Audio audio;
-    
+
     @UiField
     Video video;
 
     public PlayerViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
     }
-    
+
+    @UiFactory
+    Audio createAudio() {
+        return Audio.createIfSupported();
+    }
+
+    @UiFactory
+    Video createVideo() {
+        return Video.createIfSupported();
+    }
+
     @UiHandler("audio")
     void audioEnded(EndedEvent ev) {
         presenter.finishedPlayingCurrent();
     }
-    
+
     @UiHandler("video")
     void videoEnded(EndedEvent ev) {
         presenter.finishedPlayingCurrent();
@@ -58,7 +70,7 @@ public class PlayerViewImpl extends Composite implements PlayerView {
     @Override
     public void render() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -67,14 +79,14 @@ public class PlayerViewImpl extends Composite implements PlayerView {
     }
 
     @Override
-    public void playVideo(String url) {
-        video.setSrc(url);
+    public void playVideo(Media v) {
+        video.setSrc(v.getUrl());
         video.play();
     }
 
     @Override
-    public void playAudio(String url) {
-        audio.setSrc(url);
+    public void playAudio(Media a) {
+        audio.setSrc(a.getUrl());
         audio.play();
     }
 }

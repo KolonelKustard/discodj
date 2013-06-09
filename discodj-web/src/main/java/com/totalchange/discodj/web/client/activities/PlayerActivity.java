@@ -27,39 +27,60 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.totalchange.discodj.web.client.error.ErrorHandler;
 import com.totalchange.discodj.web.client.views.PlayerView;
+import com.totalchange.discodj.web.shared.player.Media;
 
 public class PlayerActivity extends AbstractActivity implements
         PlayerView.Presenter {
-    private static final Logger logger = Logger
-            .getLogger(PlayerActivity.class.getName());
+    private static final Logger logger = Logger.getLogger(PlayerActivity.class
+            .getName());
 
-    private PlayerView initJizzView;
+    private PlayerView playerView;
     private PlaceController placeController;
     private DispatchAsync dispatch;
     private ErrorHandler errorHandler;
 
+    private int next = 0;
+
     @Inject
-    public PlayerActivity(PlayerView initJizzView,
+    public PlayerActivity(PlayerView playerView,
             PlaceController placeController, DispatchAsync dispatch,
             ErrorHandler errorHandler) {
-        this.initJizzView = initJizzView;
+        this.playerView = playerView;
         this.placeController = placeController;
         this.dispatch = dispatch;
         this.errorHandler = errorHandler;
 
-        this.initJizzView.setPresenter(this);
+        this.playerView.setPresenter(this);
+    }
+
+    private void playNext() {
+        if (next == 0) {
+            Media media = new Media();
+            media.setId("./test/sample.mp4");
+            media.setUrl("./test/sample.mp4");
+            playerView.playVideo(media);
+
+            next = 1;
+        } else {
+            Media media = new Media();
+            media.setId("./test/sample.mp3");
+            media.setUrl("./test/sample.mp3");
+            playerView.playAudio(media);
+
+            next = 0;
+        }
     }
 
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
         logger.finer("Starting up InitJizzActivity");
-        container.setWidget(initJizzView.asWidget());
+        container.setWidget(playerView.asWidget());
+        playNext();
         logger.finer("Finished starting up InitJizzActivity");
     }
 
     @Override
     public void finishedPlayingCurrent() {
-        // TODO Auto-generated method stub
-        
+        playNext();
     }
 }
