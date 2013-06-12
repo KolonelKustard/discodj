@@ -5,6 +5,11 @@
 /.classpath
 /.project
 
+/discodj-core/target
+/discodj-core/.settings
+/discodj-core/.classpath
+/discodj-core/.project
+
 /discodj-web/target
 /discodj-web/.settings
 /discodj-web/.classpath

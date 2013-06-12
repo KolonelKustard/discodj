@@ -12,6 +12,7 @@
 	<url>http://kolonelkustard.github.io/discodj/</url>
 
 	<modules>
+	    <module>discodj-core</module>
 		<module>discodj-web</module>
 		<module>discodj-acceptance</module>
 	</modules>
