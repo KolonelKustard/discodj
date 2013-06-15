@@ -15,9 +15,16 @@
  */
 package com.totalchange.discodj.web.client.views.impl;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Random;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.totalchange.discodj.web.client.views.DjView;
 
@@ -29,8 +36,43 @@ public class DjViewImpl extends Composite implements DjView {
 
     private Presenter presenter;
 
+    @UiField
+    AbsolutePanel boundaryPanel;
+
+    @UiField
+    VerticalPanel searchPanel;
+
+    @UiField
+    VerticalPanel resultsPanel;
+
+    @UiField
+    VerticalPanel playlistPanel;
+
     public DjViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
+        initDnd();
+    }
+
+    private void initDnd() {
+        PickupDragController songDragController = new PickupDragController(
+                boundaryPanel, false);
+        songDragController.setBehaviorMultipleSelection(false);
+
+        VerticalPanelDropController playlistDropController = new VerticalPanelDropController(
+                playlistPanel);
+        songDragController.registerDropController(playlistDropController);
+
+        int count = 0;
+        for (int row = 1; row <= 4; row++) {
+            // initialize a widget
+            HTML widget = new HTML("Draggable&nbsp;#" + ++count);
+            widget.addStyleName("songWidget");
+            widget.setHeight(Random.nextInt(4) + 2 + "em");
+            resultsPanel.add(widget);
+
+            // make the widget draggable
+            songDragController.makeDraggable(widget);
+        }
     }
 
     @Override

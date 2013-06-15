@@ -17,6 +17,9 @@
 	<!-- GWT Dispatch for command pattern -->
 	<inherits name="net.customware.gwt.dispatch.Dispatch" />
 	
+	<!-- Drag and drop support -->
+	<inherits name="com.allen_sauer.gwt.dnd.gwt-dnd" />
+	
 	<!-- GWT Logging -->
 	<inherits name="com.google.gwt.logging.Logging"/>
 	<set-property name="gwt.logging.popupHandler" value="DISABLED" />
