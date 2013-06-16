@@ -15,18 +15,20 @@
  */
 package com.totalchange.discodj.web.client.views.impl;
 
+import java.util.List;
+
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.totalchange.discodj.web.client.views.DjView;
+import com.totalchange.discodj.web.shared.player.Media;
 
 public class DjViewImpl extends Composite implements DjView {
     interface DjViewUiBinder extends UiBinder<Widget, DjViewImpl> {
@@ -35,6 +37,7 @@ public class DjViewImpl extends Composite implements DjView {
     private static DjViewUiBinder uiBinder = GWT.create(DjViewUiBinder.class);
 
     private Presenter presenter;
+    private PickupDragController songDragController;
 
     @UiField
     AbsolutePanel boundaryPanel;
@@ -54,35 +57,56 @@ public class DjViewImpl extends Composite implements DjView {
     }
 
     private void initDnd() {
-        PickupDragController songDragController = new PickupDragController(
-                boundaryPanel, false);
+        this.songDragController = new PickupDragController(boundaryPanel, false);
         songDragController.setBehaviorMultipleSelection(false);
 
         VerticalPanelDropController playlistDropController = new VerticalPanelDropController(
                 playlistPanel);
         songDragController.registerDropController(playlistDropController);
-
-        int count = 0;
-        for (int row = 1; row <= 4; row++) {
-            // initialize a widget
-            HTML widget = new HTML("Draggable&nbsp;#" + ++count);
-            widget.addStyleName("songWidget");
-            widget.setHeight(Random.nextInt(4) + 2 + "em");
-            resultsPanel.add(widget);
-
-            // make the widget draggable
-            songDragController.makeDraggable(widget);
-        }
     }
 
     @Override
     public void render() {
-        // TODO Auto-generated method stub
-
+        // Nothing to be done
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void setNowPlaying(Media playlist) {
+        // TODO Auto-generated method stub
+
+    }
+    
+    private Widget makeMediaWidget(Media media) {
+        MediaWidget mediaWidget = new MediaWidget(media);
+        return new FocusPanel(mediaWidget);
+    }
+
+    @Override
+    public void setResults(int currentPage, int numPages, List<Media> results) {
+        resultsPanel.clear();
+        for (Media media : results) {
+            Widget mediaWidget = makeMediaWidget(media);
+            resultsPanel.add(mediaWidget);
+
+            // Make widget draggable
+            songDragController.makeDraggable(mediaWidget);
+        }
+    }
+
+    @Override
+    public void setPlaylist(List<Media> playlist) {
+        playlistPanel.clear();
+        for (Media media : playlist) {
+            Widget mediaWidget = makeMediaWidget(media);
+            playlistPanel.add(mediaWidget);
+
+            // Make widget draggable
+            songDragController.makeDraggable(mediaWidget);
+        }
     }
 }
