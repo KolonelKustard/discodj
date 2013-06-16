@@ -43,7 +43,7 @@ public class DjViewImpl extends Composite implements DjView {
     AbsolutePanel boundaryPanel;
 
     @UiField
-    VerticalPanel searchPanel;
+    VerticalPanel searchFacetsPanel;
 
     @UiField
     VerticalPanel resultsPanel;

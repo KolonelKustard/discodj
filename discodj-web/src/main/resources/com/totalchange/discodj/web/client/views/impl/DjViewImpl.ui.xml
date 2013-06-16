@@ -8,40 +8,81 @@
 		.container {
 			border: 1px solid #000;
 		}
+		
+		.column {
+			width: 33%;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			border: 1px solid #F00;
+		}
+		
+		.searchColumn {
+			left: 0;
+		}
+		
+		.resultsColumn {
+			left: 33%;
+			width: 34%;
+		}
+		
+		.playlistColumn {
+			left: 67%;
+		}
+		
+		.header {
+			margin: 0;
+			padding: 1em;
+			border: 1px solid #0F0;
+		}
+		
+		.searchTextBox {
+			width: 98%;
+		}
+		
+		.paging {
+			width: 100%;
+			position: absolute;
+			bottom: 0;
+			border: 1px solid #0F0;
+		}
+		
+		.previousButton {
+			position: absolute;
+			left: 0;
+		}
+		
+		.nextButton {
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
+		
+		.pageLabel {
+			text-align: center;
+		}
 	</ui:style>
 	
 	<g:AbsolutePanel ui:field="boundaryPanel" width="100%" height="100%">
-		<g:HorizontalPanel width="100%" height="100%" addStyleNames="{style.container}">
-			<g:cell width="33%">
-				<g:VerticalPanel width="100%">
-					<g:Label>Search</g:Label>
-					<g:TextBox ui:field="searchText" />
-					<g:VerticalPanel ui:field="searchPanel" width="100% "/>
-				</g:VerticalPanel>
-			</g:cell>
-			<g:cell width="34%">
-				<g:VerticalPanel width="100%">
-					<g:Label>Results</g:Label>
-					<g:VerticalPanel ui:field="resultsPanel" width="100%" />
-					<g:DockLayoutPanel>
-						<g:west size="20">
-							<g:Button text="&lt;&lt;"/>
-						</g:west>
-						<g:center>
-							<g:Label>Page 1 of 1</g:Label>
-						</g:center>
-						<g:east size="20">
-							<g:Button text="&gt;&gt;" />
-						</g:east>
-					</g:DockLayoutPanel>
-				</g:VerticalPanel>
-			</g:cell>
-			<g:cell width="33%">
-				<g:VerticalPanel width="100%">
-					<g:Label>Playlist</g:Label>
-					<g:VerticalPanel ui:field="playlistPanel" width="100%" />
-				</g:VerticalPanel>
-			</g:cell>
-		</g:HorizontalPanel>
+		<g:HTMLPanel>
+			<div class="{style.column} {style.searchColumn}">
+				<h2 class="{style.header}">Search</h2>
+				<g:TextBox ui:field="searchTextBox" addStyleNames="{style.searchTextBox}" />
+				<g:VerticalPanel ui:field="searchFacetsPanel" width="100%" />
+			</div>
+			<div class="{style.column} {style.resultsColumn}">
+				<h2 class="{style.header}">Results</h2>
+				<g:VerticalPanel ui:field="resultsPanel" width="100%" />
+				<div class="{style.paging}">
+					<g:Button addStyleNames="{style.previousButton}">&lt;&lt;</g:Button>
+					<g:Label addStyleNames="{style.pageLabel}">Page 1 of 1</g:Label>
+					<g:Button addStyleNames="{style.nextButton}">&gt;&gt;</g:Button>
+				</div>
+			</div>
+			<div class="{style.column} {style.playlistColumn}">
+				<h2 class="{style.header}">Playlist</h2>
+				<g:VerticalPanel ui:field="playlistPanel" width="100%" />
+			</div>
+		</g:HTMLPanel>
 	</g:AbsolutePanel>
 </ui:UiBinder>
