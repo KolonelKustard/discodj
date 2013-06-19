@@ -13,6 +13,7 @@
 
 	<modules>
 	    <module>discodj-core</module>
+		<module>discodj-solr</module>
 		<module>discodj-web</module>
 		<module>discodj-acceptance</module>
 	</modules>

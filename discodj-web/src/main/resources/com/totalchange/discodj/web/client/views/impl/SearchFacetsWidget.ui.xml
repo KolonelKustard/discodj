@@ -9,7 +9,17 @@
 	
 	<g:HTMLPanel>
 		<div>
+			<h3 ui:field="artistHeading"><ui:msg>Artist</ui:msg></h3>
 			
+			<g:VerticalPanel>
+			</g:VerticalPanel>
+		</div>
+		
+		<div>
+			<h3 ui:field="albumHeading"><ui:msg>Album</ui:msg></h3>
+			
+			<g:VerticalPanel>
+			</g:VerticalPanel>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>
