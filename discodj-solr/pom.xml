@@ -15,6 +15,11 @@
 	<description>Does searching SOLR style</description>
 
 	<dependencies>
+	    <dependency>
+			<groupId>com.totalchange.discodj</groupId>
+			<artifactId>discodj-core</artifactId>
+		</dependency>
+	    
 		<dependency>
 			<artifactId>solr-solrj</artifactId>
 			<groupId>org.apache.solr</groupId>

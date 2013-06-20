@@ -79,6 +79,16 @@
 
 	<dependencyManagement>
 		<dependencies>
+		    <dependency>
+				<groupId>com.totalchange.discodj</groupId>
+				<artifactId>discodj-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.totalchange.discodj</groupId>
+				<artifactId>discodj-solr</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.totalchange.discodj</groupId>
 				<artifactId>discodj-web</artifactId>
