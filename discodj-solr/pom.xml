@@ -30,6 +30,12 @@
 			<groupId>org.apache.solr</groupId>
 			<version>4.3.0</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<scope>provided</scope>
+		</dependency>
         
 		<dependency>
 			<groupId>junit</groupId>
