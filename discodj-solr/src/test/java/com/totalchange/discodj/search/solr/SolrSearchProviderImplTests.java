@@ -21,7 +21,7 @@ import com.totalchange.discodj.search.SearchPopulator;
 import com.totalchange.discodj.search.SearchQuery;
 import com.totalchange.discodj.search.SearchResults;
 
-public class SolrSearchProviderTests extends EasyMockSupport {
+public class SolrSearchProviderImplTests extends EasyMockSupport {
     private SolrServer solrServer;
     private SolrSearchProviderImpl searchProvider;
 
