@@ -53,6 +53,18 @@
 			<scope>runtime</scope>
 		</dependency>
 		
+		<!-- Guice dependency injection for server side -->
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-servlet</artifactId>
+			<version>3.0</version>
+		</dependency>
+		
 		<!-- GWT -->
 		<dependency>
 			<groupId>com.google.gwt</groupId>
@@ -97,7 +109,6 @@
 		<dependency>
 			<groupId>org.easymock</groupId>
 			<artifactId>easymock</artifactId>
-			<version>3.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
