@@ -42,6 +42,15 @@
 	</build>
 	
 	<dependencies>
+	    <dependency>
+			<groupId>com.totalchange.discodj</groupId>
+			<artifactId>discodj-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.totalchange.discodj</groupId>
+			<artifactId>discodj-solr</artifactId>
+		</dependency>
+	    
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>

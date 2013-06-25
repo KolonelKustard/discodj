@@ -16,8 +16,9 @@ public class BootstrapListener extends GuiceServletContextListener {
     @Override
     protected Injector getInjector() {
         logger.trace("Creating Guice injector");
-        Injector injector = Guice.createInjector(new ServerDispatchModule(),
-                new ActionsModule(), new DispatchServletModule());
+        Injector injector = Guice.createInjector(new DiscoDjModule(),
+                new ServerDispatchModule(), new ActionsModule(),
+                new DispatchServletModule());
         logger.trace("Created Guice injector {}", injector);
 
         return injector;
