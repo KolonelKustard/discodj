@@ -34,7 +34,7 @@ public class DiscoDjModule extends AbstractModule {
         CoreContainer container = new CoreContainer(home.getAbsolutePath());
         container.load(home.getAbsolutePath(), new File(home, "solr.xml"));
 
-        SolrServer server = new EmbeddedSolrServer(container, "discoDj");
+        SolrServer server = new EmbeddedSolrServer(container, "discodj");
         logger.trace("Returning SolrServer instance {}", server);
         return server;
     }
