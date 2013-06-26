@@ -23,6 +23,7 @@ public class SolrSearchPopulatorImpl implements SearchPopulator {
 
     private List<SolrInputDocument> toAdd = new ArrayList<>(COMMIT_INTERVAL);
     private int commitCounter = 0;
+    private int totalCounter = 0;
 
     public SolrSearchPopulatorImpl(SolrServer solrServer)
             throws SolrSearchException {
@@ -43,7 +44,10 @@ public class SolrSearchPopulatorImpl implements SearchPopulator {
 
     private void pushMediaInAndCommit() throws SolrSearchException {
         try {
+            logger.trace("Adding {} media items to SOLR", toAdd.size());
             solrServer.add(toAdd);
+
+            logger.trace("Committing");
             solrServer.commit();
 
             toAdd.clear();
@@ -68,13 +72,18 @@ public class SolrSearchPopulatorImpl implements SearchPopulator {
         doc.addField(SolrSearchProviderImpl.F_TITLE, media.getTitle());
         toAdd.add(doc);
 
+        totalCounter++;
+        commitCounter++;
         if (commitCounter >= COMMIT_INTERVAL) {
+            logger.debug("Commit counter has reached {} ({} total) - pushing "
+                    + "in", commitCounter, totalCounter);
             pushMediaInAndCommit();
         }
     }
 
     @Override
     public void commit() throws SolrSearchException {
+        logger.trace("Final commit - total of {} media items", totalCounter);
         pushMediaInAndCommit();
         toAdd = null;
     }
