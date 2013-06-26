@@ -3,7 +3,11 @@ package com.totalchange.discodj.search.solr;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.params.FacetParams;
 
 import com.totalchange.discodj.search.SearchPopulator;
 import com.totalchange.discodj.search.SearchProvider;
@@ -20,6 +24,10 @@ public final class SolrSearchProviderImpl implements SearchProvider {
     static final String F_REQUESTED_BY = "requestedBy";
     static final String F_TITLE = "title";
 
+    static final String F_TEXT = "text";
+
+    private static final int DECADE_RANGE_GAP = 10;
+
     private SolrServer solrServer;
 
     @Inject
@@ -33,8 +41,28 @@ public final class SolrSearchProviderImpl implements SearchProvider {
     }
 
     @Override
-    public SearchResults search(SearchQuery query) {
-        // TODO Auto-generated method stub
-        return null;
+    public SearchResults search(SearchQuery query) throws SolrSearchException {
+        SolrQuery sq = new SolrQuery();
+        
+        sq.setStart(query.getStart());
+        sq.setRows(query.getRows());
+
+        if (query.getKeywords() != null && !query.getKeywords().isEmpty()) {
+            sq.setQuery(F_TEXT + ":" + query.getKeywords());
+        }
+
+        sq.setFacet(true);
+        sq.setFacetMinCount(1);
+        sq.addFacetField(F_ARTIST, F_ALBUM, F_GENRE);
+        sq.add(FacetParams.FACET_RANGE, F_YEAR);
+        sq.add("f." + F_YEAR + "." + FacetParams.FACET_RANGE_GAP,
+                String.valueOf(DECADE_RANGE_GAP));
+
+        try {
+            QueryResponse res = solrServer.query(sq);
+            return new SolrSearchResultsImpl(res);
+        } catch (SolrServerException sEx) {
+            throw new SolrSearchException(sEx);
+        }
     }
 }

@@ -3,19 +3,28 @@ package com.totalchange.discodj.search;
 import java.util.List;
 
 public class SearchQuery {
-    private int resultsPerPage;
+    private int start;
+    private int rows;
     private String keywords;
     private List<SearchFacet> artistFacets;
     private List<SearchFacet> albumFacets;
     private List<SearchFacet> genreFacets;
     private List<SearchFacet> decadeFacets;
 
-    public int getResultsPerPage() {
-        return resultsPerPage;
+    public int getStart() {
+        return start;
     }
 
-    public void setResultsPerPage(int resultsPerPage) {
-        this.resultsPerPage = resultsPerPage;
+    public void setStart(int start) {
+        this.start = start;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
     }
 
     public String getKeywords() {
