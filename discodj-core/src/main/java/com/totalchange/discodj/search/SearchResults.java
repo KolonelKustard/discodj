@@ -5,7 +5,7 @@ import java.util.List;
 import com.totalchange.discodj.media.Media;
 
 public interface SearchResults {
-    int getNumPages();
+    long getNumFound();
     List<SearchFacet> getArtistFacets();
     List<SearchFacet> getAlbumFacets();
     List<SearchFacet> getGenreFacets();

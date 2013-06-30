@@ -1,5 +1,7 @@
 package com.totalchange.discodj.search.solr;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -9,6 +11,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.FacetParams;
 
+import com.totalchange.discodj.search.SearchFacet;
 import com.totalchange.discodj.search.SearchPopulator;
 import com.totalchange.discodj.search.SearchProvider;
 import com.totalchange.discodj.search.SearchQuery;
@@ -35,6 +38,15 @@ public final class SolrSearchProviderImpl implements SearchProvider {
         this.solrServer = solrServer;
     }
 
+    private void addFilterQueryIfHaveFacets(SolrQuery sq, String facetName,
+            List<SearchFacet> facets) {
+        if (facets != null && !facets.isEmpty()) {
+            for (SearchFacet facet : facets) {
+                sq.addFilterQuery(facetName + ":" + facet.getId());
+            }
+        }
+    }
+
     @Override
     public SearchPopulator repopulate() throws SolrSearchException {
         return new SolrSearchPopulatorImpl(solrServer);
@@ -43,9 +55,9 @@ public final class SolrSearchProviderImpl implements SearchProvider {
     @Override
     public SearchResults search(SearchQuery query) throws SolrSearchException {
         SolrQuery sq = new SolrQuery();
-        
-        sq.setStart(query.getStart());
-        sq.setRows(query.getRows());
+
+        sq.setStart((int) query.getStart());
+        sq.setRows((int) query.getRows());
 
         if (query.getKeywords() != null && !query.getKeywords().isEmpty()) {
             sq.setQuery(F_TEXT + ":" + query.getKeywords());
@@ -57,6 +69,11 @@ public final class SolrSearchProviderImpl implements SearchProvider {
         sq.add(FacetParams.FACET_RANGE, F_YEAR);
         sq.add("f." + F_YEAR + "." + FacetParams.FACET_RANGE_GAP,
                 String.valueOf(DECADE_RANGE_GAP));
+        
+        addFilterQueryIfHaveFacets(sq, F_ARTIST, query.getArtistFacets());
+        addFilterQueryIfHaveFacets(sq, F_ALBUM, query.getAlbumFacets());
+        addFilterQueryIfHaveFacets(sq, F_GENRE, query.getGenreFacets());
+        addFilterQueryIfHaveFacets(sq, F_YEAR, query.getDecadeFacets());
 
         try {
             QueryResponse res = solrServer.query(sq);

@@ -3,15 +3,15 @@ package com.totalchange.discodj.search;
 import java.util.List;
 
 public class SearchQuery {
-    private int start;
-    private int rows;
+    private long start;
+    private long rows;
     private String keywords;
     private List<SearchFacet> artistFacets;
     private List<SearchFacet> albumFacets;
     private List<SearchFacet> genreFacets;
     private List<SearchFacet> decadeFacets;
 
-    public int getStart() {
+    public long getStart() {
         return start;
     }
 
@@ -19,7 +19,7 @@ public class SearchQuery {
         this.start = start;
     }
 
-    public int getRows() {
+    public long getRows() {
         return rows;
     }
 
