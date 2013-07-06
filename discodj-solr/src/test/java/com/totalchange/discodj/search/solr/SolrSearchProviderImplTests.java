@@ -4,6 +4,8 @@ import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
@@ -34,6 +36,7 @@ public class SolrSearchProviderImplTests extends EasyMockSupport {
     @Test
     public void createRepopulater() throws IOException, SolrServerException {
         expect(solrServer.deleteByQuery("*:*")).andStubReturn(null);
+        expect(solrServer.commit()).andStubReturn(null);
 
         replayAll();
         SearchPopulator populator = searchProvider.repopulate();
@@ -48,6 +51,10 @@ public class SolrSearchProviderImplTests extends EasyMockSupport {
         query.setKeywords("Test");
 
         SolrDocumentList docs = createMock(SolrDocumentList.class);
+        expect(docs.getNumFound()).andReturn(1050l);
+        expect(docs.size()).andReturn(10);
+
+        List<SolrDocument> docsList = new ArrayList<>(10);
         for (int num = 0; num < 10; num++) {
             SolrDocument doc = createMock(SolrDocument.class);
             expect(doc.get(SolrSearchProviderImpl.F_ID)).andReturn(
@@ -64,19 +71,27 @@ public class SolrSearchProviderImplTests extends EasyMockSupport {
             expect(doc.get(SolrSearchProviderImpl.F_TITLE)).andReturn(
                     "Test Title " + num);
 
-            expect(docs.get(num)).andReturn(doc);
+            docsList.add(doc);
         }
+        expect(docs.iterator()).andReturn(docsList.iterator());
 
         final QueryResponse response = createMock(QueryResponse.class);
         expect(response.getResults()).andReturn(docs);
+        expect(response.getFacetField(SolrSearchProviderImpl.F_ARTIST))
+                .andReturn(null);
+        expect(response.getFacetField(SolrSearchProviderImpl.F_ALBUM))
+                .andReturn(null);
+        expect(response.getFacetField(SolrSearchProviderImpl.F_GENRE))
+                .andReturn(null);
+        expect(response.getFacetField(SolrSearchProviderImpl.F_YEAR))
+                .andReturn(null);
 
         expect(solrServer.query(anyObject(SolrQuery.class))).andAnswer(
                 new IAnswer<QueryResponse>() {
                     @Override
                     public QueryResponse answer() throws Throwable {
                         SolrQuery sq = (SolrQuery) getCurrentArguments()[0];
-                        assertEquals("Test",
-                                sq.get(SolrSearchProviderImpl.F_ARTIST));
+                        assertEquals("text:Test", sq.getQuery());
 
                         return response;
                     }
@@ -84,18 +99,18 @@ public class SolrSearchProviderImplTests extends EasyMockSupport {
 
         replayAll();
         SearchResults results = searchProvider.search(query);
-        verifyAll();
-
-        assertEquals(10, results.getNumPages());
-        for (int num = 0; num < 10; num++) {
+        assertEquals(1050, results.getNumFound());
+        assertEquals(10, results.getResults().size());
+        for (int num = 0; num < results.getResults().size(); num++) {
             Media media = results.getResults().get(num);
             assertEquals("Test ID " + num, media.getId());
             assertEquals("Test Artist " + num, media.getArtist());
             assertEquals("Test Album " + num, media.getAlbum());
             assertEquals("Test Genre " + num, media.getGenre());
             assertEquals(num, media.getYear());
-            assertEquals("Test Request By " + num, media.getRequestedBy());
+            assertEquals("Test Requested By " + num, media.getRequestedBy());
             assertEquals("Test Title " + num, media.getTitle());
         }
+        verifyAll();
     }
 }

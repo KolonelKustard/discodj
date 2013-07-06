@@ -67,9 +67,13 @@ public final class SolrSearchProviderImpl implements SearchProvider {
         sq.setFacetMinCount(1);
         sq.addFacetField(F_ARTIST, F_ALBUM, F_GENRE);
         sq.add(FacetParams.FACET_RANGE, F_YEAR);
+        sq.add("f." + F_YEAR + "." + FacetParams.FACET_RANGE_START,
+                String.valueOf(1900));
+        sq.add("f." + F_YEAR + "." + FacetParams.FACET_RANGE_END,
+                String.valueOf(3000));
         sq.add("f." + F_YEAR + "." + FacetParams.FACET_RANGE_GAP,
                 String.valueOf(DECADE_RANGE_GAP));
-        
+
         addFilterQueryIfHaveFacets(sq, F_ARTIST, query.getArtistFacets());
         addFilterQueryIfHaveFacets(sq, F_ALBUM, query.getAlbumFacets());
         addFilterQueryIfHaveFacets(sq, F_GENRE, query.getGenreFacets());

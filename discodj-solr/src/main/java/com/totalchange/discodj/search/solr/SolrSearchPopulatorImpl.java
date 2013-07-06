@@ -43,6 +43,12 @@ public class SolrSearchPopulatorImpl implements SearchPopulator {
     }
 
     private void pushMediaInAndCommit() throws SolrSearchException {
+        if (toAdd.size() <= 0) {
+            logger.trace("Skipping push and commit as nothing ({}) to add",
+                    toAdd.size());
+            return;
+        }
+
         try {
             logger.trace("Adding {} media items to SOLR", toAdd.size());
             solrServer.add(toAdd);
