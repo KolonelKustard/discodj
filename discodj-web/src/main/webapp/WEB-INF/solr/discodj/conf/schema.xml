@@ -8,6 +8,10 @@
 		<field name="year" type="int" indexed="true" stored="true" required="false" multiValued="false" />
 		<field name="requestedBy" type="string" indexed="true" stored="true" required="false" multiValued="false" />
 		<field name="title" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+		
+		<!-- This is the year field rounded down to the decade (done in code
+			and only used for faceting) -->
+		<field name="decade" type="int" indexed="true" stored="false" required="false" multiValued="false" />
 
 		<!-- catchall field, containing all other searchable text fields (implemented 
 			via copyField further on in this schema -->

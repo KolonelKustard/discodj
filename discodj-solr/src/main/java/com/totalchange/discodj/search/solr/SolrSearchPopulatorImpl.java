@@ -65,6 +65,10 @@ public class SolrSearchPopulatorImpl implements SearchPopulator {
         }
     }
 
+    private int roundYearToDecade(int year) {
+        return ((year + 5) / 10) * 10;
+    }
+
     @Override
     public void addMedia(Media media) throws SolrSearchException {
         SolrInputDocument doc = new SolrInputDocument();
@@ -73,6 +77,8 @@ public class SolrSearchPopulatorImpl implements SearchPopulator {
         doc.addField(SolrSearchProviderImpl.F_ALBUM, media.getAlbum());
         doc.addField(SolrSearchProviderImpl.F_GENRE, media.getGenre());
         doc.addField(SolrSearchProviderImpl.F_YEAR, media.getYear());
+        doc.addField(SolrSearchProviderImpl.F_DECADE,
+                roundYearToDecade(media.getYear()));
         doc.addField(SolrSearchProviderImpl.F_REQUESTED_BY,
                 media.getRequestedBy());
         doc.addField(SolrSearchProviderImpl.F_TITLE, media.getTitle());

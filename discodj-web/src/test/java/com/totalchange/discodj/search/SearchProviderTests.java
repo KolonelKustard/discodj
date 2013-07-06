@@ -2,6 +2,9 @@ package com.totalchange.discodj.search;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -13,7 +16,7 @@ import com.totalchange.discodj.web.search.inject.IntegrationTestInjector;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SearchProviderTests {
-    private static final int NUM_TEST_ARTISTS = 10;
+    private static final int NUM_TEST_ARTISTS = 1000;
     private static final int NUM_ALBUMS_PER_ARTIST = 10;
     private static final int NUM_TRACKS_PER_ALBUM = 10;
     private static final int START_DECADE = 1900;
@@ -87,7 +90,7 @@ public class SearchProviderTests {
                 decade += 10;
             }
 
-            if (genreNum >= NUM_GENRES_TO_CYCLE_ARTISTS_THROUGH) {
+            if (genreNum >= NUM_GENRES_TO_CYCLE_ARTISTS_THROUGH - 1) {
                 genreNum = 0;
             } else {
                 genreNum++;
@@ -108,5 +111,32 @@ public class SearchProviderTests {
         assertEquals(NUM_ALBUMS_PER_ARTIST, res.getAlbumFacets().size());
         assertEquals(1, res.getGenreFacets().size());
         assertEquals(NUM_ALBUMS_PER_ARTIST, res.getDecadeFacets().size());
+    }
+
+    @Test
+    public void order003FacetedSearch() {
+        SearchQuery query = new SearchQuery();
+        SearchResults res = searchProvider.search(query);
+
+        assertEquals(NUM_TEST_ARTISTS * NUM_ALBUMS_PER_ARTIST
+                * NUM_TRACKS_PER_ALBUM, res.getNumFound());
+        assertEquals(NUM_TEST_ARTISTS, res.getArtistFacets().size());
+        assertEquals(NUM_ALBUMS_PER_ARTIST, res.getAlbumFacets().size());
+        assertEquals(NUM_GENRES_TO_CYCLE_ARTISTS_THROUGH, res.getGenreFacets()
+                .size());
+        assertEquals(NUM_ALBUMS_PER_ARTIST, res.getDecadeFacets().size());
+
+        List<SearchFacet> decadeFacets = new ArrayList<>();
+        decadeFacets.add(res.getDecadeFacets().get(
+                res.getDecadeFacets().size() / 2));
+        query.setDecadeFacets(decadeFacets);
+        res = searchProvider.search(query);
+
+        assertEquals(NUM_TEST_ARTISTS * NUM_TRACKS_PER_ALBUM, res.getNumFound());
+        assertEquals(NUM_TEST_ARTISTS, res.getArtistFacets().size());
+        assertEquals(1, res.getAlbumFacets().size());
+        assertEquals(NUM_GENRES_TO_CYCLE_ARTISTS_THROUGH, res.getGenreFacets()
+                .size());
+        assertEquals(1, res.getDecadeFacets().size());
     }
 }

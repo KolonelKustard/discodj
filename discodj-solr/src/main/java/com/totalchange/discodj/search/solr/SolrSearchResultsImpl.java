@@ -46,7 +46,7 @@ class SolrSearchResultsImpl implements SearchResults {
         genreFacets = convertFacets(res
                 .getFacetField(SolrSearchProviderImpl.F_GENRE));
         decadeFacets = convertFacets(res
-                .getFacetField(SolrSearchProviderImpl.F_YEAR));
+                .getFacetField(SolrSearchProviderImpl.F_DECADE));
         
         SolrDocumentList docs = res.getResults();
         numFound = docs.getNumFound();
