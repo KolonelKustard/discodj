@@ -20,6 +20,7 @@
 /discodj-web/.classpath
 /discodj-web/.project
 /discodj-web/.gwt
+/discodj-web/src/main/webapp/WEB-INF/solr/discodj/data
 
 /discodj-acceptance/target
 /discodj-acceptance/.settings
