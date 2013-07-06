@@ -50,6 +50,10 @@
 			<groupId>com.totalchange.discodj</groupId>
 			<artifactId>discodj-solr</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.totalchange.discodj</groupId>
+			<artifactId>discodj-xuggler</artifactId>
+		</dependency>
 	    
 		<!-- Logging -->
 		<dependency>

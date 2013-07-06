@@ -14,6 +14,7 @@
 	<modules>
 	    <module>discodj-core</module>
 		<module>discodj-solr</module>
+		<module>discodj-xuggler</module>
 		<module>discodj-web</module>
 		<module>discodj-acceptance</module>
 	</modules>
@@ -87,6 +88,11 @@
 			<dependency>
 				<groupId>com.totalchange.discodj</groupId>
 				<artifactId>discodj-solr</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.totalchange.discodj</groupId>
+				<artifactId>discodj-xuggler</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
