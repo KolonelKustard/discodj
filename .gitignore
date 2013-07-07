@@ -15,6 +15,11 @@
 /discodj-solr/.classpath
 /discodj-solr/.project
 
+/discodj-xuggler/target
+/discodj-xuggler/.settings
+/discodj-xuggler/.classpath
+/discodj-xuggler/.project
+
 /discodj-web/target
 /discodj-web/.settings
 /discodj-web/.classpath

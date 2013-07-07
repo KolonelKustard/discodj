@@ -12,7 +12,7 @@ import com.totalchange.discodj.media.Media;
 public interface Catalogue {
     public interface Listener {
         void yetMoreMedia(Media media);
-        void warn(String msg);
+        void warn(String msg, Throwable cause);
     }
     
     /**
@@ -26,6 +26,4 @@ public interface Catalogue {
      *            receives events as the catalogue is listed
      */
     void listAllSongs(Listener listener);
-    
-    Media findMedia(String id);
 }
