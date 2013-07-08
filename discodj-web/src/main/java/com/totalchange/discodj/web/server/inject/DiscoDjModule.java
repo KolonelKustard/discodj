@@ -13,8 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.totalchange.discodj.catalogue.Catalogue;
 import com.totalchange.discodj.search.SearchProvider;
 import com.totalchange.discodj.search.solr.SolrSearchProviderImpl;
+import com.totalchange.discodj.xuggler.XugglerCatalogueImpl;
 
 public class DiscoDjModule extends AbstractModule {
     private static Logger logger = LoggerFactory.getLogger(DiscoDjModule.class);
@@ -23,6 +25,7 @@ public class DiscoDjModule extends AbstractModule {
     protected void configure() {
         logger.trace("Configuring disco dj Guice bindings");
         bind(SearchProvider.class).to(SolrSearchProviderImpl.class);
+        bind(Catalogue.class).to(XugglerCatalogueImpl.class);
         logger.trace("Configured disco dj Guice bindings");
     }
 
@@ -37,5 +40,16 @@ public class DiscoDjModule extends AbstractModule {
         SolrServer server = new EmbeddedSolrServer(container, "discodj");
         logger.trace("Returning SolrServer instance {}", server);
         return server;
+    }
+    
+    @Provides
+    XugglerCatalogueImpl provideXugglerCatalogueImpl(ServletContext servletContext) throws FileNotFoundException {
+        logger.trace("Creating Xuggler catalogue");
+        
+        File root = new File(servletContext.getRealPath("/WEB-INF/catalogue"));
+        XugglerCatalogueImpl catalogue = new XugglerCatalogueImpl(root);
+        
+        logger.trace("Returning Xuggler catalogue {}", catalogue);
+        return catalogue;
     }
 }

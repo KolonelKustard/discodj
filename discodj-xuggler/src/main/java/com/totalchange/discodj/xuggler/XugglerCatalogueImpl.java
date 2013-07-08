@@ -1,6 +1,7 @@
 package com.totalchange.discodj.xuggler;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,24 @@ public final class XugglerCatalogueImpl implements Catalogue {
 
     private File root;
 
-    public XugglerCatalogueImpl(File root) {
+    public XugglerCatalogueImpl(File root) throws FileNotFoundException {
+        logger.trace("Creating new Xuggler catalogue for root {}", root);
+
+        if (root == null) {
+            throw new NullPointerException("Root directory for catalogue "
+                    + "cannot be null");
+        }
+
+        if (!root.exists()) {
+            throw new FileNotFoundException("Root directory "
+                    + root.getAbsolutePath() + " does not exist");
+        }
+
+        if (!root.isDirectory()) {
+            throw new FileNotFoundException("Root " + root.getAbsolutePath()
+                    + " is not a directory");
+        }
+
         this.root = root;
     }
 
