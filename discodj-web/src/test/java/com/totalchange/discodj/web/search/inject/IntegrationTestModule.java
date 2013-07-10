@@ -25,7 +25,7 @@ public class IntegrationTestModule extends AbstractModule {
         expect(sc.getRealPath("/WEB-INF/solr")).andReturn(
                 "./src/main/webapp/WEB-INF/solr");
         expect(sc.getRealPath("/WEB-INF/catalogue")).andReturn(
-                "./src/main/test/catalogue");
+                "./src/test/catalogue");
 
         replay(sc);
         logger.trace("Returning mock ServletContext");
