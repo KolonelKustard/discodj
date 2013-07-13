@@ -13,15 +13,30 @@
  * You should have received a copy of the GNU General Public License along with
  * Jizz.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.totalchange.discodj.web.client.views;
+package com.totalchange.discodj.web.shared.dj;
 
-public interface HomeView extends CommonView {
-    public interface Presenter {
-        void goToPlayer();
-        void goToDj();
+import java.util.ArrayList;
+import java.util.List;
+
+import net.customware.gwt.dispatch.shared.Action;
+
+public class SearchAction implements Action<SearchResult> {
+    private String keywords;
+    private List<String> facetIds = new ArrayList<String>();
+
+    String getKeywords() {
+        return keywords;
     }
-    
-    void setPresenter(Presenter presenter);
-    void setLibraryLocation(String library);
-    void setReIndexStatus(int progress, String status);
+
+    void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
+
+    List<String> getFacetIds() {
+        return facetIds;
+    }
+
+    void setFacets(List<String> facetIds) {
+        this.facetIds = facetIds;
+    }
 }

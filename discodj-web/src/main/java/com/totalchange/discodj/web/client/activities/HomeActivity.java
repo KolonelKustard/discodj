@@ -19,8 +19,6 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
-import net.customware.gwt.dispatch.client.DispatchAsync;
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
@@ -36,14 +34,11 @@ public class HomeActivity extends AbstractActivity implements
 
     private HomeView homeView;
     private PlaceController placeController;
-    private DispatchAsync dispatch;
 
     @Inject
-    public HomeActivity(HomeView homeView, PlaceController placeController,
-            DispatchAsync dispatch) {
+    public HomeActivity(HomeView homeView, PlaceController placeController) {
         this.homeView = homeView;
         this.placeController = placeController;
-        this.dispatch = dispatch;
 
         this.homeView.setPresenter(this);
     }
@@ -63,11 +58,5 @@ public class HomeActivity extends AbstractActivity implements
     @Override
     public void goToDj() {
         placeController.goTo(new DjPlace());
-    }
-
-    @Override
-    public void reIndex() {
-        // TODO Auto-generated method stub
-        
     }
 }
