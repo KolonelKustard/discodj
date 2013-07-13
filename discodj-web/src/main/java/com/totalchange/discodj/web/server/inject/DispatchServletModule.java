@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import net.customware.gwt.dispatch.server.guice.GuiceStandardDispatchServlet;
 
 import com.google.inject.servlet.ServletModule;
+import com.totalchange.discodj.web.server.IndexingServlet;
 
 public class DispatchServletModule extends ServletModule {
     private static Logger logger = LoggerFactory
@@ -16,6 +17,7 @@ public class DispatchServletModule extends ServletModule {
         logger.trace("Configuring Guice servlets");
         serve("/com.totalchange.discodj.web.client.DiscoDj/dispatch").with(
                 GuiceStandardDispatchServlet.class);
+        serve("/indexer").with(IndexingServlet.class);
         logger.trace("Configured Guice servlets");
     }
 }
