@@ -23,20 +23,29 @@ import net.customware.gwt.dispatch.shared.Action;
 public class SearchAction implements Action<SearchResult> {
     private String keywords;
     private List<String> facetIds = new ArrayList<String>();
+    private int page;
 
-    String getKeywords() {
+    public String getKeywords() {
         return keywords;
     }
 
-    void setKeywords(String keywords) {
+    public void setKeywords(String keywords) {
         this.keywords = keywords;
     }
 
-    List<String> getFacetIds() {
+    public List<String> getFacetIds() {
         return facetIds;
     }
 
-    void setFacets(List<String> facetIds) {
+    public void setFacetIds(List<String> facetIds) {
         this.facetIds = facetIds;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 }

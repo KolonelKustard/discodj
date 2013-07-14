@@ -20,40 +20,58 @@ import java.util.List;
 import net.customware.gwt.dispatch.shared.Result;
 
 public class SearchResult implements Result {
+    private int numPages;
     private List<SearchFacet> artistFacets;
     private List<SearchFacet> albumFacets;
     private List<SearchFacet> genreFacets;
     private List<SearchFacet> decadeFacets;
+    private List<SearchResultMedia> results;
 
-    List<SearchFacet> getArtistFacets() {
+    public int getNumPages() {
+        return numPages;
+    }
+
+    public void setNumPages(int numPages) {
+        this.numPages = numPages;
+    }
+
+    public List<SearchFacet> getArtistFacets() {
         return artistFacets;
     }
 
-    void setArtistFacets(List<SearchFacet> artistFacets) {
+    public void setArtistFacets(List<SearchFacet> artistFacets) {
         this.artistFacets = artistFacets;
     }
 
-    List<SearchFacet> getAlbumFacets() {
+    public List<SearchFacet> getAlbumFacets() {
         return albumFacets;
     }
 
-    void setAlbumFacets(List<SearchFacet> albumFacets) {
+    public void setAlbumFacets(List<SearchFacet> albumFacets) {
         this.albumFacets = albumFacets;
     }
 
-    List<SearchFacet> getGenreFacets() {
+    public List<SearchFacet> getGenreFacets() {
         return genreFacets;
     }
 
-    void setGenreFacets(List<SearchFacet> genreFacets) {
+    public void setGenreFacets(List<SearchFacet> genreFacets) {
         this.genreFacets = genreFacets;
     }
 
-    List<SearchFacet> getDecadeFacets() {
+    public List<SearchFacet> getDecadeFacets() {
         return decadeFacets;
     }
 
-    void setDecadeFacets(List<SearchFacet> decadeFacets) {
+    public void setDecadeFacets(List<SearchFacet> decadeFacets) {
         this.decadeFacets = decadeFacets;
+    }
+
+    public List<SearchResultMedia> getResults() {
+        return results;
+    }
+
+    public void setResults(List<SearchResultMedia> results) {
+        this.results = results;
     }
 }

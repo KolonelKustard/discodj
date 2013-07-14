@@ -1,6 +1,6 @@
 package com.totalchange.discodj.search;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,7 +129,9 @@ public class SearchProviderTests {
         List<SearchFacet> decadeFacets = new ArrayList<>();
         decadeFacets.add(res.getDecadeFacets().get(
                 res.getDecadeFacets().size() / 2));
-        query.setDecadeFacets(decadeFacets);
+        for (SearchFacet facet : decadeFacets) {
+            query.addFacetId(facet.getId());
+        }
         res = searchProvider.search(query);
 
         assertEquals(NUM_TEST_ARTISTS * NUM_TRACKS_PER_ALBUM, res.getNumFound());

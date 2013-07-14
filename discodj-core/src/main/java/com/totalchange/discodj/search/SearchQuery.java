@@ -1,15 +1,13 @@
 package com.totalchange.discodj.search;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchQuery {
     private long start;
     private long rows;
     private String keywords;
-    private List<SearchFacet> artistFacets;
-    private List<SearchFacet> albumFacets;
-    private List<SearchFacet> genreFacets;
-    private List<SearchFacet> decadeFacets;
+    private List<String> facetIds = new ArrayList<>();
 
     public long getStart() {
         return start;
@@ -35,35 +33,11 @@ public class SearchQuery {
         this.keywords = keywords;
     }
 
-    public List<SearchFacet> getArtistFacets() {
-        return artistFacets;
+    public void addFacetId(String facetId) {
+        this.facetIds.add(facetId);
     }
 
-    public void setArtistFacets(List<SearchFacet> artistFacets) {
-        this.artistFacets = artistFacets;
-    }
-
-    public List<SearchFacet> getAlbumFacets() {
-        return albumFacets;
-    }
-
-    public void setAlbumFacets(List<SearchFacet> albumFacets) {
-        this.albumFacets = albumFacets;
-    }
-
-    public List<SearchFacet> getGenreFacets() {
-        return genreFacets;
-    }
-
-    public void setGenreFacets(List<SearchFacet> genreFacets) {
-        this.genreFacets = genreFacets;
-    }
-
-    public List<SearchFacet> getDecadeFacets() {
-        return decadeFacets;
-    }
-
-    public void setDecadeFacets(List<SearchFacet> decadeFacets) {
-        this.decadeFacets = decadeFacets;
+    public List<String> getFacetIds() {
+        return facetIds;
     }
 }

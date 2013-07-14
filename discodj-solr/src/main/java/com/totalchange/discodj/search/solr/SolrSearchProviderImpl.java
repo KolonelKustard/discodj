@@ -1,7 +1,5 @@
 package com.totalchange.discodj.search.solr;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -10,7 +8,6 @@ import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
-import com.totalchange.discodj.search.SearchFacet;
 import com.totalchange.discodj.search.SearchPopulator;
 import com.totalchange.discodj.search.SearchProvider;
 import com.totalchange.discodj.search.SearchQuery;
@@ -36,15 +33,6 @@ public final class SolrSearchProviderImpl implements SearchProvider {
         this.solrServer = solrServer;
     }
 
-    private void addFilterQueryIfHaveFacets(SolrQuery sq, String facetName,
-            List<SearchFacet> facets) {
-        if (facets != null && !facets.isEmpty()) {
-            for (SearchFacet facet : facets) {
-                sq.addFilterQuery(facet.getId());
-            }
-        }
-    }
-
     @Override
     public SearchPopulator repopulate() throws SolrSearchException {
         return new SolrSearchPopulatorImpl(solrServer);
@@ -68,10 +56,9 @@ public final class SolrSearchProviderImpl implements SearchProvider {
         sq.setFacetLimit(-1);
         sq.addFacetField(F_ARTIST, F_ALBUM, F_GENRE, F_DECADE);
 
-        addFilterQueryIfHaveFacets(sq, F_ARTIST, query.getArtistFacets());
-        addFilterQueryIfHaveFacets(sq, F_ALBUM, query.getAlbumFacets());
-        addFilterQueryIfHaveFacets(sq, F_GENRE, query.getGenreFacets());
-        addFilterQueryIfHaveFacets(sq, F_DECADE, query.getDecadeFacets());
+        for (String id : query.getFacetIds()) {
+            sq.addFilterQuery(id);
+        }
 
         try {
             QueryResponse res = solrServer.query(sq);
