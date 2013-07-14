@@ -3,7 +3,7 @@ package com.totalchange.discodj.web.shared.dj;
 public class SearchResultMedia {
     private String id;
     private String artist;
-    private String album;
+    private String title;
 
     public String getId() {
         return id;
@@ -21,11 +21,11 @@ public class SearchResultMedia {
         this.artist = artist;
     }
 
-    public String getAlbum() {
-        return album;
+    public String getTitle() {
+        return title;
     }
 
-    public void setAlbum(String album) {
-        this.album = album;
+    public void setAlbum(String title) {
+        this.title = title;
     }
 }

@@ -1,6 +1,5 @@
 package com.totalchange.discodj.web.client.activities;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -25,36 +24,10 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
         this.djView.setPresenter(this);
     }
 
-    private Media makeDummyMedia(String name, int num) {
-        Media media = new Media();
-        media.setId("test" + name + num);
-        media.setUrl("http://test/" + name.toLowerCase() + "/" + num);
-        media.setArtist(name + " Artist " + num);
-        media.setTitle(name + " Title " + num);
-        return media;
-    }
-
-    private void populateWithDummyData() {
-        djView.setNowPlaying(makeDummyMedia("NowPlaying", 0));
-
-        List<Media> results = new ArrayList<Media>();
-        for (int num = 0; num < 10; num++) {
-            results.add(makeDummyMedia("Result", num));
-        }
-        djView.setResults(1, 20, results);
-
-        List<Media> playlist = new ArrayList<Media>();
-        for (int num = 0; num < 4; num++) {
-            playlist.add(makeDummyMedia("Playlist", num));
-        }
-        djView.setPlaylist(playlist);
-    }
-
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
         logger.finer("Starting up InitJizzActivity");
         container.setWidget(djView.asWidget());
-        populateWithDummyData();
         logger.finer("Finished starting up InitJizzActivity");
     }
 
