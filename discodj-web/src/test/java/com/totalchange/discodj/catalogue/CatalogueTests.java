@@ -2,8 +2,8 @@ package com.totalchange.discodj.catalogue;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.BeforeClass;
@@ -21,22 +21,31 @@ public class CatalogueTests {
                 .getInstance(Catalogue.class);
     }
 
+    private String makeMediaId(String filename) {
+        File root = new File("./src/test/catalogue");
+        return new File(root, filename).getAbsolutePath();
+    }
+    
+    private void assertAndPopMedia(Media media) {
+        
+    }
+
     @Test
     public void listAllInCatalogue() {
         List<Media> expectedMedia = new ArrayList<>();
-        expectedMedia.add(new TestMediaBuilder().withId(null)
-                .withArtist("Test Artist").withAlbum("Test Album")
-                .withGenre("Test Genre").withYear(1980).withRequestedBy(null)
-                .withTitle("Test Song 1").build());
-        expectedMedia.add(new TestMediaBuilder().withId(null)
-                .withArtist("Test Artist").withAlbum("Test Album")
-                .withGenre("Test Genre").withYear(1980).withRequestedBy(null)
-                .withTitle("Test Video 1").build());
+        expectedMedia.add(new TestMediaBuilder()
+                .withId(makeMediaId("test.mp3")).withArtist("Test Artist")
+                .withAlbum("Test Album").withGenre("Test Genre").withYear(1980)
+                .withRequestedBy(null).withTitle("Test Song 1").build());
+        expectedMedia.add(new TestMediaBuilder()
+                .withId(makeMediaId("test.mp4")).withArtist("Test Artist")
+                .withAlbum("Test Album").withGenre("Test Genre").withYear(1980)
+                .withRequestedBy(null).withTitle("Test Video 1").build());
 
         catalogue.listAllSongs(new Catalogue.Listener() {
             @Override
             public void yetMoreMedia(Media media) {
-                Collections.bin
+
             }
 
             @Override
