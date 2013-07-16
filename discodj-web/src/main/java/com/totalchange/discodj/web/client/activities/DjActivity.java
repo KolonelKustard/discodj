@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
+import net.customware.gwt.dispatch.client.DispatchAsync;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -16,10 +18,12 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
             .getName());
 
     private DjView djView;
+    private DispatchAsync dispatchAsync;
 
     @Inject
-    public DjActivity(DjView djView) {
+    public DjActivity(DjView djView, DispatchAsync dispatchAsync) {
         this.djView = djView;
+        this.dispatchAsync = dispatchAsync;
 
         this.djView.setPresenter(this);
     }

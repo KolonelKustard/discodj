@@ -51,7 +51,17 @@ public class SearchHandler implements ActionHandler<SearchAction, SearchResult> 
 
     private List<SearchFacet> copyFacets(
             List<com.totalchange.discodj.search.SearchFacet> src) {
-        return null;
+        if (src == null) {
+            return null;
+        }
+
+        List<SearchFacet> dest = new ArrayList<>(src.size());
+        for (com.totalchange.discodj.search.SearchFacet srcFacet : src) {
+            SearchFacet destFacet = new SearchFacet(srcFacet.getId(),
+                    srcFacet.getName(), srcFacet.getNumMatches());
+            dest.add(destFacet);
+        }
+        return dest;
     }
 
     @Override

@@ -5,12 +5,12 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class SearchFacet implements IsSerializable {
     private String id;
     private String name;
-    private int occurrences;
+    private long numMatches;
 
-    public SearchFacet(String id, String name, int occurrences) {
+    public SearchFacet(String id, String name, long numMatches) {
         this.id = id;
         this.name = name;
-        this.occurrences = occurrences;
+        this.numMatches = numMatches;
     }
 
     String getId() {
@@ -29,11 +29,11 @@ public class SearchFacet implements IsSerializable {
         this.name = name;
     }
 
-    int getOccurrences() {
-        return occurrences;
+    long getNumMatches() {
+        return numMatches;
     }
 
-    void setOccurrences(int occurrences) {
-        this.occurrences = occurrences;
+    void setOccurrences(long numMatches) {
+        this.numMatches = numMatches;
     }
 }
