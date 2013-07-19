@@ -15,14 +15,19 @@
  */
 package com.totalchange.discodj.web.client.places;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.place.shared.Place;
 
 public class DjPlace extends Place {
+    private static final String PARAM_KEYWORDS = "q";
+    private static final String PARAM_FACET_IDS = "f";
+
     private String keywords;
-    private List<Integer> facetIds;
+    private List<String> facetIds;
 
     public String getKeywords() {
         return keywords;
@@ -32,25 +37,40 @@ public class DjPlace extends Place {
         this.keywords = keywords;
     }
 
-    public List<Integer> getFacetIds() {
+    public List<String> getFacetIds() {
         return facetIds;
     }
 
-    public void setFacetIds(List<Integer> facetIds) {
+    public void setFacetIds(List<String> facetIds) {
         this.facetIds = facetIds;
     }
 
     public static class Tokenizer extends AbstractPlaceTokenizer<DjPlace> {
         @Override
         protected DjPlace getPlace(Map<String, List<String>> params) {
-            // TODO Auto-generated method stub
-            return null;
+            DjPlace place = new DjPlace();
+
+            List<String> keywords = params.get(PARAM_KEYWORDS);
+            if (keywords != null && !keywords.isEmpty()) {
+                place.setKeywords(keywords.get(0));
+            }
+
+            place.setFacetIds(params.get(PARAM_FACET_IDS));
+
+            return place;
         }
 
         @Override
         protected Map<String, List<String>> getParams(DjPlace place) {
-            // TODO Auto-generated method stub
-            return null;
+            Map<String, List<String>> params = new HashMap<String, List<String>>();
+
+            List<String> keywords = new ArrayList<String>(1);
+            keywords.add(place.getKeywords());
+            params.put(PARAM_KEYWORDS, keywords);
+
+            params.put(PARAM_FACET_IDS, place.getFacetIds());
+
+            return params;
         }
     }
 }
