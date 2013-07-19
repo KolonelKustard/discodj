@@ -19,6 +19,9 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
 
     private DjView djView;
     private DispatchAsync dispatchAsync;
+    
+    private String keywords = null;
+    private List<String> facetIds = null;
 
     @Inject
     public DjActivity(DjView djView, DispatchAsync dispatchAsync) {
@@ -26,6 +29,14 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
         this.dispatchAsync = dispatchAsync;
 
         this.djView.setPresenter(this);
+    }
+    
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
+    
+    public void setFacetIds(List<String> facetIds) {
+        this.facetIds = facetIds;
     }
 
     @Override

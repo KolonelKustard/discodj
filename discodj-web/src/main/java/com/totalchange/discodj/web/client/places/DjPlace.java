@@ -55,7 +55,10 @@ public class DjPlace extends Place {
                 place.setKeywords(keywords.get(0));
             }
 
-            place.setFacetIds(params.get(PARAM_FACET_IDS));
+            List<String> facetIds = params.get(PARAM_KEYWORDS);
+            if (facetIds != null && !facetIds.isEmpty()) {
+                place.setFacetIds(facetIds);
+            }
 
             return place;
         }
@@ -64,11 +67,15 @@ public class DjPlace extends Place {
         protected Map<String, List<String>> getParams(DjPlace place) {
             Map<String, List<String>> params = new HashMap<String, List<String>>();
 
-            List<String> keywords = new ArrayList<String>(1);
-            keywords.add(place.getKeywords());
-            params.put(PARAM_KEYWORDS, keywords);
+            if (place.getKeywords() != null && place.getKeywords().length() > 0) {
+                List<String> keywords = new ArrayList<String>(1);
+                keywords.add(place.getKeywords());
+                params.put(PARAM_KEYWORDS, keywords);
+            }
 
-            params.put(PARAM_FACET_IDS, place.getFacetIds());
+            if (place.getFacetIds() != null && !place.getFacetIds().isEmpty()) {
+                params.put(PARAM_FACET_IDS, place.getFacetIds());
+            }
 
             return params;
         }
