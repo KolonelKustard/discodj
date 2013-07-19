@@ -15,18 +15,41 @@
  */
 package com.totalchange.discodj.web.client.places;
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceTokenizer;
 
 public class DjPlace extends Place {
-    public static class Tokenizer implements PlaceTokenizer<DjPlace> {
+    private String keywords;
+    private List<Integer> facetIds;
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
+
+    public List<Integer> getFacetIds() {
+        return facetIds;
+    }
+
+    public void setFacetIds(List<Integer> facetIds) {
+        this.facetIds = facetIds;
+    }
+
+    public static class Tokenizer extends AbstractPlaceTokenizer<DjPlace> {
         @Override
-        public DjPlace getPlace(String token) {
-            return new DjPlace();
+        protected DjPlace getPlace(Map<String, List<String>> params) {
+            // TODO Auto-generated method stub
+            return null;
         }
 
         @Override
-        public String getToken(DjPlace place) {
+        protected Map<String, List<String>> getParams(DjPlace place) {
+            // TODO Auto-generated method stub
             return null;
         }
     }

@@ -39,4 +39,16 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
     public void setPlaylist(List<Media> playlist) {
         // TODO Auto-generated method stub
     }
+
+    @Override
+    public void search(String keywords) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void addFacet(String facetId) {
+        // TODO Auto-generated method stub
+        
+    }
 }

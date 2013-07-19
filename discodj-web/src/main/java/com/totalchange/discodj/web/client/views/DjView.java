@@ -8,6 +8,8 @@ import com.totalchange.discodj.web.shared.player.Media;
 public interface DjView extends CommonView {
     public interface Presenter {
         void setPlaylist(List<Media> playlist);
+        void search(String keywords);
+        void addFacet(String facetId);
     }
 
     void setPresenter(Presenter presenter);
