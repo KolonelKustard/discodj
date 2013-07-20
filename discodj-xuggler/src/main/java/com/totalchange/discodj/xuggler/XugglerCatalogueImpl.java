@@ -52,7 +52,7 @@ public final class XugglerCatalogueImpl implements Catalogue {
         try {
             IContainer container = IContainer.make();
             XugglerException.throwIfInError(container.open(
-                    file.getAbsolutePath(), null, null));
+                    file.getAbsolutePath(), IContainer.Type.READ, null));
             try {
                 IMetaData metadata = container.getMetaData();
                 logger.trace("Got Xuggler metadata: {}", metadata);

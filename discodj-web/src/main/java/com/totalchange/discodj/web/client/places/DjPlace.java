@@ -19,15 +19,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.gwt.place.shared.Place;
 
 public class DjPlace extends Place {
     private static final String PARAM_KEYWORDS = "q";
     private static final String PARAM_FACET_IDS = "f";
+    private static final String PARAM_PAGE = "p";
 
-    private String keywords;
-    private List<String> facetIds;
+    private static final Logger logger = Logger.getLogger(DjPlace.class
+            .getName());
+
+    private String keywords = null;
+    private List<String> facetIds = null;
+    private int page = 1;
 
     public String getKeywords() {
         return keywords;
@@ -45,6 +52,14 @@ public class DjPlace extends Place {
         this.facetIds = facetIds;
     }
 
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
     public static class Tokenizer extends AbstractPlaceTokenizer<DjPlace> {
         @Override
         protected DjPlace getPlace(Map<String, List<String>> params) {
@@ -55,9 +70,19 @@ public class DjPlace extends Place {
                 place.setKeywords(keywords.get(0));
             }
 
-            List<String> facetIds = params.get(PARAM_KEYWORDS);
+            List<String> facetIds = params.get(PARAM_FACET_IDS);
             if (facetIds != null && !facetIds.isEmpty()) {
                 place.setFacetIds(facetIds);
+            }
+
+            List<String> page = params.get(PARAM_PAGE);
+            if (page != null && !page.isEmpty()) {
+                try {
+                    place.setPage(Integer.parseInt(page.get(0)));
+                } catch (NumberFormatException nfEx) {
+                    logger.log(Level.INFO,
+                            "Invalid page number: " + nfEx.getMessage(), nfEx);
+                }
             }
 
             return place;
@@ -75,6 +100,12 @@ public class DjPlace extends Place {
 
             if (place.getFacetIds() != null && !place.getFacetIds().isEmpty()) {
                 params.put(PARAM_FACET_IDS, place.getFacetIds());
+            }
+            
+            if (place.getPage() > 1) {
+                List<String> page = new ArrayList<String>(1);
+                page.add(String.valueOf(place.getPage()));
+                params.put(PARAM_PAGE, page);
             }
 
             return params;

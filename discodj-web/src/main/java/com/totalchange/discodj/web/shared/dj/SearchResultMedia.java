@@ -1,6 +1,10 @@
 package com.totalchange.discodj.web.shared.dj;
 
-public class SearchResultMedia {
+import java.io.Serializable;
+
+public class SearchResultMedia implements Serializable {
+    private static final long serialVersionUID = 8853328652712059275L;
+
     private String id;
     private String artist;
     private String title;

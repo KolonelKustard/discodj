@@ -15,7 +15,7 @@ public class DispatchServletModule extends ServletModule {
     @Override
     protected void configureServlets() {
         logger.trace("Configuring Guice servlets");
-        serve("/com.totalchange.discodj.web.client.DiscoDj/dispatch").with(
+        serve("/DiscoDj/dispatch").with(
                 GuiceStandardDispatchServlet.class);
         serve("/indexer").with(IndexingServlet.class);
         logger.trace("Configured Guice servlets");

@@ -15,14 +15,13 @@
  */
 package com.totalchange.discodj.web.shared.dj;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.customware.gwt.dispatch.shared.Action;
 
 public class SearchAction implements Action<SearchResult> {
     private String keywords;
-    private List<String> facetIds = new ArrayList<String>();
+    private List<String> facetIds;
     private int page;
 
     public String getKeywords() {

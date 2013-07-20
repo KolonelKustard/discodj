@@ -10,6 +10,7 @@ public interface DjView extends CommonView {
         void setPlaylist(List<Media> playlist);
         void search(String keywords);
         void addFacet(String facetId);
+        void goToPage(int page);
     }
 
     void setPresenter(Presenter presenter);

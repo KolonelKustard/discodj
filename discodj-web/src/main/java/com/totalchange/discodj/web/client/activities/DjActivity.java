@@ -31,6 +31,7 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
 
     private String keywords = null;
     private List<String> facetIds = null;
+    private int page = 1;
 
     @Inject
     public DjActivity(DjView djView, PlaceController placeController,
@@ -44,13 +45,14 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
     }
 
     private void showSearchResults(SearchResult result) {
-
+        djView.setResults(page, result.getNumPages(), result.getResults());
     }
 
     private void search() {
         SearchAction action = new SearchAction();
         action.setKeywords(keywords);
         action.setFacetIds(facetIds);
+        action.setPage(page);
         dispatchAsync.execute(action, new AsyncCallback<SearchResult>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -72,15 +74,17 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
         this.facetIds = facetIds;
     }
 
+    public void setPage(int page) {
+        this.page = page;
+    }
+
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
         logger.finer("Starting up InitJizzActivity");
         container.setWidget(djView.asWidget());
 
-        if ((keywords != null && keywords.length() > 0)
-                || (facetIds != null && !facetIds.isEmpty())) {
-            search();
-        }
+        // Always search so get back facets even if no keywords provided
+        search();
 
         logger.finer("Finished starting up InitJizzActivity");
     }
@@ -108,6 +112,16 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
         DjPlace place = new DjPlace();
         place.setKeywords(keywords);
         place.setFacetIds(facetIds);
+
+        placeController.goTo(place);
+    }
+
+    @Override
+    public void goToPage(int page) {
+        DjPlace place = new DjPlace();
+        place.setKeywords(keywords);
+        place.setFacetIds(facetIds);
+        place.setPage(page);
 
         placeController.goTo(place);
     }

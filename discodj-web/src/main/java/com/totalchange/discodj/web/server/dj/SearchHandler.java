@@ -77,11 +77,17 @@ public class SearchHandler implements ActionHandler<SearchAction, SearchResult> 
 
         SearchQuery query = new SearchQuery();
         query.setKeywords(action.getKeywords());
-        for (String id : action.getFacetIds()) {
-            query.addFacetId(id);
+        if (action.getFacetIds() != null) {
+            for (String id : action.getFacetIds()) {
+                query.addFacetId(id);
+            }
         }
         query.setRows(RESULTS_PER_PAGE);
-        query.setStart((action.getPage() - 1) * RESULTS_PER_PAGE);
+        if (action.getPage() > 1) {
+            query.setStart((action.getPage() - 1) * RESULTS_PER_PAGE);
+        } else {
+            query.setStart(0);
+        }
 
         SearchResults results = searchProvider.search(query);
         result.setNumPages((int) (results.getNumFound() / RESULTS_PER_PAGE));
