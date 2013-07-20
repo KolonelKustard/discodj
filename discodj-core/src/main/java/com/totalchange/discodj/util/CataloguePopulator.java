@@ -23,6 +23,20 @@ public final class CataloguePopulator implements Runnable {
         this.searchProvider = searchProvider;
     }
 
+    private boolean isValidMedia(Media media) {
+        if (media.getId() == null) {
+            logger.info("Media {} not valid (has no id)", media);
+            return false;
+        }
+
+        if (media.getTitle() == null) {
+            logger.info("Media {} not valid (has no title)", media);
+            return false;
+        }
+
+        return true;
+    }
+
     @Override
     public void run() {
         logger.trace("Re-indexing search collection");
@@ -32,8 +46,13 @@ public final class CataloguePopulator implements Runnable {
             catalogue.listAllSongs(new Catalogue.Listener() {
                 @Override
                 public void yetMoreMedia(Media media) {
-                    logger.trace("Adding media {}", media);
-                    searchPopulator.addMedia(media);
+                    if (isValidMedia(media)) {
+                        logger.trace("Adding media {}", media);
+                        searchPopulator.addMedia(media);
+                    } else {
+                        logger.info("Skipped adding media {} as is not valid",
+                                media);
+                    }
                 }
 
                 @Override
