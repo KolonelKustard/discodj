@@ -91,9 +91,9 @@
 				<h2 class="{style.header}">Results</h2>
 				<g:VerticalPanel ui:field="resultsPanel" width="100%" />
 				<div class="{style.paging}">
-					<g:Button addStyleNames="{style.previousButton}">&lt;&lt;</g:Button>
-					<g:Label addStyleNames="{style.pageLabel}">Page 1 of 1</g:Label>
-					<g:Button addStyleNames="{style.nextButton}">&gt;&gt;</g:Button>
+					<g:Button ui:field="previousButton" addStyleNames="{style.previousButton}">&lt;&lt;</g:Button>
+					<g:Label ui:field="pageLabel" addStyleNames="{style.pageLabel}">Page 1 of 1</g:Label>
+					<g:Button ui:field="nextButton" addStyleNames="{style.nextButton}">&gt;&gt;</g:Button>
 				</div>
 			</div>
 			<div class="{style.column} {style.playlistColumn}">

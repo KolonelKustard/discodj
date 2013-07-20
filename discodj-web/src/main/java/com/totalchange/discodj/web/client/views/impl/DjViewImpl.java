@@ -20,13 +20,16 @@ import java.util.List;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -62,6 +65,15 @@ public class DjViewImpl extends Composite implements DjView {
     VerticalPanel resultsPanel;
 
     @UiField
+    Button previousButton;
+
+    @UiField
+    Button nextButton;
+
+    @UiField
+    Label pageLabel;
+
+    @UiField
     VerticalPanel playlistPanel;
 
     @UiField
@@ -84,6 +96,16 @@ public class DjViewImpl extends Composite implements DjView {
     @UiHandler("searchTextBox")
     void searchTextBoxKeyUp(KeyUpEvent ev) {
         presenter.search(searchTextBox.getValue());
+    }
+
+    @UiHandler("previousButton")
+    void previousButtonClick(ClickEvent ev) {
+        presenter.previousPage();
+    }
+
+    @UiHandler("nextButton")
+    void nextButtonClick(ClickEvent ev) {
+        presenter.nextPage();
     }
 
     @Override
@@ -118,6 +140,10 @@ public class DjViewImpl extends Composite implements DjView {
             // Make widget draggable
             songDragController.makeDraggable(mediaWidget);
         }
+
+        pageLabel.setText("Page " + currentPage + " of " + numPages);
+        previousButton.setEnabled(currentPage > 1);
+        nextButton.setEnabled(currentPage < numPages);
     }
 
     @Override

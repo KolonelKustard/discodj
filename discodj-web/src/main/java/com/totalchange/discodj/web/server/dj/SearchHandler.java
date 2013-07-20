@@ -49,7 +49,7 @@ public class SearchHandler implements ActionHandler<SearchAction, SearchResult> 
         this.searchProvider = searchProvider;
     }
 
-    private List<SearchFacet> copyFacets(
+    private List<SearchFacet> copyFacets(List<String> selectedFacetIds,
             List<com.totalchange.discodj.search.SearchFacet> src) {
         if (src == null) {
             return null;
@@ -57,8 +57,11 @@ public class SearchHandler implements ActionHandler<SearchAction, SearchResult> 
 
         List<SearchFacet> dest = new ArrayList<>(src.size());
         for (com.totalchange.discodj.search.SearchFacet srcFacet : src) {
+            boolean selected = selectedFacetIds != null
+                    && selectedFacetIds.contains(srcFacet.getId());
+
             SearchFacet destFacet = new SearchFacet(srcFacet.getId(),
-                    srcFacet.getName(), srcFacet.getNumMatches());
+                    srcFacet.getName(), srcFacet.getNumMatches(), selected);
             dest.add(destFacet);
         }
         return dest;
@@ -90,12 +93,19 @@ public class SearchHandler implements ActionHandler<SearchAction, SearchResult> 
         }
 
         SearchResults results = searchProvider.search(query);
-        result.setNumPages((int) (results.getNumFound() / RESULTS_PER_PAGE));
 
-        result.setArtistFacets(copyFacets(results.getArtistFacets()));
-        result.setAlbumFacets(copyFacets(results.getAlbumFacets()));
-        result.setGenreFacets(copyFacets(results.getGenreFacets()));
-        result.setDecadeFacets(copyFacets(results.getDecadeFacets()));
+        int numPages = (int) Math.ceil((double) results.getNumFound()
+                / (double) RESULTS_PER_PAGE);
+        result.setNumPages(numPages);
+
+        result.setArtistFacets(copyFacets(action.getFacetIds(),
+                results.getArtistFacets()));
+        result.setAlbumFacets(copyFacets(action.getFacetIds(),
+                results.getAlbumFacets()));
+        result.setGenreFacets(copyFacets(action.getFacetIds(),
+                results.getGenreFacets()));
+        result.setDecadeFacets(copyFacets(action.getFacetIds(),
+                results.getDecadeFacets()));
 
         List<SearchResultMedia> resultMedia = new ArrayList<>(results
                 .getResults().size());

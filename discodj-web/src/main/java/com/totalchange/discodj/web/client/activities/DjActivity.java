@@ -121,12 +121,39 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
     }
 
     @Override
-    public void goToPage(int page) {
+    public void removeFacet(String facetId) {
+        if (facetIds != null) {
+            facetIds.remove(facetId);
+            if (facetIds.isEmpty()) {
+                facetId = null;
+            }
+        }
+
+        DjPlace place = new DjPlace();
+        place.setKeywords(keywords);
+        place.setFacetIds(facetIds);
+
+        placeController.goTo(place);
+    }
+
+    private void goToPage(int page) {
         DjPlace place = new DjPlace();
         place.setKeywords(keywords);
         place.setFacetIds(facetIds);
         place.setPage(page);
 
         placeController.goTo(place);
+    }
+
+    @Override
+    public void previousPage() {
+        if (page > 1) {
+            goToPage(page - 1);
+        }
+    }
+
+    @Override
+    public void nextPage() {
+        goToPage(page + 1);
     }
 }

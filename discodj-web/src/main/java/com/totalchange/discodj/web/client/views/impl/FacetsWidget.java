@@ -45,13 +45,14 @@ public class FacetsWidget extends Composite {
             final CheckBox checkbox = new CheckBox();
             checkbox.setText(facet.getName() + " (" + facet.getNumMatches()
                     + ")");
+            checkbox.setValue(facet.isSelected());
             checkbox.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
                     if (checkbox.getValue()) {
                         presenter.addFacet(facet.getId());
                     } else {
-
+                        presenter.removeFacet(facet.getId());
                     }
                 }
             });

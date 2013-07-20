@@ -11,7 +11,9 @@ public interface DjView extends CommonView {
         void setPlaylist(List<Media> playlist);
         void search(String keywords);
         void addFacet(String facetId);
-        void goToPage(int page);
+        void removeFacet(String facetId);
+        void previousPage();
+        void nextPage();
     }
 
     void setPresenter(Presenter presenter);
