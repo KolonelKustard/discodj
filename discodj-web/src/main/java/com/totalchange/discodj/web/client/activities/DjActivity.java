@@ -48,7 +48,10 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
         djView.setResults(page, result.getNumPages(), result.getResults());
     }
 
-    private void search() {
+    public void search() {
+        logger.finer("Performing search for '" + keywords + "', facets "
+                + facetIds + " and page " + page);
+
         SearchAction action = new SearchAction();
         action.setKeywords(keywords);
         action.setFacetIds(facetIds);
@@ -61,6 +64,7 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
 
             @Override
             public void onSuccess(SearchResult result) {
+                logger.finer("Got result " + result);
                 showSearchResults(result);
             }
         });
@@ -82,10 +86,6 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
     public void start(AcceptsOneWidget container, EventBus eventBus) {
         logger.finer("Starting up InitJizzActivity");
         container.setWidget(djView.asWidget());
-
-        // Always search so get back facets even if no keywords provided
-        search();
-
         logger.finer("Finished starting up InitJizzActivity");
     }
 

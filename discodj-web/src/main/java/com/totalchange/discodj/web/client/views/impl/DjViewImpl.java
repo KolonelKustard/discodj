@@ -20,11 +20,14 @@ import java.util.List;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.totalchange.discodj.web.client.views.DjView;
@@ -51,6 +54,9 @@ public class DjViewImpl extends Composite implements DjView {
     @UiField
     VerticalPanel playlistPanel;
 
+    @UiField
+    TextBox searchTextBox;
+
     public DjViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
         initDnd();
@@ -63,6 +69,11 @@ public class DjViewImpl extends Composite implements DjView {
         VerticalPanelDropController playlistDropController = new VerticalPanelDropController(
                 playlistPanel);
         songDragController.registerDropController(playlistDropController);
+    }
+
+    @UiHandler("searchTextBox")
+    void searchTextBoxKeyUp(KeyUpEvent ev) {
+        presenter.search(searchTextBox.getValue());
     }
 
     @Override

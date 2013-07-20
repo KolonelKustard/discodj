@@ -50,6 +50,7 @@ public class AppActivityMapper implements ActivityMapper {
             djActivity.setKeywords(djPlace.getKeywords());
             djActivity.setFacetIds(djPlace.getFacetIds());
             djActivity.setPage(djPlace.getPage());
+            djActivity.search();
             return djActivity;
         }
         return null;
