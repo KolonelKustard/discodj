@@ -46,6 +46,10 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
 
     private void showSearchResults(SearchResult result) {
         djView.setResults(page, result.getNumPages(), result.getResults());
+        djView.setArtistFacets(result.getArtistFacets());
+        djView.setAlbumFacets(result.getAlbumFacets());
+        djView.setGenreFacets(result.getGenreFacets());
+        djView.setDecadeFacets(result.getDecadeFacets());
     }
 
     public void search() {

@@ -2,6 +2,7 @@ package com.totalchange.discodj.web.client.views;
 
 import java.util.List;
 
+import com.totalchange.discodj.web.shared.dj.SearchFacet;
 import com.totalchange.discodj.web.shared.dj.SearchResultMedia;
 import com.totalchange.discodj.web.shared.player.Media;
 
@@ -19,6 +20,11 @@ public interface DjView extends CommonView {
 
     void setResults(int currentPage, int numPages,
             List<SearchResultMedia> results);
+    
+    void setArtistFacets(List<SearchFacet> artistFacets);
+    void setAlbumFacets(List<SearchFacet> artistFacets);
+    void setGenreFacets(List<SearchFacet> artistFacets);
+    void setDecadeFacets(List<SearchFacet> artistFacets);
 
     void setPlaylist(List<SearchResultMedia> playlist);
 }

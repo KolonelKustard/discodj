@@ -3,7 +3,8 @@
     ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
     ui:generateKeys="com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator"
     ui:generateLocales="default"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:dj="urn:import:com.totalchange.discodj.web.client.views.impl">
 	<ui:style>
 		.container {
 			border: 1px solid #000;
@@ -40,6 +41,11 @@
 			width: 98%;
 		}
 		
+		.facetsContainer {
+			height: 22%;
+			border: 1px solid #0F0;
+		}
+		
 		.paging {
 			width: 100%;
 			position: absolute;
@@ -68,7 +74,18 @@
 			<div class="{style.column} {style.searchColumn}">
 				<h2 class="{style.header}">Search</h2>
 				<g:TextBox ui:field="searchTextBox" addStyleNames="{style.searchTextBox}" />
-				<g:VerticalPanel ui:field="searchFacetsPanel" width="100%" />
+				<div class="{style.facetsContainer}">
+					<dj:FacetsWidget ui:field="artistFacets" title="Artists" />
+				</div>
+				<div class="{style.facetsContainer}">
+					<dj:FacetsWidget ui:field="albumFacets" title="Albums" />
+				</div>
+				<div class="{style.facetsContainer}">
+					<dj:FacetsWidget ui:field="genreFacets" title="Genres" />
+				</div>
+				<div class="{style.facetsContainer}">
+					<dj:FacetsWidget ui:field="decadeFacets" title="Decades" />
+				</div>
 			</div>
 			<div class="{style.column} {style.resultsColumn}">
 				<h2 class="{style.header}">Results</h2>

@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.totalchange.discodj.web.client.views.DjView;
+import com.totalchange.discodj.web.shared.dj.SearchFacet;
 import com.totalchange.discodj.web.shared.dj.SearchResultMedia;
 
 public class DjViewImpl extends Composite implements DjView {
@@ -46,7 +47,16 @@ public class DjViewImpl extends Composite implements DjView {
     AbsolutePanel boundaryPanel;
 
     @UiField
-    VerticalPanel searchFacetsPanel;
+    FacetsWidget artistFacets;
+
+    @UiField
+    FacetsWidget albumFacets;
+
+    @UiField
+    FacetsWidget genreFacets;
+
+    @UiField
+    FacetsWidget decadeFacets;
 
     @UiField
     VerticalPanel resultsPanel;
@@ -108,6 +118,26 @@ public class DjViewImpl extends Composite implements DjView {
             // Make widget draggable
             songDragController.makeDraggable(mediaWidget);
         }
+    }
+
+    @Override
+    public void setArtistFacets(List<SearchFacet> facets) {
+        artistFacets.setFacets(presenter, facets);
+    }
+
+    @Override
+    public void setAlbumFacets(List<SearchFacet> facets) {
+        albumFacets.setFacets(presenter, facets);
+    }
+
+    @Override
+    public void setGenreFacets(List<SearchFacet> facets) {
+        this.genreFacets.setFacets(presenter, facets);
+    }
+
+    @Override
+    public void setDecadeFacets(List<SearchFacet> facets) {
+        this.decadeFacets.setFacets(presenter, facets);
     }
 
     @Override
