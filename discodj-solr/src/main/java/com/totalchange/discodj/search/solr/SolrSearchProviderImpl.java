@@ -60,6 +60,8 @@ public final class SolrSearchProviderImpl implements SearchProvider {
             sq.addFilterQuery(id);
         }
 
+        // TODO Add exclusions based on playlist
+
         try {
             QueryResponse res = solrServer.query(sq);
             return new SolrSearchResultsImpl(res);
