@@ -25,7 +25,7 @@ public class SearchResult implements Result {
     private List<SearchFacet> albumFacets;
     private List<SearchFacet> genreFacets;
     private List<SearchFacet> decadeFacets;
-    private List<SearchResultMedia> results;
+    private List<DjMedia> results;
 
     public int getNumPages() {
         return numPages;
@@ -67,11 +67,11 @@ public class SearchResult implements Result {
         this.decadeFacets = decadeFacets;
     }
 
-    public List<SearchResultMedia> getResults() {
+    public List<DjMedia> getResults() {
         return results;
     }
 
-    public void setResults(List<SearchResultMedia> results) {
+    public void setResults(List<DjMedia> results) {
         this.results = results;
     }
 }

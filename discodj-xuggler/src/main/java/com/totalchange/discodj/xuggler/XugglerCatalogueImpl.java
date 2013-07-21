@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.totalchange.discodj.catalogue.Catalogue;
+import com.totalchange.discodj.media.Media;
 import com.xuggle.xuggler.IContainer;
 import com.xuggle.xuggler.IMetaData;
 
@@ -48,20 +49,23 @@ public final class XugglerCatalogueImpl implements Catalogue {
         }
     }
 
+    private Media makeMedia(String filename) throws XugglerException {
+        IContainer container = IContainer.make();
+        XugglerException.throwIfInError(container.open(filename,
+                IContainer.Type.READ, null));
+        try {
+            IMetaData metadata = container.getMetaData();
+            logger.trace("Got Xuggler metadata: {}", metadata);
+            return new XugglerMediaImpl(filename, metadata);
+        } finally {
+            logger.trace("Closing Xuggler container");
+            XugglerException.throwIfInError(container.close());
+        }
+    }
+
     private void addFile(File file, Listener listener) {
         try {
-            IContainer container = IContainer.make();
-            XugglerException.throwIfInError(container.open(
-                    file.getAbsolutePath(), IContainer.Type.READ, null));
-            try {
-                IMetaData metadata = container.getMetaData();
-                logger.trace("Got Xuggler metadata: {}", metadata);
-                listener.yetMoreMedia(new XugglerMediaImpl(file
-                        .getCanonicalPath(), metadata));
-            } finally {
-                logger.trace("Closing Xuggler container");
-                XugglerException.throwIfInError(container.close());
-            }
+            listener.yetMoreMedia(makeMedia(file.getCanonicalPath()));
         } catch (Throwable th) {
             listener.warn("Couldn't read metadata from file " + file
                     + " with error: " + th.getMessage(), th);
@@ -81,5 +85,14 @@ public final class XugglerCatalogueImpl implements Catalogue {
     @Override
     public void listAllSongs(Listener listener) {
         recurseForMedia(root, listener);
+    }
+
+    @Override
+    public Media getMedia(String mediaId) {
+        try {
+            return makeMedia(mediaId);
+        } catch (XugglerException xugEx) {
+            throw new RuntimeException(xugEx);
+        }
     }
 }

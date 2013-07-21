@@ -2,7 +2,7 @@ package com.totalchange.discodj.web.shared.dj;
 
 import java.io.Serializable;
 
-public class SearchResultMedia implements Serializable {
+public class DjMedia implements Serializable {
     private static final long serialVersionUID = 8853328652712059275L;
 
     private String id;
@@ -29,7 +29,7 @@ public class SearchResultMedia implements Serializable {
         return title;
     }
 
-    public void setAlbum(String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 }

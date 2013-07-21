@@ -23,7 +23,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.totalchange.discodj.web.shared.dj.SearchResultMedia;
+import com.totalchange.discodj.web.shared.dj.DjMedia;
 
 class MediaWidget extends Composite {
     interface MediaWidgetUiBinder extends UiBinder<Widget, MediaWidget> {
@@ -38,13 +38,13 @@ class MediaWidget extends Composite {
     @UiField
     Label titleLabel;
 
-    private SearchResultMedia media;
+    private DjMedia media;
 
     public MediaWidget() {
         initWidget(uiBinder.createAndBindUi(this));
     }
 
-    public MediaWidget(SearchResultMedia media) {
+    public MediaWidget(DjMedia media) {
         this();
         setMedia(media);
     }
@@ -59,11 +59,11 @@ class MediaWidget extends Composite {
         ev.preventDefault();
     }
 
-    public SearchResultMedia getMedia() {
+    public DjMedia getMedia() {
         return media;
     }
 
-    public void setMedia(SearchResultMedia media) {
+    public void setMedia(DjMedia media) {
         this.media = media;
         populateFromMedia();
     }

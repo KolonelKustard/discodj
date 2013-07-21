@@ -26,4 +26,6 @@ public interface Catalogue {
      *            receives events as the catalogue is listed
      */
     void listAllSongs(Listener listener);
+    
+    Media getMedia(String mediaId);
 }

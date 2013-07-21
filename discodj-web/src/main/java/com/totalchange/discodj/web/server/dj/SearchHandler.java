@@ -34,7 +34,7 @@ import com.totalchange.discodj.search.SearchResults;
 import com.totalchange.discodj.web.shared.dj.SearchAction;
 import com.totalchange.discodj.web.shared.dj.SearchFacet;
 import com.totalchange.discodj.web.shared.dj.SearchResult;
-import com.totalchange.discodj.web.shared.dj.SearchResultMedia;
+import com.totalchange.discodj.web.shared.dj.DjMedia;
 
 public class SearchHandler implements ActionHandler<SearchAction, SearchResult> {
     private static final int RESULTS_PER_PAGE = 30;
@@ -65,6 +65,14 @@ public class SearchHandler implements ActionHandler<SearchAction, SearchResult> 
             dest.add(destFacet);
         }
         return dest;
+    }
+
+    static DjMedia copyMedia(Media media) {
+        DjMedia djMedia = new DjMedia();
+        djMedia.setId(media.getId());
+        djMedia.setArtist(media.getArtist());
+        djMedia.setTitle(media.getTitle());
+        return djMedia;
     }
 
     @Override
@@ -107,14 +115,9 @@ public class SearchHandler implements ActionHandler<SearchAction, SearchResult> 
         result.setDecadeFacets(copyFacets(action.getFacetIds(),
                 results.getDecadeFacets()));
 
-        List<SearchResultMedia> resultMedia = new ArrayList<>(results
-                .getResults().size());
+        List<DjMedia> resultMedia = new ArrayList<>(results.getResults().size());
         for (Media media : results.getResults()) {
-            SearchResultMedia srm = new SearchResultMedia();
-            srm.setId(media.getId());
-            srm.setArtist(media.getArtist());
-            srm.setAlbum(media.getAlbum());
-            resultMedia.add(srm);
+            resultMedia.add(copyMedia(media));
         }
         result.setResults(resultMedia);
 
@@ -125,6 +128,6 @@ public class SearchHandler implements ActionHandler<SearchAction, SearchResult> 
     @Override
     public void rollback(SearchAction action, SearchResult result,
             ExecutionContext context) throws DispatchException {
-        logger.warn("Call to roll back home action will have no effect");
+        logger.warn("Call to roll back search action will have no effect");
     }
 }

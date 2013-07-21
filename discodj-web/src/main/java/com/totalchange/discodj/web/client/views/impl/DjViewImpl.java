@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.totalchange.discodj.web.client.views.DjView;
 import com.totalchange.discodj.web.shared.dj.SearchFacet;
-import com.totalchange.discodj.web.shared.dj.SearchResultMedia;
+import com.totalchange.discodj.web.shared.dj.DjMedia;
 
 public class DjViewImpl extends Composite implements DjView {
     interface DjViewUiBinder extends UiBinder<Widget, DjViewImpl> {
@@ -124,16 +124,16 @@ public class DjViewImpl extends Composite implements DjView {
 
     }
 
-    private Widget makeMediaWidget(SearchResultMedia media) {
+    private Widget makeMediaWidget(DjMedia media) {
         MediaWidget mediaWidget = new MediaWidget(media);
         return new FocusPanel(mediaWidget);
     }
 
     @Override
     public void setResults(int currentPage, int numPages,
-            List<SearchResultMedia> results) {
+            List<DjMedia> results) {
         resultsPanel.clear();
-        for (SearchResultMedia media : results) {
+        for (DjMedia media : results) {
             Widget mediaWidget = makeMediaWidget(media);
             resultsPanel.add(mediaWidget);
 
@@ -167,9 +167,9 @@ public class DjViewImpl extends Composite implements DjView {
     }
 
     @Override
-    public void setPlaylist(List<SearchResultMedia> playlist) {
+    public void setPlaylist(List<DjMedia> playlist) {
         playlistPanel.clear();
-        for (SearchResultMedia media : playlist) {
+        for (DjMedia media : playlist) {
             Widget mediaWidget = makeMediaWidget(media);
             playlistPanel.add(mediaWidget);
 

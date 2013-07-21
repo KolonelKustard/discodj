@@ -18,6 +18,8 @@ import com.totalchange.discodj.web.client.places.DjPlace;
 import com.totalchange.discodj.web.client.views.DjView;
 import com.totalchange.discodj.web.shared.dj.SearchAction;
 import com.totalchange.discodj.web.shared.dj.SearchResult;
+import com.totalchange.discodj.web.shared.dj.StatusAction;
+import com.totalchange.discodj.web.shared.dj.StatusResult;
 import com.totalchange.discodj.web.shared.player.Media;
 
 public class DjActivity extends AbstractActivity implements DjView.Presenter {
@@ -50,6 +52,25 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
         djView.setAlbumFacets(result.getAlbumFacets());
         djView.setGenreFacets(result.getGenreFacets());
         djView.setDecadeFacets(result.getDecadeFacets());
+    }
+
+    private void showStatusUpdate(StatusResult result) {
+        djView.setPlaylist(result.getPlaylist());
+    }
+
+    private void requestStatusUpdate() {
+        StatusAction action = new StatusAction();
+        dispatchAsync.execute(action, new AsyncCallback<StatusResult>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                errorHandler.loadingError(caught);
+            }
+
+            @Override
+            public void onSuccess(StatusResult result) {
+                showStatusUpdate(result);
+            }
+        });
     }
 
     public void search() {
@@ -90,6 +111,7 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
     public void start(AcceptsOneWidget container, EventBus eventBus) {
         logger.finer("Starting up InitJizzActivity");
         container.setWidget(djView.asWidget());
+        requestStatusUpdate();
         logger.finer("Finished starting up InitJizzActivity");
     }
 
