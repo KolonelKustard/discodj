@@ -4,16 +4,15 @@ import java.util.List;
 
 import com.totalchange.discodj.web.shared.dj.SearchFacet;
 import com.totalchange.discodj.web.shared.dj.DjMedia;
-import com.totalchange.discodj.web.shared.player.Media;
 
 public interface DjView extends CommonView {
     public interface Presenter {
-        void setPlaylist(List<Media> playlist);
         void search(String keywords);
         void addFacet(String facetId);
         void removeFacet(String facetId);
         void previousPage();
         void nextPage();
+        void playlistPossiblyChanged();
     }
 
     void setPresenter(Presenter presenter);
@@ -28,5 +27,6 @@ public interface DjView extends CommonView {
     void setGenreFacets(List<SearchFacet> artistFacets);
     void setDecadeFacets(List<SearchFacet> artistFacets);
 
+    List<DjMedia> getPlaylist();
     void setPlaylist(List<DjMedia> playlist);
 }

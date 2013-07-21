@@ -16,11 +16,11 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.totalchange.discodj.web.client.error.ErrorHandler;
 import com.totalchange.discodj.web.client.places.DjPlace;
 import com.totalchange.discodj.web.client.views.DjView;
+import com.totalchange.discodj.web.shared.dj.DjMedia;
 import com.totalchange.discodj.web.shared.dj.SearchAction;
 import com.totalchange.discodj.web.shared.dj.SearchResult;
 import com.totalchange.discodj.web.shared.dj.StatusAction;
 import com.totalchange.discodj.web.shared.dj.StatusResult;
-import com.totalchange.discodj.web.shared.player.Media;
 
 public class DjActivity extends AbstractActivity implements DjView.Presenter {
     private static final Logger logger = Logger.getLogger(DjActivity.class
@@ -34,6 +34,8 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
     private String keywords = null;
     private List<String> facetIds = null;
     private int page = 1;
+
+    private List<DjMedia> playlist = null;
 
     @Inject
     public DjActivity(DjView djView, PlaceController placeController,
@@ -54,8 +56,32 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
         djView.setDecadeFacets(result.getDecadeFacets());
     }
 
+    private boolean isDifferentToPlaylist(List<DjMedia> other) {
+        if (playlist == null) {
+            return true;
+        }
+
+        if (playlist.size() != other.size()) {
+            return true;
+        }
+
+        for (int num = 0; num < playlist.size(); num++) {
+            String id1 = playlist.get(num).getId();
+            String id2 = other.get(num).getId();
+
+            if (!id1.equals(id2)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void showStatusUpdate(StatusResult result) {
-        djView.setPlaylist(result.getPlaylist());
+        if (isDifferentToPlaylist(result.getPlaylist())) {
+            playlist = result.getPlaylist();
+            djView.setPlaylist(result.getPlaylist());
+        }
     }
 
     private void requestStatusUpdate() {
@@ -116,11 +142,6 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
     }
 
     @Override
-    public void setPlaylist(List<Media> playlist) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     public void search(String keywords) {
         DjPlace place = new DjPlace();
         place.setKeywords(keywords);
@@ -177,5 +198,14 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
     @Override
     public void nextPage() {
         goToPage(page + 1);
+    }
+
+    @Override
+    public void playlistPossiblyChanged() {
+        List<DjMedia> revised = djView.getPlaylist();
+        if (isDifferentToPlaylist(revised)) {
+            logger.fine("Updating playlist");
+            // TODO Write update playlist action
+        }
     }
 }

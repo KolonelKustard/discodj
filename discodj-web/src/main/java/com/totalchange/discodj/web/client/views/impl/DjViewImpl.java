@@ -15,8 +15,11 @@
  */
 package com.totalchange.discodj.web.client.views.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.allen_sauer.gwt.dnd.client.DragEndEvent;
+import com.allen_sauer.gwt.dnd.client.DragHandlerAdapter;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.google.gwt.core.shared.GWT;
@@ -34,8 +37,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.totalchange.discodj.web.client.views.DjView;
-import com.totalchange.discodj.web.shared.dj.SearchFacet;
 import com.totalchange.discodj.web.shared.dj.DjMedia;
+import com.totalchange.discodj.web.shared.dj.SearchFacet;
 
 public class DjViewImpl extends Composite implements DjView {
     interface DjViewUiBinder extends UiBinder<Widget, DjViewImpl> {
@@ -91,6 +94,13 @@ public class DjViewImpl extends Composite implements DjView {
         VerticalPanelDropController playlistDropController = new VerticalPanelDropController(
                 playlistPanel);
         songDragController.registerDropController(playlistDropController);
+
+        songDragController.addDragHandler(new DragHandlerAdapter() {
+            @Override
+            public void onDragEnd(DragEndEvent event) {
+                presenter.playlistPossiblyChanged();
+            }
+        });
     }
 
     @UiHandler("searchTextBox")
@@ -130,8 +140,7 @@ public class DjViewImpl extends Composite implements DjView {
     }
 
     @Override
-    public void setResults(int currentPage, int numPages,
-            List<DjMedia> results) {
+    public void setResults(int currentPage, int numPages, List<DjMedia> results) {
         resultsPanel.clear();
         for (DjMedia media : results) {
             Widget mediaWidget = makeMediaWidget(media);
@@ -164,6 +173,18 @@ public class DjViewImpl extends Composite implements DjView {
     @Override
     public void setDecadeFacets(List<SearchFacet> facets) {
         this.decadeFacets.setFacets(presenter, facets);
+    }
+
+    @Override
+    public List<DjMedia> getPlaylist() {
+        List<DjMedia> playlist = new ArrayList<DjMedia>(
+                playlistPanel.getWidgetCount());
+        for (int num = 0; num < playlistPanel.getWidgetCount(); num++) {
+            MediaWidget widget = (MediaWidget) playlistPanel.getWidget(num);
+            playlist.add(widget.getMedia());
+        }
+
+        return playlist;
     }
 
     @Override
