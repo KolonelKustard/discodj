@@ -1,5 +1,7 @@
 package com.totalchange.discodj.catalogue;
 
+import java.util.List;
+
 import com.totalchange.discodj.media.Media;
 
 /**
@@ -28,4 +30,5 @@ public interface Catalogue {
     void listAllSongs(Listener listener);
     
     Media getMedia(String mediaId);
+    List<Media> getDefaultPlaylist();
 }

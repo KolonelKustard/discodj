@@ -2,6 +2,8 @@ package com.totalchange.discodj.xuggler;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Collections;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,8 @@ import com.xuggle.xuggler.IContainer;
 import com.xuggle.xuggler.IMetaData;
 
 public final class XugglerCatalogueImpl implements Catalogue {
+    private static final String DEFAULT_PLAYLIST = "default.m3u";
+    
     private static final Logger logger = LoggerFactory
             .getLogger(XugglerCatalogueImpl.class);
 
@@ -94,5 +98,16 @@ public final class XugglerCatalogueImpl implements Catalogue {
         } catch (XugglerException xugEx) {
             throw new RuntimeException(xugEx);
         }
+    }
+
+    @Override
+    public List<Media> getDefaultPlaylist() {
+        File file = new File(root, DEFAULT_PLAYLIST);
+        if (!file.exists()) {
+            return Collections.emptyList();
+        }
+        
+        // TODO Auto-generated method stub
+        return null;
     }
 }
