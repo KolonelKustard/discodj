@@ -1,7 +1,9 @@
 package com.totalchange.discodj.queue;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -11,12 +13,20 @@ import com.totalchange.discodj.media.Media;
 
 @Singleton
 public class PlaylistQueue {
+    private Queue<String> defaultQueue = new LinkedList<>();
     private PlaylistIdQueue queue = new PlaylistIdQueue();
     private Catalogue catalogue;
 
     @Inject
     public PlaylistQueue(Catalogue catalogue) {
         this.catalogue = catalogue;
+
+        List<Media> defaultMediaQueue = catalogue.getDefaultPlaylist();
+        if (defaultMediaQueue != null) {
+            for (Media media : defaultMediaQueue) {
+                defaultQueue.offer(media.getId());
+            }
+        }
     }
 
     private Media fetchMedia(String id) {
@@ -25,7 +35,17 @@ public class PlaylistQueue {
     }
 
     public Media pop() {
-        return fetchMedia(queue.popNextMediaId());
+        String nextMediaId = queue.popNextMediaId();
+        if (nextMediaId != null) {
+            return fetchMedia(nextMediaId);
+        }
+
+        nextMediaId = defaultQueue.poll();
+        if (nextMediaId != null) {
+            return fetchMedia(nextMediaId);
+        }
+
+        return null;
     }
 
     public List<Media> getPlaylist() {

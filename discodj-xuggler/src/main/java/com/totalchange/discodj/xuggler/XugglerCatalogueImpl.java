@@ -2,6 +2,8 @@ package com.totalchange.discodj.xuggler;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,12 +12,13 @@ import org.slf4j.LoggerFactory;
 
 import com.totalchange.discodj.catalogue.Catalogue;
 import com.totalchange.discodj.media.Media;
+import com.totalchange.discodj.util.M3uPlaylist;
 import com.xuggle.xuggler.IContainer;
 import com.xuggle.xuggler.IMetaData;
 
 public final class XugglerCatalogueImpl implements Catalogue {
     private static final String DEFAULT_PLAYLIST = "default.m3u";
-    
+
     private static final Logger logger = LoggerFactory
             .getLogger(XugglerCatalogueImpl.class);
 
@@ -106,8 +109,29 @@ public final class XugglerCatalogueImpl implements Catalogue {
         if (!file.exists()) {
             return Collections.emptyList();
         }
-        
-        // TODO Auto-generated method stub
-        return null;
+
+        M3uPlaylist m3u = new M3uPlaylist();
+        try {
+            m3u.read(file);
+
+            List<File> files = m3u.getPlaylist(root);
+            List<Media> playlist = new ArrayList<>(files.size());
+            for (File media : files) {
+                try {
+                    playlist.add(makeMedia(media.getCanonicalPath()));
+                } catch (XugglerException xEx) {
+                    logger.info(
+                            "Skipped adding item " + file
+                                    + " to default playlist with error: "
+                                    + xEx.getMessage(), xEx);
+                }
+            }
+            return playlist;
+        } catch (IOException ioEx) {
+            logger.error(
+                    "Error reading default playlist: " + ioEx.getMessage(),
+                    ioEx);
+            return Collections.emptyList();
+        }
     }
 }
