@@ -15,6 +15,12 @@
  */
 package com.totalchange.discodj.web.server.player;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
+import javax.inject.Inject;
+
 import net.customware.gwt.dispatch.server.ActionHandler;
 import net.customware.gwt.dispatch.server.ExecutionContext;
 import net.customware.gwt.dispatch.shared.DispatchException;
@@ -22,13 +28,26 @@ import net.customware.gwt.dispatch.shared.DispatchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.totalchange.discodj.media.Media;
+import com.totalchange.discodj.queue.PlaylistQueue;
 import com.totalchange.discodj.web.shared.player.GetNextFromPlaylistAction;
 import com.totalchange.discodj.web.shared.player.GetNextFromPlaylistResult;
+import com.totalchange.discodj.web.shared.player.GetNextFromPlaylistResult.MediaType;
 
 public class GetNextFromPlaylistHandler implements
         ActionHandler<GetNextFromPlaylistAction, GetNextFromPlaylistResult> {
+    private static final String MEDIA_SERVLET_URL_PREFIX = "/media?id=";
+    private static final String URL_ENCODING = StandardCharsets.UTF_8.name();
+
     private static final Logger logger = LoggerFactory
             .getLogger(GetNextFromPlaylistHandler.class);
+
+    private PlaylistQueue playlistQueue;
+
+    @Inject
+    public GetNextFromPlaylistHandler(PlaylistQueue playlistQueue) {
+        this.playlistQueue = playlistQueue;
+    }
 
     @Override
     public Class<GetNextFromPlaylistAction> getActionType() {
@@ -38,10 +57,27 @@ public class GetNextFromPlaylistHandler implements
     @Override
     public GetNextFromPlaylistResult execute(GetNextFromPlaylistAction action,
             ExecutionContext context) throws DispatchException {
-        logger.trace("Fetching server settings");
+        logger.trace("Fetching next song to play from playlist");
         GetNextFromPlaylistResult result = new GetNextFromPlaylistResult();
 
-        logger.trace("Returning server settings {}", result);
+        Media media = playlistQueue.pop();
+        result.setType(MediaType.Audio);
+        if (media.getId().toLowerCase().endsWith("mp4")) {
+            // TODO Improve crude type detection
+            result.setType(MediaType.Video);
+        }
+
+        try {
+            result.setUrl(MEDIA_SERVLET_URL_PREFIX
+                    + URLEncoder.encode(media.getId(), URL_ENCODING));
+        } catch (UnsupportedEncodingException ueEx) {
+            throw new RuntimeException(ueEx);
+        }
+        result.setArtist(media.getArtist());
+        result.setTitle(media.getTitle());
+        result.setRequestedBy(media.getRequestedBy());
+
+        logger.trace("Returning next song {}", result);
         return result;
     }
 
@@ -49,6 +85,6 @@ public class GetNextFromPlaylistHandler implements
     public void rollback(GetNextFromPlaylistAction action,
             GetNextFromPlaylistResult result, ExecutionContext context)
             throws DispatchException {
-        logger.warn("Calls to GetSettingsHandler#rollback do nothing");
+        logger.warn("Calls to GetNextFromPlaylistHandler#rollback do nothing");
     }
 }

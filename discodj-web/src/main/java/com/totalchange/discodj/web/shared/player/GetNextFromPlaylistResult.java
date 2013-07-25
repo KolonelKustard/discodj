@@ -18,4 +18,53 @@ package com.totalchange.discodj.web.shared.player;
 import net.customware.gwt.dispatch.shared.Result;
 
 public class GetNextFromPlaylistResult implements Result {
+    public enum MediaType {
+        Video, Audio
+    }
+
+    private MediaType type;
+    private String url;
+    private String artist;
+    private String title;
+    private String requestedBy;
+
+    public MediaType getType() {
+        return type;
+    }
+
+    public void setType(MediaType type) {
+        this.type = type;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getRequestedBy() {
+        return requestedBy;
+    }
+
+    public void setRequestedBy(String requestedBy) {
+        this.requestedBy = requestedBy;
+    }
 }

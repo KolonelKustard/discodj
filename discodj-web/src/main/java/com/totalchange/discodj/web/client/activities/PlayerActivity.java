@@ -27,7 +27,8 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.totalchange.discodj.web.client.error.ErrorHandler;
 import com.totalchange.discodj.web.client.views.PlayerView;
-import com.totalchange.discodj.web.shared.player.Media;
+import com.totalchange.discodj.web.shared.player.GetNextFromPlaylistResult;
+import com.totalchange.discodj.web.shared.player.PlayerMedia;
 
 public class PlayerActivity extends AbstractActivity implements
         PlayerView.Presenter {
@@ -52,17 +53,21 @@ public class PlayerActivity extends AbstractActivity implements
 
         this.playerView.setPresenter(this);
     }
+    
+    private void playNext(GetNextFromPlaylistResult next) {
+        
+    }
 
-    private void playNext() {
+    private void loadNext() {
         if (next == 0) {
-            Media media = new Media();
+            PlayerMedia media = new PlayerMedia();
             media.setId("./test/sample.mp4");
             media.setUrl("./test/sample.mp4");
             playerView.playVideo(media);
 
             next = 1;
         } else {
-            Media media = new Media();
+            PlayerMedia media = new PlayerMedia();
             media.setId("./test/sample.mp3");
             media.setUrl("./test/sample.mp3");
             playerView.playAudio(media);
@@ -75,12 +80,12 @@ public class PlayerActivity extends AbstractActivity implements
     public void start(AcceptsOneWidget container, EventBus eventBus) {
         logger.finer("Starting up InitJizzActivity");
         container.setWidget(playerView.asWidget());
-        playNext();
+        loadNext();
         logger.finer("Finished starting up InitJizzActivity");
     }
 
     @Override
     public void finishedPlayingCurrent() {
-        playNext();
+        loadNext();
     }
 }

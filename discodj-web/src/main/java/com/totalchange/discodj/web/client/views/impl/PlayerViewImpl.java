@@ -26,7 +26,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 import com.totalchange.discodj.web.client.views.PlayerView;
-import com.totalchange.discodj.web.shared.player.Media;
 
 public class PlayerViewImpl extends Composite implements PlayerView {
     interface PlayerViewUiBinder extends UiBinder<Widget, PlayerViewImpl> {
@@ -79,14 +78,14 @@ public class PlayerViewImpl extends Composite implements PlayerView {
     }
 
     @Override
-    public void playVideo(Media v) {
-        video.setSrc(v.getUrl());
+    public void playVideo(String videoUrl) {
+        video.setSrc(videoUrl);
         video.play();
     }
 
     @Override
-    public void playAudio(Media a) {
-        audio.setSrc(a.getUrl());
+    public void playAudio(String audioUrl) {
+        audio.setSrc(audioUrl);
         audio.play();
     }
 }

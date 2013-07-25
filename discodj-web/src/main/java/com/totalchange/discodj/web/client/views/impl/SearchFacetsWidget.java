@@ -16,14 +16,9 @@
 package com.totalchange.discodj.web.client.views.impl;
 
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.totalchange.discodj.web.shared.player.Media;
 
 class SearchFacetsWidget extends Composite {
     interface SearchFacetsWidgetUiBinder extends UiBinder<Widget, SearchFacetsWidget> {

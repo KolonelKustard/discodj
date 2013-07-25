@@ -68,6 +68,10 @@ public class SearchHandler implements ActionHandler<SearchAction, SearchResult> 
     }
 
     static DjMedia copyMedia(Media media) {
+        if (media == null) {
+            return null;
+        }
+
         DjMedia djMedia = new DjMedia();
         djMedia.setId(media.getId());
         djMedia.setArtist(media.getArtist());

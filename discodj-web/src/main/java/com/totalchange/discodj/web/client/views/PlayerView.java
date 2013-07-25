@@ -15,8 +15,6 @@
  */
 package com.totalchange.discodj.web.client.views;
 
-import com.totalchange.discodj.web.shared.player.Media;
-
 public interface PlayerView extends CommonView {
     public interface Presenter {
         void finishedPlayingCurrent();
@@ -24,6 +22,6 @@ public interface PlayerView extends CommonView {
 
     void setPresenter(Presenter presenter);
 
-    void playVideo(Media video);
-    void playAudio(Media audio);
+    void playVideo(String videoUrl);
+    void playAudio(String audioUrl);
 }

@@ -41,6 +41,9 @@ public class StatusHandler implements ActionHandler<StatusAction, StatusResult> 
 
         StatusResult result = new StatusResult();
 
+        Media nowPlaying = queue.getLastPopped();
+        result.setNowPlaying(SearchHandler.copyMedia(nowPlaying));
+
         List<Media> playlist = queue.getPlaylist();
         List<DjMedia> copied = new ArrayList<>(playlist.size());
         for (Media media : playlist) {

@@ -16,6 +16,7 @@ public class PlaylistQueue {
     private Queue<String> defaultQueue = new LinkedList<>();
     private PlaylistIdQueue queue = new PlaylistIdQueue();
     private Catalogue catalogue;
+    private Media lastPopped = null;
 
     @Inject
     public PlaylistQueue(Catalogue catalogue) {
@@ -35,17 +36,24 @@ public class PlaylistQueue {
     }
 
     public Media pop() {
+        // TODO Error handling in case resources aren't available
         String nextMediaId = queue.popNextMediaId();
         if (nextMediaId != null) {
-            return fetchMedia(nextMediaId);
+            lastPopped = fetchMedia(nextMediaId);
+            return lastPopped;
         }
 
         nextMediaId = defaultQueue.poll();
         if (nextMediaId != null) {
-            return fetchMedia(nextMediaId);
+            lastPopped = fetchMedia(nextMediaId);
+            return lastPopped;
         }
 
         return null;
+    }
+
+    public Media getLastPopped() {
+        return lastPopped;
     }
 
     public List<Media> getPlaylist() {
