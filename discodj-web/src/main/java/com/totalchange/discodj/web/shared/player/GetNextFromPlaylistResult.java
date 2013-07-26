@@ -22,11 +22,20 @@ public class GetNextFromPlaylistResult implements Result {
         Video, Audio
     }
 
+    private boolean queueEmpty;
     private MediaType type;
     private String url;
     private String artist;
     private String title;
     private String requestedBy;
+
+    public boolean isQueueEmpty() {
+        return queueEmpty;
+    }
+
+    public void setQueueEmpty(boolean queueEmpty) {
+        this.queueEmpty = queueEmpty;
+    }
 
     public MediaType getType() {
         return type;

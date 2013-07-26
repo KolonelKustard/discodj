@@ -23,12 +23,13 @@ import net.customware.gwt.dispatch.client.DispatchAsync;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.totalchange.discodj.web.client.error.ErrorHandler;
 import com.totalchange.discodj.web.client.views.PlayerView;
+import com.totalchange.discodj.web.shared.player.GetNextFromPlaylistAction;
 import com.totalchange.discodj.web.shared.player.GetNextFromPlaylistResult;
-import com.totalchange.discodj.web.shared.player.PlayerMedia;
+import com.totalchange.discodj.web.shared.player.GetNextFromPlaylistResult.MediaType;
 
 public class PlayerActivity extends AbstractActivity implements
         PlayerView.Presenter {
@@ -36,44 +37,44 @@ public class PlayerActivity extends AbstractActivity implements
             .getName());
 
     private PlayerView playerView;
-    private PlaceController placeController;
     private DispatchAsync dispatch;
     private ErrorHandler errorHandler;
 
-    private int next = 0;
-
     @Inject
-    public PlayerActivity(PlayerView playerView,
-            PlaceController placeController, DispatchAsync dispatch,
+    public PlayerActivity(PlayerView playerView, DispatchAsync dispatch,
             ErrorHandler errorHandler) {
         this.playerView = playerView;
-        this.placeController = placeController;
         this.dispatch = dispatch;
         this.errorHandler = errorHandler;
 
         this.playerView.setPresenter(this);
     }
-    
+
     private void playNext(GetNextFromPlaylistResult next) {
-        
+        if (next.isQueueEmpty()) {
+            return;
+        }
+
+        if (next.getType() == MediaType.Video) {
+            playerView.playVideo(next.getUrl());
+        } else {
+            playerView.playAudio(next.getUrl());
+        }
     }
 
     private void loadNext() {
-        if (next == 0) {
-            PlayerMedia media = new PlayerMedia();
-            media.setId("./test/sample.mp4");
-            media.setUrl("./test/sample.mp4");
-            playerView.playVideo(media);
+        dispatch.execute(new GetNextFromPlaylistAction(),
+                new AsyncCallback<GetNextFromPlaylistResult>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        errorHandler.loadingError(caught);
+                    }
 
-            next = 1;
-        } else {
-            PlayerMedia media = new PlayerMedia();
-            media.setId("./test/sample.mp3");
-            media.setUrl("./test/sample.mp3");
-            playerView.playAudio(media);
-
-            next = 0;
-        }
+                    @Override
+                    public void onSuccess(GetNextFromPlaylistResult result) {
+                        playNext(result);
+                    }
+                });
     }
 
     @Override

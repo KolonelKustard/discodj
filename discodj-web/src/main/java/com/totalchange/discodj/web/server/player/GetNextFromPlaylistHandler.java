@@ -61,6 +61,13 @@ public class GetNextFromPlaylistHandler implements
         GetNextFromPlaylistResult result = new GetNextFromPlaylistResult();
 
         Media media = playlistQueue.pop();
+
+        if (media == null) {
+            result.setQueueEmpty(true);
+            return result;
+        }
+        result.setQueueEmpty(false);
+
         result.setType(MediaType.Audio);
         if (media.getId().toLowerCase().endsWith("mp4")) {
             // TODO Improve crude type detection
