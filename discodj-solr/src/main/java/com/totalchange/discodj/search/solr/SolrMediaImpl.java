@@ -46,5 +46,4 @@ final class SolrMediaImpl implements Media {
     public String getTitle() {
         return (String) doc.get(SolrSearchProviderImpl.F_TITLE);
     }
-
 }

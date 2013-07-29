@@ -1,8 +1,10 @@
 package com.totalchange.discodj.xuggler;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -133,5 +135,10 @@ public final class XugglerCatalogueImpl implements Catalogue {
                     ioEx);
             return Collections.emptyList();
         }
+    }
+
+    @Override
+    public InputStream getMediaData(Media media) throws IOException {
+        return new FileInputStream(media.getId());
     }
 }

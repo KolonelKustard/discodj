@@ -30,13 +30,15 @@ import org.slf4j.LoggerFactory;
 
 import com.totalchange.discodj.media.Media;
 import com.totalchange.discodj.queue.PlaylistQueue;
+import com.totalchange.discodj.web.server.MediaServlet;
 import com.totalchange.discodj.web.shared.player.GetNextFromPlaylistAction;
 import com.totalchange.discodj.web.shared.player.GetNextFromPlaylistResult;
 import com.totalchange.discodj.web.shared.player.GetNextFromPlaylistResult.MediaType;
 
 public class GetNextFromPlaylistHandler implements
         ActionHandler<GetNextFromPlaylistAction, GetNextFromPlaylistResult> {
-    private static final String MEDIA_SERVLET_URL_PREFIX = "/media?id=";
+    private static final String MEDIA_SERVLET_URL_PREFIX = MediaServlet.PATH
+            + "?" + MediaServlet.PARAM_ID + "=";
     private static final String URL_ENCODING = StandardCharsets.UTF_8.name();
 
     private static final Logger logger = LoggerFactory

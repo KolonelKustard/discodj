@@ -1,5 +1,7 @@
 package com.totalchange.discodj.catalogue;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import com.totalchange.discodj.media.Media;
@@ -31,4 +33,5 @@ public interface Catalogue {
     
     Media getMedia(String mediaId);
     List<Media> getDefaultPlaylist();
+    InputStream getMediaData(Media media) throws IOException;
 }
