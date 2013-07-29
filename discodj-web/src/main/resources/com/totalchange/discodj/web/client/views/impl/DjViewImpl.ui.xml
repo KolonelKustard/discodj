@@ -31,6 +31,10 @@
 			left: 67%;
 		}
 		
+		.playlistPanel {
+			padding-bottom: 2em;
+		}
+		
 		.header {
 			margin: 0;
 			padding: 1em;
@@ -98,7 +102,7 @@
 			</div>
 			<div class="{style.column} {style.playlistColumn}">
 				<h2 class="{style.header}">Playlist</h2>
-				<g:VerticalPanel ui:field="playlistPanel" width="100%" />
+				<g:VerticalPanel ui:field="playlistPanel" width="100%" styleName="{style.playlistPanel}" />
 			</div>
 		</g:HTMLPanel>
 	</g:AbsolutePanel>
