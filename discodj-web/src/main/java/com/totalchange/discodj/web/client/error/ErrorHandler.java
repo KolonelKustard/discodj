@@ -1,7 +1,5 @@
 package com.totalchange.discodj.web.client.error;
 
-import java.util.Set;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
