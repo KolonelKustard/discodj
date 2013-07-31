@@ -71,6 +71,13 @@
 		.pageLabel {
 			text-align: center;
 		}
+		
+		.nowPlaying {
+			width: 100%;
+			position: absolute;
+			bottom: 0;
+			border: 1px solid #0F0;
+		}
 	</ui:style>
 	
 	<g:AbsolutePanel ui:field="boundaryPanel" width="100%" height="100%">
@@ -103,6 +110,10 @@
 			<div class="{style.column} {style.playlistColumn}">
 				<h2 class="{style.header}">Playlist</h2>
 				<g:VerticalPanel ui:field="playlistPanel" width="100%" styleName="{style.playlistPanel}" />
+				<div class="{style.nowPlaying}">
+					<h3>Now Playing:</h3>
+					<g:Label ui:field="nowPlayingLabel" />
+				</div>
 			</div>
 		</g:HTMLPanel>
 	</g:AbsolutePanel>

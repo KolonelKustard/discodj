@@ -80,6 +80,9 @@ public class DjViewImpl extends Composite implements DjView {
     VerticalPanel playlistPanel;
 
     @UiField
+    Label nowPlayingLabel;
+
+    @UiField
     TextBox searchTextBox;
 
     public DjViewImpl() {
@@ -129,9 +132,8 @@ public class DjViewImpl extends Composite implements DjView {
     }
 
     @Override
-    public void setNowPlaying(String artist, String album) {
-        // TODO Auto-generated method stub
-
+    public void setNowPlaying(String artist, String title) {
+        nowPlayingLabel.setText(title + " - " + artist);
     }
 
     private Widget makeMediaWidget(DjMedia media) {
@@ -180,8 +182,17 @@ public class DjViewImpl extends Composite implements DjView {
         List<DjMedia> playlist = new ArrayList<DjMedia>(
                 playlistPanel.getWidgetCount());
         for (int num = 0; num < playlistPanel.getWidgetCount(); num++) {
-            MediaWidget widget = (MediaWidget) playlistPanel.getWidget(num);
-            playlist.add(widget.getMedia());
+            Object widget = playlistPanel.getWidget(num);
+
+            if (widget instanceof FocusPanel) {
+                FocusPanel focusPanel = (FocusPanel) widget;
+                widget = focusPanel.getWidget();
+            }
+
+            if (widget != null && widget instanceof MediaWidget) {
+                MediaWidget mediaWidget = (MediaWidget) widget;
+                playlist.add(mediaWidget.getMedia());
+            }
         }
 
         return playlist;

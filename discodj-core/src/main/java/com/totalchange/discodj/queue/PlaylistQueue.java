@@ -57,10 +57,11 @@ public class PlaylistQueue {
             lastPopped = fetchMedia(nextMediaId);
             logger.trace("Returning media from default queue {}", lastPopped);
             return lastPopped;
+        } else {
+            logger.trace("Nothing left in the queue");
+            lastPopped = null;
+            return lastPopped;
         }
-
-        logger.trace("Queue empty");
-        return null;
     }
 
     public Media getLastPopped() {

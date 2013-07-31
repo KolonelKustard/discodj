@@ -79,10 +79,19 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
     }
 
     private void showStatusUpdate(StatusResult result) {
+        if (result.getNowPlaying() != null) {
+            djView.setNowPlaying(result.getNowPlaying().getArtist(), result
+                    .getNowPlaying().getTitle());
+        } else {
+            djView.setNowPlaying(null, null);
+        }
+
         if (isDifferentToPlaylist(result.getPlaylist())) {
             playlist = result.getPlaylist();
             djView.setPlaylist(result.getPlaylist());
         }
+
+        // TODO Trigger another time delayed update
     }
 
     private void requestStatusUpdate() {

@@ -52,17 +52,21 @@ public class PlayerActivity extends AbstractActivity implements
 
     private void playNext(GetNextFromPlaylistResult next) {
         if (next.isQueueEmpty()) {
+            logger.fine("Queue is empty - nothing to play");
             return;
         }
 
         if (next.getType() == MediaType.Video) {
+            logger.fine("Playing next audio " + next.getUrl());
             playerView.playVideo(next.getUrl());
         } else {
+            logger.fine("Playing next video " + next.getUrl());
             playerView.playAudio(next.getUrl());
         }
     }
 
     private void loadNext() {
+        logger.finer("Loading next media");
         dispatch.execute(new GetNextFromPlaylistAction(),
                 new AsyncCallback<GetNextFromPlaylistResult>() {
                     @Override
@@ -72,6 +76,7 @@ public class PlayerActivity extends AbstractActivity implements
 
                     @Override
                     public void onSuccess(GetNextFromPlaylistResult result) {
+                        logger.finer("Got next media");
                         playNext(result);
                     }
                 });
