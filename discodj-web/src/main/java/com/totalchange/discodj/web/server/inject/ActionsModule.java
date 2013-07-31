@@ -5,9 +5,11 @@ import org.slf4j.LoggerFactory;
 
 import com.totalchange.discodj.web.server.dj.SearchHandler;
 import com.totalchange.discodj.web.server.dj.StatusHandler;
+import com.totalchange.discodj.web.server.dj.UpdatePlaylistHandler;
 import com.totalchange.discodj.web.server.player.GetNextFromPlaylistHandler;
 import com.totalchange.discodj.web.shared.dj.SearchAction;
 import com.totalchange.discodj.web.shared.dj.StatusAction;
+import com.totalchange.discodj.web.shared.dj.UpdatePlaylistAction;
 import com.totalchange.discodj.web.shared.player.GetNextFromPlaylistAction;
 
 import net.customware.gwt.dispatch.server.guice.ActionHandlerModule;
@@ -21,6 +23,7 @@ public class ActionsModule extends ActionHandlerModule {
 
         bindHandler(SearchAction.class, SearchHandler.class);
         bindHandler(StatusAction.class, StatusHandler.class);
+        bindHandler(UpdatePlaylistAction.class, UpdatePlaylistHandler.class);
         bindHandler(GetNextFromPlaylistAction.class,
                 GetNextFromPlaylistHandler.class);
 

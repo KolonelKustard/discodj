@@ -8,11 +8,17 @@ import java.util.Queue;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.totalchange.discodj.catalogue.Catalogue;
 import com.totalchange.discodj.media.Media;
 
 @Singleton
 public class PlaylistQueue {
+    private static final Logger logger = LoggerFactory
+            .getLogger(PlaylistQueue.class);
+
     private Queue<String> defaultQueue = new LinkedList<>();
     private PlaylistIdQueue queue = new PlaylistIdQueue();
     private Catalogue catalogue;
@@ -36,19 +42,24 @@ public class PlaylistQueue {
     }
 
     public Media pop() {
+        logger.trace("Popping next item off the queue");
+
         // TODO Error handling in case resources aren't available
         String nextMediaId = queue.popNextMediaId();
         if (nextMediaId != null) {
             lastPopped = fetchMedia(nextMediaId);
+            logger.trace("Returning media from manual queue {}", lastPopped);
             return lastPopped;
         }
 
         nextMediaId = defaultQueue.poll();
         if (nextMediaId != null) {
             lastPopped = fetchMedia(nextMediaId);
+            logger.trace("Returning media from default queue {}", lastPopped);
             return lastPopped;
         }
 
+        logger.trace("Queue empty");
         return null;
     }
 
@@ -66,6 +77,7 @@ public class PlaylistQueue {
     }
 
     public void setPlaylist(List<String> playlist) {
+        logger.trace("Setting playlist to {}", playlist);
         queue.setPlaylist(playlist);
     }
 

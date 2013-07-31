@@ -21,6 +21,7 @@ import com.totalchange.discodj.web.shared.dj.SearchAction;
 import com.totalchange.discodj.web.shared.dj.SearchResult;
 import com.totalchange.discodj.web.shared.dj.StatusAction;
 import com.totalchange.discodj.web.shared.dj.StatusResult;
+import com.totalchange.discodj.web.shared.dj.UpdatePlaylistAction;
 
 public class DjActivity extends AbstractActivity implements DjView.Presenter {
     private static final Logger logger = Logger.getLogger(DjActivity.class
@@ -205,7 +206,27 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
         List<DjMedia> revised = djView.getPlaylist();
         if (isDifferentToPlaylist(revised)) {
             logger.fine("Updating playlist");
-            // TODO Write update playlist action
+
+            UpdatePlaylistAction action = new UpdatePlaylistAction();
+            List<DjMedia> playlist = djView.getPlaylist();
+            List<String> revisedPlaylistMediaIds = new ArrayList<String>(
+                    playlist.size());
+            for (DjMedia media : playlist) {
+                revisedPlaylistMediaIds.add(media.getId());
+            }
+            action.setRevisedPlaylist(revisedPlaylistMediaIds);
+            dispatchAsync.execute(action, new AsyncCallback<StatusResult>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    errorHandler.loadingError(caught);
+                }
+
+                @Override
+                public void onSuccess(StatusResult result) {
+                    logger.fine("Playlist updated");
+                    showStatusUpdate(result);
+                }
+            });
         }
     }
 }
