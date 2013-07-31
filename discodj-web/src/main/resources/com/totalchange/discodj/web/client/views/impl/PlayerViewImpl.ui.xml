@@ -6,11 +6,14 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:m="urn:import:com.google.gwt.media.client">
 	<ui:style>
-		
+		.fullscreen {
+			width: 100%;
+			height: 100%;
+		}
 	</ui:style>
 	
 	<g:HTMLPanel>
 		<m:Audio ui:field="audio" />
-		<m:Video ui:field="video" />
+		<m:Video ui:field="video" styleName="{style.fullscreen}" />
 	</g:HTMLPanel>
 </ui:UiBinder>
