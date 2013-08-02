@@ -9,7 +9,6 @@
 	</ui:style>
 	
 	<g:HTMLPanel>
-		<g:Label ui:field="titleLabel">Title</g:Label>
 		<g:VerticalPanel ui:field="checkboxesPanel" />
 	</g:HTMLPanel>
 </ui:UiBinder>

@@ -23,9 +23,6 @@ public class FacetsWidget extends Composite {
             .create(FacetsWidgetUiBinder.class);
 
     @UiField
-    Label titleLabel;
-
-    @UiField
     VerticalPanel checkboxesPanel;
 
     private List<SearchFacet> facets;
@@ -58,14 +55,6 @@ public class FacetsWidget extends Composite {
             });
             checkboxesPanel.add(checkbox);
         }
-    }
-
-    public String getTitle() {
-        return titleLabel.getText();
-    }
-
-    public void setTitle(String title) {
-        titleLabel.setText(title);
     }
 
     public List<SearchFacet> getFacets() {

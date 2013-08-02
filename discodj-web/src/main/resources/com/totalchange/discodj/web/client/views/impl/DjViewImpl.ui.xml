@@ -45,9 +45,16 @@
 			width: 98%;
 		}
 		
+		.facetTitle {
+			padding: 0;
+			margin: 0;
+			font-size: 100%;
+		}
+		
 		.facetsContainer {
-			height: 22%;
+			height: 16%;
 			border: 1px solid #0F0;
+			overflow: auto;
 		}
 		
 		.paging {
@@ -85,17 +92,21 @@
 			<div class="{style.column} {style.searchColumn}">
 				<h2 class="{style.header}">Search</h2>
 				<g:TextBox ui:field="searchTextBox" addStyleNames="{style.searchTextBox}" />
+				<h3 class="{style.facetTitle}">Artists</h3>
 				<div class="{style.facetsContainer}">
-					<dj:FacetsWidget ui:field="artistFacets" title="Artists" />
+					<dj:FacetsWidget ui:field="artistFacets" />
 				</div>
+				<h3 class="{style.facetTitle}">Albums</h3>
 				<div class="{style.facetsContainer}">
-					<dj:FacetsWidget ui:field="albumFacets" title="Albums" />
+					<dj:FacetsWidget ui:field="albumFacets" />
 				</div>
+				<h3 class="{style.facetTitle}">Genres</h3>
 				<div class="{style.facetsContainer}">
-					<dj:FacetsWidget ui:field="genreFacets" title="Genres" />
+					<dj:FacetsWidget ui:field="genreFacets" />
 				</div>
+				<h3 class="{style.facetTitle}">Decades</h3>
 				<div class="{style.facetsContainer}">
-					<dj:FacetsWidget ui:field="decadeFacets" title="Decades" />
+					<dj:FacetsWidget ui:field="decadeFacets" />
 				</div>
 			</div>
 			<div class="{style.column} {style.resultsColumn}">

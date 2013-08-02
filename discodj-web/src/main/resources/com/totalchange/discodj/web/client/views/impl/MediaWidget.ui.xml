@@ -9,11 +9,15 @@
 			border: 1px solid #000;
 			padding: 0.5em;
 		}
+		
+		.inline {
+			display: inline;
+		}
 	</ui:style>
 	
-	<g:HorizontalPanel>
-		<g:Label ui:field="titleLabel">Title</g:Label>
-		<g:Label ui:field="byLabel">by</g:Label>
-		<g:Label ui:field="artistLabel">Artist</g:Label>
-	</g:HorizontalPanel>
+	<g:HTMLPanel>
+		<g:Label ui:field="titleLabel" styleName="{style.inline}">Title</g:Label>
+		<g:Label ui:field="byLabel" styleName="{style.inline}">by</g:Label>
+		<g:Label ui:field="artistLabel" styleName="{style.inline}">Artist</g:Label>
+	</g:HTMLPanel>
 </ui:UiBinder>
