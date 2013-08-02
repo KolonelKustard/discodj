@@ -1,9 +1,9 @@
 package com.totalchange.discodj.xuggler;
 
-import com.totalchange.discodj.media.Media;
+import com.totalchange.discodj.media.AbstractMedia;
 import com.xuggle.xuggler.IMetaData;
 
-final class XugglerMediaImpl implements Media {
+final class XugglerMediaImpl extends AbstractMedia {
     private String id;
     private String artist;
     private String album;
@@ -60,5 +60,10 @@ final class XugglerMediaImpl implements Media {
     @Override
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public String toString() {
+        return "XugglerMediaImpl [" + super.toString() + "]";
     }
 }
