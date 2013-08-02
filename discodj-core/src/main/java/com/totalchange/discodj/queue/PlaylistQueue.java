@@ -58,22 +58,24 @@ public class PlaylistQueue {
         logger.trace("Popping next item off the queue - trying requested "
                 + "queue first");
 
-        Media nextMedia = requestedQueue.remove(0);
-        if (nextMedia != null) {
-            if (skipIfInPoppedList(nextMedia)) {
-                logger.trace("Skipping already played media {}", nextMedia);
-                return pop();
-            } else {
-                lastPopped = nextMedia;
-                addPoppedId(lastPopped.getId());
-                logger.trace("Returning media from requested queue {}",
-                        lastPopped);
-                return lastPopped;
+        if (requestedQueue.size() > 0) {
+            Media nextMedia = requestedQueue.remove(0);
+            if (nextMedia != null) {
+                if (skipIfInPoppedList(nextMedia)) {
+                    logger.trace("Skipping already played media {}", nextMedia);
+                    return pop();
+                } else {
+                    lastPopped = nextMedia;
+                    addPoppedId(lastPopped.getId());
+                    logger.trace("Returning media from requested queue {}",
+                            lastPopped);
+                    return lastPopped;
+                }
             }
         }
 
         logger.trace("Nothing in requested queue, trying default queue");
-        nextMedia = defaultQueue.poll();
+        Media nextMedia = defaultQueue.poll();
         if (nextMedia != null) {
             if (skipIfInPoppedList(nextMedia)) {
                 logger.trace("Skipping already played media {}", nextMedia);
@@ -123,16 +125,25 @@ public class PlaylistQueue {
     }
 
     public synchronized int getWhenCanBePlayedAgain(Media media) {
+        logger.trace("Working out when {} can be played", media);
+
         int pos = poppedIdList.indexOf(media.getId());
         if (pos > -1) {
-            return pos;
+            int songsTime = pos + 1;
+            logger.trace("Based on what's popped it can be played in {} "
+                    + "songs time", songsTime);
+            return songsTime;
         }
 
         pos = requestedQueue.indexOf(media);
         if (pos > -1) {
-            return pos + poppedIdList.size();
+            int songsTime = pos + 1;
+            logger.trace("Based on requested queue it can be played in {} "
+                    + "songs time", songsTime);
+            return songsTime;
         }
 
+        logger.trace("Not found in any list so can be played now");
         return -1;
     }
 }

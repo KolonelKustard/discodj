@@ -149,7 +149,7 @@ public class DjViewImpl extends Composite implements DjView {
             resultsPanel.add(mediaWidget);
 
             // Make widget draggable (if it can be added to the playlist)
-            if (media.getWhenCanBePlayedAgain() > -1) {
+            if (media.getWhenCanBePlayedAgain() <= -1) {
                 songDragController.makeDraggable(mediaWidget);
             }
         }
