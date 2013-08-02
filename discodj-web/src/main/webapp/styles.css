@@ -1,34 +1,63 @@
-/** Add css rules here for your application. */
-
-
-/** Example rules used by the template application (remove for your app) */
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
+html, body {
+	padding: 0;
+	margin: 0;
+	border: none;
 }
 
-.sendButton {
-  display: block;
-  font-size: 16pt;
+.searchInput {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 66%;
+	height: 2em;
 }
 
-/** Most GWT widgets already have a style name defined */
-.gwt-DialogBox {
-  width: 400px;
+.artistFacets {
+	position: absolute;
+	top: 2em;
+	left: 0;
+	width: 33%;
+	height: -moz-calc(50% - 2em);
+    height: -webkit-calc(50% - 2em);
+    height: calc(50% - 2em);
+    overflow: auto;
 }
 
-.dialogVPanel {
-  margin: 5px;
+.albumFacets {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	width: 33%;
+	height: 50%;
+	overflow: auto;
 }
 
-.serverResponseLabelError {
-  color: red;
+.searchResults {
+	position: absolute;
+	top: 2em;
+	left: 33%;
+	width: 33%;
+	height: -moz-calc(100% - 2em);
+    height: -webkit-calc(100% - 2em);
+    height: calc(100% - 2em);
+    overflow: auto;
 }
 
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
+.nowPlaying {
+	position: absolute;
+	top: 0;
+	left: 67%;
+	width: 33%;
+	height: 2em;
+}
+
+.playlist {
+	position: absolute;
+	top: 2em;
+	left: 67%;
+	width: 33%;
+	height: -moz-calc(100% - 2em);
+    height: -webkit-calc(100% - 2em);
+    height: calc(100% - 2em);
+    overflow: auto;
 }
