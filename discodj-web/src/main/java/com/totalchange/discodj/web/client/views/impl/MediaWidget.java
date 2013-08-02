@@ -38,10 +38,15 @@ class MediaWidget extends Composite {
     @UiField
     Label titleLabel;
 
+    @UiField
+    Label whenCanBePlayedAgainLabel;
+
+    private String playedAgainText;
     private DjMedia media;
 
     public MediaWidget() {
         initWidget(uiBinder.createAndBindUi(this));
+        playedAgainText = whenCanBePlayedAgainLabel.getText();
     }
 
     public MediaWidget(DjMedia media) {
@@ -52,9 +57,18 @@ class MediaWidget extends Composite {
     private void populateFromMedia() {
         artistLabel.setText(media.getArtist());
         titleLabel.setText(media.getTitle());
+
+        if (media.getWhenCanBePlayedAgain() > 0) {
+            whenCanBePlayedAgainLabel.setText(media.getWhenCanBePlayedAgain()
+                    + " " + playedAgainText);
+            whenCanBePlayedAgainLabel.setVisible(true);
+        } else {
+            whenCanBePlayedAgainLabel.setVisible(false);
+        }
     }
 
-    @UiHandler({ "artistLabel", "titleLabel", "byLabel" })
+    @UiHandler({ "artistLabel", "titleLabel", "byLabel",
+            "whenCanBePlayedAgainLabel" })
     void preventMouseDownEvent(MouseDownEvent ev) {
         ev.preventDefault();
     }

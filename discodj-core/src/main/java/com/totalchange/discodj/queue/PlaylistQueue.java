@@ -85,11 +85,11 @@ public class PlaylistQueue {
                         lastPopped);
                 return lastPopped;
             }
-        } else {
-            lastPopped = null;
-            logger.trace("Nothing left in the queue - returning null");
-            return lastPopped;
         }
+
+        lastPopped = null;
+        logger.trace("Nothing left in the queue - returning null");
+        return lastPopped;
     }
 
     public Media getLastPopped() {
@@ -106,7 +106,13 @@ public class PlaylistQueue {
         requestedQueue.clear();
         for (String id : playlist) {
             try {
-                requestedQueue.add(fetchMedia(id));
+                Media media = fetchMedia(id);
+                if (!skipIfInPoppedList(media)) {
+                    requestedQueue.add(media);
+                } else {
+                    logger.trace("Skipping adding {} as is in already popped "
+                            + "list", media);
+                }
             } catch (Exception ex) {
                 logger.warn(
                         "Failed to add id " + id
@@ -116,7 +122,17 @@ public class PlaylistQueue {
         }
     }
 
-    public synchronized List<String> getMediaIdsToExclude() {
-        return new ArrayList<>(poppedIdList);
+    public synchronized int getWhenCanBePlayedAgain(Media media) {
+        int pos = poppedIdList.indexOf(media.getId());
+        if (pos > -1) {
+            return pos;
+        }
+
+        pos = requestedQueue.indexOf(media);
+        if (pos > -1) {
+            return pos + poppedIdList.size();
+        }
+
+        return -1;
     }
 }

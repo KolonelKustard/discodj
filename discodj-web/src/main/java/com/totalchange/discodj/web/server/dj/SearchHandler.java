@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.totalchange.discodj.media.Media;
+import com.totalchange.discodj.queue.PlaylistQueue;
 import com.totalchange.discodj.search.SearchProvider;
 import com.totalchange.discodj.search.SearchQuery;
 import com.totalchange.discodj.search.SearchResults;
@@ -43,10 +44,13 @@ public class SearchHandler implements ActionHandler<SearchAction, SearchResult> 
             .getLogger(SearchHandler.class);
 
     private SearchProvider searchProvider;
+    private PlaylistQueue playlistQueue;
 
     @Inject
-    public SearchHandler(SearchProvider searchProvider) {
+    public SearchHandler(SearchProvider searchProvider,
+            PlaylistQueue playlistQueue) {
         this.searchProvider = searchProvider;
+        this.playlistQueue = playlistQueue;
     }
 
     private List<SearchFacet> copyFacets(List<String> selectedFacetIds,
@@ -67,7 +71,7 @@ public class SearchHandler implements ActionHandler<SearchAction, SearchResult> 
         return dest;
     }
 
-    static DjMedia copyMedia(Media media) {
+    static DjMedia copyMedia(Media media, PlaylistQueue playlistQueue) {
         if (media == null) {
             return null;
         }
@@ -76,6 +80,12 @@ public class SearchHandler implements ActionHandler<SearchAction, SearchResult> 
         djMedia.setId(media.getId());
         djMedia.setArtist(media.getArtist());
         djMedia.setTitle(media.getTitle());
+
+        if (playlistQueue != null) {
+            djMedia.setWhenCanBePlayedAgain(playlistQueue
+                    .getWhenCanBePlayedAgain(media));
+        }
+
         return djMedia;
     }
 
@@ -121,7 +131,7 @@ public class SearchHandler implements ActionHandler<SearchAction, SearchResult> 
 
         List<DjMedia> resultMedia = new ArrayList<>(results.getResults().size());
         for (Media media : results.getResults()) {
-            resultMedia.add(copyMedia(media));
+            resultMedia.add(copyMedia(media, playlistQueue));
         }
         result.setResults(resultMedia);
 

@@ -8,6 +8,7 @@ public class DjMedia implements Serializable {
     private String id;
     private String artist;
     private String title;
+    private int whenCanBePlayedAgain;
 
     public String getId() {
         return id;
@@ -31,5 +32,13 @@ public class DjMedia implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getWhenCanBePlayedAgain() {
+        return whenCanBePlayedAgain;
+    }
+
+    public void setWhenCanBePlayedAgain(int whenCanBePlayedAgain) {
+        this.whenCanBePlayedAgain = whenCanBePlayedAgain;
     }
 }

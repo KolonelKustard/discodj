@@ -19,5 +19,8 @@
 		<g:Label ui:field="titleLabel" styleName="{style.inline}">Title</g:Label>
 		<g:Label ui:field="byLabel" styleName="{style.inline}">by</g:Label>
 		<g:Label ui:field="artistLabel" styleName="{style.inline}">Artist</g:Label>
+		<g:Label ui:field="whenCanBePlayedAgainLabel" visible="false">
+			song need to play before this can be played again
+		</g:Label>
 	</g:HTMLPanel>
 </ui:UiBinder>
