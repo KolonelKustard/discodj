@@ -37,7 +37,7 @@ public class UpdatePlaylistHandler implements
     @Override
     public StatusResult execute(UpdatePlaylistAction action,
             ExecutionContext context) throws DispatchException {
-        queue.setPlaylist(action.getRevisedPlaylist());
+        queue.setPlaylistIds(action.getRevisedPlaylist());
 
         return statusHandler.execute(null, context);
     }

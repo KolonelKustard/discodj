@@ -16,24 +16,26 @@ import com.totalchange.discodj.media.Media;
 
 @Singleton
 public class PlaylistQueue {
+    private static final int POPPED_LIST_SIZE = 20;
+
     private static final Logger logger = LoggerFactory
             .getLogger(PlaylistQueue.class);
 
-    private Queue<String> defaultQueue = new LinkedList<>();
-    private PlaylistIdQueue queue = new PlaylistIdQueue();
+    private final Queue<Media> defaultQueue;
+    private final List<Media> requestedQueue = new ArrayList<>();
+    private final List<String> poppedIdList = new ArrayList<>(POPPED_LIST_SIZE);
+
     private Catalogue catalogue;
     private Media lastPopped = null;
 
     @Inject
     public PlaylistQueue(Catalogue catalogue) {
+        logger.trace("Creating new queue");
         this.catalogue = catalogue;
 
-        List<Media> defaultMediaQueue = catalogue.getDefaultPlaylist();
-        if (defaultMediaQueue != null) {
-            for (Media media : defaultMediaQueue) {
-                defaultQueue.offer(media.getId());
-            }
-        }
+        logger.trace("Populating default playlist from catalogue");
+        defaultQueue = new LinkedList<>(catalogue.getDefaultPlaylist());
+        logger.trace("Done");
     }
 
     private Media fetchMedia(String id) {
@@ -41,25 +43,51 @@ public class PlaylistQueue {
         return catalogue.getMedia(id);
     }
 
-    public Media pop() {
-        logger.trace("Popping next item off the queue");
+    private void addPoppedId(String id) {
+        if (poppedIdList.size() >= POPPED_LIST_SIZE) {
+            poppedIdList.remove(0);
+        }
+        poppedIdList.add(id);
+    }
 
-        // TODO Error handling in case resources aren't available
-        String nextMediaId = queue.popNextMediaId();
-        if (nextMediaId != null) {
-            lastPopped = fetchMedia(nextMediaId);
-            logger.trace("Returning media from manual queue {}", lastPopped);
-            return lastPopped;
+    private boolean skipIfInPoppedList(Media media) {
+        return poppedIdList.contains(media.getId());
+    }
+
+    public synchronized Media pop() {
+        logger.trace("Popping next item off the queue - trying requested "
+                + "queue first");
+
+        Media nextMedia = requestedQueue.remove(0);
+        if (nextMedia != null) {
+            if (skipIfInPoppedList(nextMedia)) {
+                logger.trace("Skipping already played media {}", nextMedia);
+                return pop();
+            } else {
+                lastPopped = nextMedia;
+                addPoppedId(lastPopped.getId());
+                logger.trace("Returning media from requested queue {}",
+                        lastPopped);
+                return lastPopped;
+            }
         }
 
-        nextMediaId = defaultQueue.poll();
-        if (nextMediaId != null) {
-            lastPopped = fetchMedia(nextMediaId);
-            logger.trace("Returning media from default queue {}", lastPopped);
-            return lastPopped;
+        logger.trace("Nothing in requested queue, trying default queue");
+        nextMedia = defaultQueue.poll();
+        if (nextMedia != null) {
+            if (skipIfInPoppedList(nextMedia)) {
+                logger.trace("Skipping already played media {}", nextMedia);
+                return pop();
+            } else {
+                lastPopped = nextMedia;
+                addPoppedId(lastPopped.getId());
+                logger.trace("Returning media from default queue {}",
+                        lastPopped);
+                return lastPopped;
+            }
         } else {
-            logger.trace("Nothing left in the queue");
             lastPopped = null;
+            logger.trace("Nothing left in the queue - returning null");
             return lastPopped;
         }
     }
@@ -68,21 +96,27 @@ public class PlaylistQueue {
         return lastPopped;
     }
 
-    public List<Media> getPlaylist() {
-        List<String> ids = queue.getCopiedPlaylist();
-        List<Media> media = new ArrayList<>(ids.size());
-        for (String id : ids) {
-            media.add(fetchMedia(id));
-        }
-        return media;
+    public synchronized List<Media> getPlaylist() {
+        return new ArrayList<>(requestedQueue);
     }
 
-    public void setPlaylist(List<String> playlist) {
+    public synchronized void setPlaylistIds(List<String> playlist) {
         logger.trace("Setting playlist to {}", playlist);
-        queue.setPlaylist(playlist);
+
+        requestedQueue.clear();
+        for (String id : playlist) {
+            try {
+                requestedQueue.add(fetchMedia(id));
+            } catch (Exception ex) {
+                logger.warn(
+                        "Failed to add id " + id
+                                + " with fetch from catalogue error "
+                                + ex.getMessage(), ex);
+            }
+        }
     }
 
-    public List<String> getMediaIdsToExclude() {
-        return queue.getMediaIdsToExclude();
+    public synchronized List<String> getMediaIdsToExclude() {
+        return new ArrayList<>(poppedIdList);
     }
 }
