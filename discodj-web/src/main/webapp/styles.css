@@ -67,6 +67,22 @@ span.deleteicon span {
     overflow: auto;
 }
 
+#paging {
+	padding: 0.5em;
+}
+
+.backButton {
+	float: left;
+}
+
+.pagination {
+	text-align: center;
+}
+
+.nextButton {
+	float: right;
+}
+
 .nowPlaying {
 	position: absolute;
 	top: 0;
