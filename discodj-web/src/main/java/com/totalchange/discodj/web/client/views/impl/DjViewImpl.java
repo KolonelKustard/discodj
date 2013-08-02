@@ -148,8 +148,10 @@ public class DjViewImpl extends Composite implements DjView {
             Widget mediaWidget = makeMediaWidget(media);
             resultsPanel.add(mediaWidget);
 
-            // Make widget draggable
-            songDragController.makeDraggable(mediaWidget);
+            // Make widget draggable (if it can be added to the playlist)
+            if (media.getWhenCanBePlayedAgain() > -1) {
+                songDragController.makeDraggable(mediaWidget);
+            }
         }
 
         pageLabel.setText("Page " + currentPage + " of " + numPages);
