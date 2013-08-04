@@ -6,125 +6,135 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:dj="urn:import:com.totalchange.discodj.web.client.views.impl">
 	<ui:style>
-		.container {
-			border: 1px solid #000;
-		}
-		
-		.column {
-			width: 33%;
-			height: 100%;
+		.searchTextBox {
 			position: absolute;
 			top: 0;
-			border: 1px solid #F00;
-		}
-		
-		.searchColumn {
 			left: 0;
-		}
-		
-		.resultsColumn {
-			left: 33%;
-			width: 34%;
-		}
-		
-		.playlistColumn {
-			left: 67%;
-		}
-		
-		.playlistPanel {
-			padding-bottom: 2em;
-		}
-		
-		.header {
-			margin: 0;
-			padding: 1em;
-			border: 1px solid #0F0;
-		}
-		
-		.searchTextBox {
-			width: 98%;
-		}
-		
-		.facetTitle {
-			padding: 0;
-			margin: 0;
-			font-size: 100%;
-		}
-		
-		.facetsContainer {
-			height: 16%;
-			border: 1px solid #0F0;
-			overflow: auto;
-		}
-		
-		.paging {
 			width: 100%;
+			height: 2.5em;
+			padding: 0 1em;
+		}
+		
+		.deleteIcon {
 			position: absolute;
-			bottom: 0;
-			border: 1px solid #0F0;
+			top: 0;
+			left: 0;
+			width: 60%;
+			height: 2.5em;
+		}
+		
+		.deleteIcon span {
+			position: absolute;
+			display: block;
+			top: 0.7em;
+			right: 0.5em;
+			width: 16px;
+			height: 16px;
+			background: url('http://cdn.sstatic.net/stackoverflow/img/sprites.png?v=4') 0 -690px;
+			cursor: pointer;
+		}
+		
+		.artistFacets {
+			position: absolute;
+			top: 2.5em;
+			left: 0;
+			width: 20%;
+			height: literal("-moz-calc(50% - 2.5em)");
+		    height: literal("-webkit-calc(50% - 2.5em)");
+		    height: literal("calc(50% - 2.5em)");
+		    overflow: auto;
+		    background: url(images/artistsbg.png) repeat-x bottom;
+		}
+		
+		.albumFacets {
+			position: absolute;
+			top: 50%;
+			left: 0;
+			width: 20%;
+			height: 50%;
+			overflow: auto;
+			background: url(images/albumsbg.png) repeat-x top;
+		}
+		
+		.facet {
+			padding: 0.3em 0.5em;
+		}
+		
+		.searchResults {
+			position: absolute;
+			top: 2.5em;
+			left: 20%;
+			width: 40%;
+			height: literal("-moz-calc(100% - 2.5em)");
+		    height: literal("-webkit-calc(100% - 2.5em)");
+		    height: literal("calc(100% - 2.5em)");
+		    overflow: auto;
+		    background: url(images/searchresultsbg.png) repeat-y right;
+		}
+
+		.paging {
+			padding: 0.5em;
 		}
 		
 		.previousButton {
-			position: absolute;
-			left: 0;
-		}
-		
-		.nextButton {
-			position: absolute;
-			right: 0;
-			top: 0;
+			float: left;
 		}
 		
 		.pageLabel {
 			text-align: center;
 		}
 		
+		.nextButton {
+			float: right;
+		}
+		
 		.nowPlaying {
-			width: 100%;
 			position: absolute;
-			bottom: 0;
-			border: 1px solid #0F0;
+			top: 0;
+			left: 60%;
+			width: 40%;
+			height: 3em;
+			background: url(images/playlistbg.png) repeat-y left
+		}
+		
+		.playlist {
+			position: absolute;
+			top: 2.5em;
+			left: 60%;
+			width: 40%;
+			height: literal("-moz-calc(100% - 2.5em)");
+		    height: literal("-webkit-calc(100% - 2.5em)");
+		    height: literal("calc(100% - 2.5em)");
+		    overflow: auto;
+		    background: url(images/playlistbg.png) repeat-y left;
 		}
 	</ui:style>
 	
 	<g:AbsolutePanel ui:field="boundaryPanel" width="100%" height="100%">
 		<g:HTMLPanel>
-			<div class="{style.column} {style.searchColumn}">
-				<h2 class="{style.header}">Search</h2>
+			<span class="{style.deleteIcon}">
 				<g:TextBox ui:field="searchTextBox" addStyleNames="{style.searchTextBox}" />
-				<h3 class="{style.facetTitle}">Artists</h3>
-				<div class="{style.facetsContainer}">
-					<dj:FacetsWidget ui:field="artistFacets" />
-				</div>
-				<h3 class="{style.facetTitle}">Albums</h3>
-				<div class="{style.facetsContainer}">
-					<dj:FacetsWidget ui:field="albumFacets" />
-				</div>
-				<h3 class="{style.facetTitle}">Genres</h3>
-				<div class="{style.facetsContainer}">
-					<dj:FacetsWidget ui:field="genreFacets" />
-				</div>
-				<h3 class="{style.facetTitle}">Decades</h3>
-				<div class="{style.facetsContainer}">
-					<dj:FacetsWidget ui:field="decadeFacets" />
-				</div>
+				<span></span>
+			</span>
+			<div class="{style.artistFacets}">
+				<dj:FacetsWidget ui:field="artistFacets" />
 			</div>
-			<div class="{style.column} {style.resultsColumn}">
-				<h2 class="{style.header}">Results</h2>
+			<div class="{style.albumFacets}">
+				<dj:FacetsWidget ui:field="albumFacets" />
+			</div>
+			<div class="{style.searchResults}">
 				<g:VerticalPanel ui:field="resultsPanel" width="100%" />
 				<div class="{style.paging}">
 					<g:Button ui:field="previousButton" addStyleNames="{style.previousButton}">&lt;&lt;</g:Button>
-					<g:Label ui:field="pageLabel" addStyleNames="{style.pageLabel}">Page 1 of 1</g:Label>
 					<g:Button ui:field="nextButton" addStyleNames="{style.nextButton}">&gt;&gt;</g:Button>
+					<g:Label ui:field="pageLabel" addStyleNames="{style.pageLabel}">Page 1 of 1</g:Label>
 				</div>
 			</div>
-			<div class="{style.column} {style.playlistColumn}">
-				<h2 class="{style.header}">Playlist</h2>
-				<g:VerticalPanel ui:field="playlistPanel" width="100%" styleName="{style.playlistPanel}" />
-				<div class="{style.nowPlaying}">
-					<h3>Now Playing:</h3>
-					<g:Label ui:field="nowPlayingLabel" />
-				</div>
+			<div class="{style.nowPlaying}">
+				<g:Label ui:field="nowPlayingLabel" />
+			</div>
+			<div class="{style.playlist}">
+				<g:VerticalPanel ui:field="playlistPanel" width="100%" />
 			</div>
 		</g:HTMLPanel>
 	</g:AbsolutePanel>

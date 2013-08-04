@@ -59,12 +59,6 @@ public class DjViewImpl extends Composite implements DjView {
     FacetsWidget albumFacets;
 
     @UiField
-    FacetsWidget genreFacets;
-
-    @UiField
-    FacetsWidget decadeFacets;
-
-    @UiField
     VerticalPanel resultsPanel;
 
     @UiField
@@ -171,12 +165,12 @@ public class DjViewImpl extends Composite implements DjView {
 
     @Override
     public void setGenreFacets(List<SearchFacet> facets) {
-        this.genreFacets.setFacets(presenter, facets);
+        // TODO Get rid of genre facets altogether
     }
 
     @Override
     public void setDecadeFacets(List<SearchFacet> facets) {
-        this.decadeFacets.setFacets(presenter, facets);
+        // TODO Get rid of decade facets altogether
     }
 
     @Override
