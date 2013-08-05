@@ -16,12 +16,12 @@
 package com.totalchange.discodj.web.client.views.impl;
 
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.totalchange.discodj.web.shared.dj.DjMedia;
 
@@ -32,21 +32,29 @@ class MediaWidget extends Composite {
     private static MediaWidgetUiBinder uiBinder = GWT
             .create(MediaWidgetUiBinder.class);
 
-    @UiField
-    Label artistLabel;
+    interface Style extends CssResource {
+        String disabled();
+    }
 
     @UiField
-    Label titleLabel;
+    Style style;
 
     @UiField
-    Label whenCanBePlayedAgainLabel;
+    DivElement containerDiv;
 
-    private String playedAgainText;
+    @UiField
+    InlineLabel artistLabel;
+
+    @UiField
+    InlineLabel titleLabel;
+
+    @UiField
+    InlineLabel alreadyPlayedLabel;
+
     private DjMedia media;
 
     public MediaWidget() {
         initWidget(uiBinder.createAndBindUi(this));
-        playedAgainText = whenCanBePlayedAgainLabel.getText();
     }
 
     public MediaWidget(DjMedia media) {
@@ -59,18 +67,12 @@ class MediaWidget extends Composite {
         titleLabel.setText(media.getTitle());
 
         if (media.getWhenCanBePlayedAgain() > 0) {
-            whenCanBePlayedAgainLabel.setText(media.getWhenCanBePlayedAgain()
-                    + " " + playedAgainText);
-            whenCanBePlayedAgainLabel.setVisible(true);
+            alreadyPlayedLabel.setVisible(true);
+            containerDiv.addClassName(style.disabled());
         } else {
-            whenCanBePlayedAgainLabel.setVisible(false);
+            alreadyPlayedLabel.setVisible(false);
+            containerDiv.removeClassName(style.disabled());
         }
-    }
-
-    @UiHandler({ "artistLabel", "titleLabel", "byLabel",
-            "whenCanBePlayedAgainLabel" })
-    void preventMouseDownEvent(MouseDownEvent ev) {
-        ev.preventDefault();
     }
 
     public DjMedia getMedia() {

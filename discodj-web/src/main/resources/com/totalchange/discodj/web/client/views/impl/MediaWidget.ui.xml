@@ -4,23 +4,25 @@
     ui:generateKeys="com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator"
     ui:generateLocales="default"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style>
-		.mediaWidget {
-			border: 1px solid #000;
+	<ui:style  type="com.totalchange.discodj.web.client.views.impl.MediaWidget.Style">
+		.mediaItem {
+			margin: 0.5em 0.5em 0 0.5em;
 			padding: 0.5em;
+			border: 1px solid #CCC;
+			background-color: rgba(255, 255, 255, 0.5);
 		}
 		
-		.inline {
-			display: inline;
+		.disabled {
+			color: #888;
 		}
 	</ui:style>
 	
 	<g:HTMLPanel>
-		<g:Label ui:field="titleLabel" styleName="{style.inline}">Title</g:Label>
-		<g:Label ui:field="byLabel" styleName="{style.inline}">by</g:Label>
-		<g:Label ui:field="artistLabel" styleName="{style.inline}">Artist</g:Label>
-		<g:Label ui:field="whenCanBePlayedAgainLabel" visible="false">
-			song needs to play before this can be played again
-		</g:Label>
+		<div ui:field="containerDiv" class="{style.mediaItem}">
+			<ui:msg><g:InlineLabel ui:field="titleLabel" /> by <g:InlineLabel ui:field="artistLabel" /></ui:msg>
+			<g:InlineLabel ui:field="alreadyPlayedLabel" visible="false">
+				<ui:msg>(already played or already in the queue)</ui:msg>
+			</g:InlineLabel>
+		</div>
 	</g:HTMLPanel>
 </ui:UiBinder>

@@ -97,6 +97,14 @@
 			background: url(images/playlistbg.png) repeat-y left
 		}
 		
+		.nowPlaying div {
+			margin: 0.1em 0.5em 0 0.5em;
+			padding: 0.4em 0.5em;
+			border: 1px solid #CCC;
+			background-color: rgba(255, 255, 255, 0.5);
+			color: #888;
+		}
+		
 		.playlist {
 			position: absolute;
 			top: 2.5em;
@@ -107,6 +115,10 @@
 		    height: literal("calc(100% - 2.5em)");
 		    overflow: auto;
 		    background: url(images/playlistbg.png) repeat-y left;
+		}
+		
+		.playlistPanel {
+			padding-bottom: 4em;
 		}
 	</ui:style>
 	
@@ -131,10 +143,20 @@
 				</div>
 			</div>
 			<div class="{style.nowPlaying}">
-				<g:Label ui:field="nowPlayingLabel" />
+				<g:HTMLPanel ui:field="nowPlaying" visible="false">
+					<ui:msg>
+						Now Playing:
+						<g:InlineLabel ui:field="nowPlayingTitleLabel" />
+						by
+						<g:InlineLabel ui:field="nowPlayingArtistLabel" />
+					</ui:msg>
+				</g:HTMLPanel>
+				<g:HTMLPanel ui:field="nothingPlaying">
+					<ui:msg>Now Playing: Nada</ui:msg>
+				</g:HTMLPanel>
 			</div>
 			<div class="{style.playlist}">
-				<g:VerticalPanel ui:field="playlistPanel" width="100%" />
+				<g:VerticalPanel ui:field="playlistPanel" width="100%" styleName="{style.playlistPanel}" />
 			</div>
 		</g:HTMLPanel>
 	</g:AbsolutePanel>

@@ -32,6 +32,8 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -74,7 +76,16 @@ public class DjViewImpl extends Composite implements DjView {
     VerticalPanel playlistPanel;
 
     @UiField
-    Label nowPlayingLabel;
+    HTMLPanel nowPlaying;
+
+    @UiField
+    InlineLabel nowPlayingArtistLabel;
+
+    @UiField
+    InlineLabel nowPlayingTitleLabel;
+
+    @UiField
+    HTMLPanel nothingPlaying;
 
     @UiField
     TextBox searchTextBox;
@@ -127,7 +138,15 @@ public class DjViewImpl extends Composite implements DjView {
 
     @Override
     public void setNowPlaying(String artist, String title) {
-        nowPlayingLabel.setText(title + " - " + artist);
+        if (artist != null || title != null) {
+            nothingPlaying.setVisible(false);
+            nowPlayingArtistLabel.setText(artist);
+            nowPlayingTitleLabel.setText(title);
+            nowPlaying.setVisible(true);
+        } else {
+            nowPlaying.setVisible(false);
+            nothingPlaying.setVisible(true);
+        }
     }
 
     private Widget makeMediaWidget(DjMedia media) {
