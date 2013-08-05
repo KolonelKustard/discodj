@@ -63,6 +63,8 @@ public class PlayerViewImpl extends Composite implements PlayerView {
 
     @UiHandler("video")
     void videoEnded(EndedEvent ev) {
+        audio.setVisible(false);
+        video.setVisible(false);
         presenter.finishedPlayingCurrent();
     }
 
@@ -79,13 +81,17 @@ public class PlayerViewImpl extends Composite implements PlayerView {
 
     @Override
     public void playVideo(String videoUrl) {
+        audio.setVisible(false);
         video.setSrc(videoUrl);
+        video.setVisible(true);
         video.play();
     }
 
     @Override
     public void playAudio(String audioUrl) {
+        video.setVisible(false);
         audio.setSrc(audioUrl);
+        audio.setVisible(true);
         audio.play();
     }
 }
