@@ -11,6 +11,7 @@ import net.customware.gwt.dispatch.client.DispatchAsync;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.totalchange.discodj.web.client.error.ErrorHandler;
@@ -24,6 +25,17 @@ import com.totalchange.discodj.web.shared.dj.StatusResult;
 import com.totalchange.discodj.web.shared.dj.UpdatePlaylistAction;
 
 public class DjActivity extends AbstractActivity implements DjView.Presenter {
+    /**
+     * Another AJAX request will only be triggered after this amount of time.
+     **/
+    private static final int MS_DELAY_BETWEEN_UPDATES = 1000;
+
+    /**
+     * How frequently the {@link Timer} instance will check whether
+     * {@link #MS_DELAY_BETWEEN_UPDATES} has elapsed.
+     */
+    private static final int MS_DELAY_BETWEEN_UPDATER_CHECK = 500;
+
     private static final Logger logger = Logger.getLogger(DjActivity.class
             .getName());
 
@@ -37,6 +49,23 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
     private int page = 1;
 
     private List<DjMedia> playlist = null;
+
+    private long lastUpdated = -1;
+    private Timer updater = new Timer() {
+        @Override
+        public void run() {
+            logger.finest("Updater fired");
+            if ((System.currentTimeMillis() - lastUpdated) < MS_DELAY_BETWEEN_UPDATES) {
+                logger.finest("Skipping update as another one happened "
+                        + (System.currentTimeMillis() - lastUpdated)
+                        + "ms ago and the delay between updates is "
+                        + MS_DELAY_BETWEEN_UPDATES);
+                return;
+            }
+            requestStatusUpdate();
+            logger.finest("Updater finished");
+        }
+    };
 
     @Inject
     public DjActivity(DjView djView, PlaceController placeController,
@@ -91,7 +120,7 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
             djView.setPlaylist(result.getPlaylist());
         }
 
-        // TODO Trigger another time delayed update
+        lastUpdated = System.currentTimeMillis();
     }
 
     private void requestStatusUpdate() {
@@ -145,10 +174,18 @@ public class DjActivity extends AbstractActivity implements DjView.Presenter {
 
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
-        logger.finer("Starting up InitJizzActivity");
+        logger.finer("Starting");
         container.setWidget(djView.asWidget());
         requestStatusUpdate();
-        logger.finer("Finished starting up InitJizzActivity");
+        updater.scheduleRepeating(MS_DELAY_BETWEEN_UPDATER_CHECK);
+        logger.finer("Finished starting");
+    }
+
+    @Override
+    public void onStop() {
+        logger.finer("Stopping");
+        updater.cancel();
+        logger.finer("Stopped");
     }
 
     @Override
