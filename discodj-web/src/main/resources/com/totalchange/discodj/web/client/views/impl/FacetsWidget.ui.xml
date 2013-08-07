@@ -5,10 +5,12 @@
     ui:generateLocales="default"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
-		
+		.facets td {
+			padding: 0.3em 0.5em;
+		}
 	</ui:style>
 	
 	<g:HTMLPanel>
-		<g:VerticalPanel ui:field="checkboxesPanel" />
+		<g:VerticalPanel ui:field="checkboxesPanel" styleName="{style.facets}" />
 	</g:HTMLPanel>
 </ui:UiBinder>
