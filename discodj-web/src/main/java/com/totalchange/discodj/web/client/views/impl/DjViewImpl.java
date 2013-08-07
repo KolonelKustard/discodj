@@ -37,7 +37,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -73,7 +72,13 @@ public class DjViewImpl extends Composite implements DjView {
     Button nextButton;
 
     @UiField
-    Label pageLabel;
+    HTMLPanel pagingPanel;
+
+    @UiField
+    InlineLabel pageNumLabel;
+
+    @UiField
+    InlineLabel totalPagesLabel;
 
     @UiField
     AbsolutePanel dropZone;
@@ -220,9 +225,17 @@ public class DjViewImpl extends Composite implements DjView {
             resultsPanel.add(mediaWidget);
         }
 
-        pageLabel.setText("Page " + currentPage + " of " + numPages);
-        previousButton.setEnabled(currentPage > 1);
-        nextButton.setEnabled(currentPage < numPages);
+        if (numPages > 1) {
+            pageNumLabel.setText(String.valueOf(currentPage));
+            totalPagesLabel.setText(String.valueOf(numPages));
+
+            previousButton.setEnabled(currentPage > 1);
+            nextButton.setEnabled(currentPage < numPages);
+
+            pagingPanel.setVisible(true);
+        } else {
+            pagingPanel.setVisible(false);
+        }
     }
 
     @Override

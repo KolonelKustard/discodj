@@ -138,11 +138,13 @@
 			</div>
 			<div class="{style.searchResults}">
 				<g:VerticalPanel ui:field="resultsPanel" width="100%" />
-				<div class="{style.paging}">
+				<g:HTMLPanel ui:field="pagingPanel" styleName="{style.paging}" visible="false">
 					<g:Button ui:field="previousButton" addStyleNames="{style.previousButton}">&lt;&lt;</g:Button>
 					<g:Button ui:field="nextButton" addStyleNames="{style.nextButton}">&gt;&gt;</g:Button>
-					<g:Label ui:field="pageLabel" addStyleNames="{style.pageLabel}">Page 1 of 1</g:Label>
-				</div>
+					<div class="{style.pageLabel}">
+						Page <g:InlineLabel ui:field="pageNumLabel" /> of <g:InlineLabel ui:field="totalPagesLabel" />
+					</div>
+				</g:HTMLPanel>
 			</div>
 			<div class="{style.nowPlaying}">
 				<g:HTMLPanel ui:field="nowPlaying" visible="false">
