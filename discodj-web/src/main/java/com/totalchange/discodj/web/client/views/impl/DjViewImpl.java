@@ -25,6 +25,8 @@ import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -102,6 +104,7 @@ public class DjViewImpl extends Composite implements DjView {
     private void initDnd() {
         this.songDragController = new PickupDragController(boundaryPanel, false);
         songDragController.setBehaviorMultipleSelection(false);
+        songDragController.setBehaviorDragStartSensitivity(3);
 
         AbsolutePositionDropController dropZoneController = new AbsolutePositionDropController(
                 dropZone);
@@ -181,9 +184,31 @@ public class DjViewImpl extends Composite implements DjView {
         }
     }
 
+    private void moveWidgetFromSearchResultsToPlaylist(Widget widget) {
+        resultsPanel.remove(widget);
+        playlistPanel.add(widget);
+    }
+
     private Widget makeMediaWidget(DjMedia media) {
         MediaWidget mediaWidget = new MediaWidget(media);
-        return new FocusPanel(mediaWidget);
+
+        // Stops events making their way to the media widget
+        final FocusPanel wrapper = new FocusPanel(mediaWidget);
+
+        if (media.getWhenCanBePlayedAgain() <= -1) {
+            // Make widget draggable (if it can be added to the playlist)
+            songDragController.makeDraggable(wrapper);
+
+            // Also allow a double click to move it over
+            wrapper.addDoubleClickHandler(new DoubleClickHandler() {
+                @Override
+                public void onDoubleClick(DoubleClickEvent event) {
+                    moveWidgetFromSearchResultsToPlaylist(wrapper);
+                }
+            });
+        }
+
+        return wrapper;
     }
 
     @Override
@@ -192,11 +217,6 @@ public class DjViewImpl extends Composite implements DjView {
         for (DjMedia media : results) {
             Widget mediaWidget = makeMediaWidget(media);
             resultsPanel.add(mediaWidget);
-
-            // Make widget draggable (if it can be added to the playlist)
-            if (media.getWhenCanBePlayedAgain() <= -1) {
-                songDragController.makeDraggable(mediaWidget);
-            }
         }
 
         pageLabel.setText("Page " + currentPage + " of " + numPages);
