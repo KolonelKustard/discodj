@@ -21,6 +21,7 @@ import java.util.List;
 import com.allen_sauer.gwt.dnd.client.DragEndEvent;
 import com.allen_sauer.gwt.dnd.client.DragHandlerAdapter;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -73,6 +74,9 @@ public class DjViewImpl extends Composite implements DjView {
     Label pageLabel;
 
     @UiField
+    AbsolutePanel dropZone;
+
+    @UiField
     VerticalPanel playlistPanel;
 
     @UiField
@@ -99,6 +103,10 @@ public class DjViewImpl extends Composite implements DjView {
         this.songDragController = new PickupDragController(boundaryPanel, false);
         songDragController.setBehaviorMultipleSelection(false);
 
+        AbsolutePositionDropController dropZoneController = new AbsolutePositionDropController(
+                dropZone);
+        songDragController.registerDropController(dropZoneController);
+
         VerticalPanelDropController playlistDropController = new VerticalPanelDropController(
                 playlistPanel);
         songDragController.registerDropController(playlistDropController);
@@ -106,9 +114,27 @@ public class DjViewImpl extends Composite implements DjView {
         songDragController.addDragHandler(new DragHandlerAdapter() {
             @Override
             public void onDragEnd(DragEndEvent event) {
+                moveAnyMediaWidgetsFromDropZoneToPlaylist();
                 presenter.playlistPossiblyChanged();
             }
         });
+    }
+
+    private void moveAnyMediaWidgetsFromDropZoneToPlaylist() {
+        for (int num = 0; num < dropZone.getWidgetCount(); num++) {
+            Object widget = dropZone.getWidget(num);
+
+            if (widget instanceof FocusPanel) {
+                FocusPanel focusPanel = (FocusPanel) widget;
+                widget = focusPanel.getWidget();
+            }
+
+            if (widget != null && widget instanceof MediaWidget) {
+                MediaWidget mediaWidget = (MediaWidget) widget;
+                dropZone.remove(mediaWidget);
+                playlistPanel.add(mediaWidget);
+            }
+        }
     }
 
     @UiHandler("searchTextBox")

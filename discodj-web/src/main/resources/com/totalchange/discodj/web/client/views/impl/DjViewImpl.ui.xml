@@ -158,7 +158,9 @@
 				</g:HTMLPanel>
 			</div>
 			<div class="{style.playlist}">
-				<g:VerticalPanel ui:field="playlistPanel" width="100%" styleName="{style.playlistPanel}" />
+				<g:AbsolutePanel ui:field="dropZone" width="100%" height="100%">
+					<g:VerticalPanel ui:field="playlistPanel" width="100%" styleName="{style.playlistPanel}" />
+				</g:AbsolutePanel>
 			</div>
 		</g:HTMLPanel>
 	</g:AbsolutePanel>
