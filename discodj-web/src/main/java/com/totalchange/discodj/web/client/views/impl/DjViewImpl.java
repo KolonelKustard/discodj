@@ -187,6 +187,7 @@ public class DjViewImpl extends Composite implements DjView {
     private void moveWidgetFromSearchResultsToPlaylist(Widget widget) {
         resultsPanel.remove(widget);
         playlistPanel.add(widget);
+        presenter.playlistPossiblyChanged();
     }
 
     private Widget makeMediaWidget(DjMedia media) {
