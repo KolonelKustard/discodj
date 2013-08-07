@@ -125,8 +125,10 @@
 	<g:AbsolutePanel ui:field="boundaryPanel" width="100%" height="100%">
 		<g:HTMLPanel>
 			<span class="{style.deleteIcon}">
-				<dj:SearchTextBox ui:field="searchTextBox" addStyleNames="{style.searchTextBox}" placeholder="Type in here to search for a song" />
-				<span></span>
+				<dj:SearchTextBox ui:field="searchTextBox" addStyleNames="{style.searchTextBox}" placeholder="Type in here to search for a song">
+					<ui:attribute name="placeholder" />
+				</dj:SearchTextBox>
+				<g:InlineLabel ui:field="clearSearchButton" />
 			</span>
 			<div class="{style.artistFacets}">
 				<dj:FacetsWidget ui:field="artistFacets" />

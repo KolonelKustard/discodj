@@ -126,6 +126,12 @@ public class DjViewImpl extends Composite implements DjView {
         presenter.nextPage();
     }
 
+    @UiHandler("clearSearchButton")
+    void clearSearchButtonClick(ClickEvent ex) {
+        searchTextBox.setValue("");
+        presenter.search(searchTextBox.getValue());
+    }
+
     @Override
     public void render() {
         // Nothing to be done
