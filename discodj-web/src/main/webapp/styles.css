@@ -4,31 +4,32 @@ html, body {
 	border: none;
 	font-family: sans-serif;
 	background-color: #FFF;
-	color: #000;
+	color: #515151;
 }
 
-.searchInput {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 2.5em;
-	padding: 0 1em;
-}
-
-span.deleteicon {
+.search {
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 60%;
-	height: 2.5em;
+	height: 3em;
+	border-bottom: 1px solid #CCC;
+	border-right: 1px solid #CCC;
 }
 
-span.deleteicon span {
+.searchInput {
+	width: 90%;
+	height: 3em;
+	padding: 0.5em 2em 0 1em;
+	margin: 0;
+	border: 0;
+}
+
+.search span {
 	position: absolute;
 	display: block;
-	top: 0.7em;
-	right: 0.5em;
+	top: 1em;
+	right: 1em;
 	width: 16px;
 	height: 16px;
 	background: url('http://cdn.sstatic.net/stackoverflow/img/sprites.png?v=4') 0 -690px;
@@ -37,40 +38,48 @@ span.deleteicon span {
 
 .artistFacets {
 	position: absolute;
-	top: 2.5em;
+	top: 3em;
 	left: 0;
 	width: 20%;
-	height: -moz-calc(50% - 2.5em);
-    height: -webkit-calc(50% - 2.5em);
-    height: calc(50% - 2.5em);
+	height: 54%;
+	height: -moz-calc(54% - 3em - 1px);
+    height: -webkit-calc(54% - 3em - 1px);
+    height: calc(54% - 3em - 1px);
     overflow: auto;
-    background: url(images/artistsbg.png) repeat-x bottom;
+    background: #252A3A;
+    color: #FFF;
+    border-bottom: 1px solid #CCC;
 }
 
 .albumFacets {
 	position: absolute;
-	top: 50%;
+	top: 54%;
 	left: 0;
 	width: 20%;
-	height: 50%;
+	height: 46%;
 	overflow: auto;
-	background: url(images/albumsbg.png) repeat-x top;
+	background: #252A3A;
+	color: #FFF;
 }
 
 .facet {
-	padding: 0.3em 0.5em;
+	padding: 0.5em 0.5em;
+}
+
+.facet:hover {
+	background: #373C5A;
 }
 
 .searchResults {
 	position: absolute;
-	top: 2.5em;
+	top: 3em;
 	left: 20%;
 	width: 40%;
-	height: -moz-calc(100% - 2.5em);
-    height: -webkit-calc(100% - 2.5em);
-    height: calc(100% - 2.5em);
+	height: -moz-calc(100% - 3em);
+    height: -webkit-calc(100% - 3em);
+    height: calc(100% - 3em);
     overflow: auto;
-    background: url(images/searchresultsbg.png) repeat-y right;
+    border-right: 1px solid #CCC;
 }
 
 #paging {
@@ -95,30 +104,33 @@ span.deleteicon span {
 	left: 60%;
 	width: 40%;
 	height: 3em;
-	background: url(images/playlistbg.png) repeat-y left
+	background: #252A3A;
+	color: #FFF;
+	border-bottom: 1px solid #CCC;
 }
 
-.nowPlaying .mediaItem {
-	margin: 0.2em 0.5em;
+.nowPlaying div {
+	padding: 1em;
 }
 
 .playlist {
 	position: absolute;
-	top: 2.5em;
+	top: 3em;
 	left: 60%;
 	width: 40%;
-	height: -moz-calc(100% - 2.5em);
-    height: -webkit-calc(100% - 2.5em);
-    height: calc(100% - 2.5em);
+	height: -moz-calc(100% - 3em);
+    height: -webkit-calc(100% - 3em);
+    height: calc(100% - 3em);
     overflow: auto;
-    background: url(images/playlistbg.png) repeat-y left;
 }
 
 .mediaItem {
-	margin: 0.5em;
-	padding: 0.5em;
-	border: 1px solid #CCC;
-	background-color: rgba(255, 255, 255, 0.5);
+	padding: 1em;
+	border-bottom: 1px solid #CCC;
+}
+
+.mediaItem:hover {
+	background-color: #EEE;
 }
 
 .disabled {
