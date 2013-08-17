@@ -13,6 +13,7 @@ html, body {
 	left: 0;
 	width: 60%;
 	height: 3em;
+	box-shadow: 0 0 10px #CCC inset;
 	border-bottom: 1px solid #CCC;
 	border-right: 1px solid #CCC;
 }
@@ -23,6 +24,7 @@ html, body {
 	padding: 0.5em 2em 0 1em;
 	margin: 0;
 	border: 0;
+	background: transparent;
 }
 
 .search span {
@@ -32,7 +34,7 @@ html, body {
 	right: 1em;
 	width: 16px;
 	height: 16px;
-	background: url('http://cdn.sstatic.net/stackoverflow/img/sprites.png?v=4') 0 -690px;
+	background: url(images/clearinput.png);
 	cursor: pointer;
 }
 
@@ -63,6 +65,7 @@ html, body {
 }
 
 .facet {
+	display: block;
 	padding: 0.5em 0.5em;
 }
 

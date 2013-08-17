@@ -6,70 +6,73 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:dj="urn:import:com.totalchange.discodj.web.client.views.impl">
 	<ui:style>
-		.searchTextBox {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 2.5em;
-			padding: 0 1em;
-		}
-		
-		.deleteIcon {
+		.search {
 			position: absolute;
 			top: 0;
 			left: 0;
 			width: 60%;
-			height: 2.5em;
+			height: 3em;
+			box-shadow: 0 0 10px #CCC inset;
+			border-bottom: 1px solid #CCC;
+			border-right: 1px solid #CCC;
 		}
 		
-		.deleteIcon span {
+		.searchTextBox {
+			width: 90%;
+			height: 3em;
+			padding: 0.5em 2em 0 1em;
+			margin: 0;
+			border: 0;
+			background: transparent;
+		}
+		
+		.search span {
 			position: absolute;
 			display: block;
-			top: 0.7em;
-			right: 0.5em;
+			top: 1em;
+			right: 1em;
 			width: 16px;
 			height: 16px;
-			background: url('http://cdn.sstatic.net/stackoverflow/img/sprites.png?v=4') 0 -690px;
+			background: url(images/clearinput.png);
 			cursor: pointer;
 		}
 		
 		.artistFacets {
 			position: absolute;
-			top: 2.5em;
+			top: 3em;
 			left: 0;
 			width: 20%;
-			height: literal("-moz-calc(50% - 2.5em)");
-		    height: literal("-webkit-calc(50% - 2.5em)");
-		    height: literal("calc(50% - 2.5em)");
+			height: 54%;
+			height: literal("-moz-calc(54% - 3em - 1px)");
+		    height: literal("-webkit-calc(54% - 3em - 1px)");
+		    height: literal("calc(54% - 3em - 1px)");
 		    overflow: auto;
-		    background: url(images/artistsbg.png) repeat-x bottom;
+		    background: #252A3A;
+		    color: #FFF;
+		    border-bottom: 1px solid #CCC;
 		}
 		
 		.albumFacets {
 			position: absolute;
-			top: 50%;
+			top: 54%;
 			left: 0;
 			width: 20%;
-			height: 50%;
+			height: 46%;
 			overflow: auto;
-			background: url(images/albumsbg.png) repeat-x top;
-		}
-		
-		.facet {
-			padding: 0.3em 0.5em;
+			background: #252A3A;
+			color: #FFF;
 		}
 		
 		.searchResults {
 			position: absolute;
-			top: 2.5em;
+			top: 3em;
 			left: 20%;
 			width: 40%;
-			height: literal("-moz-calc(100% - 2.5em)");
-		    height: literal("-webkit-calc(100% - 2.5em)");
-		    height: literal("calc(100% - 2.5em)");
+			height: literal("-moz-calc(100% - 3em)");
+		    height: literal("-webkit-calc(100% - 3em)");
+		    height: literal("calc(100% - 3em)");
 		    overflow: auto;
-		    background: url(images/searchresultsbg.png) repeat-y right;
+		    border-right: 1px solid #CCC;
 		}
 
 		.paging {
@@ -94,27 +97,24 @@
 			left: 60%;
 			width: 40%;
 			height: 3em;
-			background: url(images/playlistbg.png) repeat-y left
+			background: #252A3A;
+			color: #FFF;
+			border-bottom: 1px solid #CCC;
 		}
 		
 		.nowPlaying div {
-			margin: 0.1em 0.5em 0 0.5em;
-			padding: 0.4em 0.5em;
-			border: 1px solid #CCC;
-			background-color: rgba(255, 255, 255, 0.5);
-			color: #888;
+			padding: 1em;
 		}
 		
 		.playlist {
 			position: absolute;
-			top: 2.5em;
+			top: 3em;
 			left: 60%;
 			width: 40%;
-			height: literal("-moz-calc(100% - 2.5em)");
-		    height: literal("-webkit-calc(100% - 2.5em)");
-		    height: literal("calc(100% - 2.5em)");
+			height: literal("-moz-calc(100% - 3em)");
+		    height: literal("-webkit-calc(100% - 3em)");
+		    height: literal("calc(100% - 3em)");
 		    overflow: auto;
-		    background: url(images/playlistbg.png) repeat-y left;
 		}
 		
 		.playlistPanel {
@@ -124,12 +124,12 @@
 	
 	<g:AbsolutePanel ui:field="boundaryPanel" width="100%" height="100%">
 		<g:HTMLPanel>
-			<span class="{style.deleteIcon}">
+			<div class="{style.search}">
 				<dj:SearchTextBox ui:field="searchTextBox" addStyleNames="{style.searchTextBox}" placeholder="Type in here to search for a song">
 					<ui:attribute name="placeholder" />
 				</dj:SearchTextBox>
 				<g:InlineLabel ui:field="clearSearchButton" />
-			</span>
+			</div>
 			<div class="{style.artistFacets}">
 				<dj:FacetsWidget ui:field="artistFacets" />
 			</div>

@@ -6,14 +6,20 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style  type="com.totalchange.discodj.web.client.views.impl.MediaWidget.Style">
 		.mediaItem {
-			margin: 0.5em 0.5em 0 0.5em;
-			padding: 0.5em;
-			border: 1px solid #CCC;
-			background-color: rgba(255, 255, 255, 0.5);
+			padding: 1em;
+			border-bottom: 1px solid #CCC;
+		}
+		
+		.mediaItem:hover {
+			background-color: #EEE;
 		}
 		
 		.disabled {
 			color: #888;
+		}
+		
+		.disabled:hover {
+			background-color: inherit;
 		}
 	</ui:style>
 	
