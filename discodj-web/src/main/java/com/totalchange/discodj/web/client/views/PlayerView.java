@@ -24,4 +24,8 @@ public interface PlayerView extends CommonView {
 
     void playVideo(String videoUrl);
     void playAudio(String audioUrl);
+    
+    void setNowPlayingTitle(String title);
+    void setNowPlayingArtist(String artist);
+    void setNowPlayingRequestedBy(String requestedBy);
 }

@@ -63,6 +63,10 @@ public class PlayerActivity extends AbstractActivity implements
             logger.fine("Playing next video " + next.getUrl());
             playerView.playAudio(next.getUrl());
         }
+
+        playerView.setNowPlayingTitle(next.getTitle());
+        playerView.setNowPlayingArtist(next.getArtist());
+        playerView.setNowPlayingRequestedBy(next.getRequestedBy());
     }
 
     private void loadNext() {

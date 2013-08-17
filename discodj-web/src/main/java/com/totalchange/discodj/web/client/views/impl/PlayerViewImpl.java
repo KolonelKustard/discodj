@@ -24,6 +24,8 @@ import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.totalchange.discodj.web.client.views.PlayerView;
 
@@ -42,8 +44,38 @@ public class PlayerViewImpl extends Composite implements PlayerView {
     @UiField
     Video video;
 
+    @UiField
+    HTMLPanel infoPanel;
+
+    @UiField
+    HTMLPanel requestedByPanel;
+
+    @UiField
+    InlineLabel requestedByLabel;
+
+    @UiField
+    HTMLPanel titlePanel;
+
+    @UiField
+    InlineLabel titleLabel;
+
+    @UiField
+    HTMLPanel artistPanel;
+
+    @UiField
+    InlineLabel artistLabel;
+
     public PlayerViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
+    }
+
+    private void showOrHideInfoPanelBasedOnContent() {
+        boolean shouldBeVisible = requestedByPanel.isVisible()
+                || titlePanel.isVisible() || artistPanel.isVisible();
+
+        if (infoPanel.isVisible() != shouldBeVisible) {
+            infoPanel.setVisible(shouldBeVisible);
+        }
     }
 
     @UiFactory
@@ -58,6 +90,8 @@ public class PlayerViewImpl extends Composite implements PlayerView {
 
     @UiHandler("audio")
     void audioEnded(EndedEvent ev) {
+        audio.setVisible(false);
+        video.setVisible(false);
         presenter.finishedPlayingCurrent();
     }
 
@@ -70,8 +104,7 @@ public class PlayerViewImpl extends Composite implements PlayerView {
 
     @Override
     public void render() {
-        // TODO Auto-generated method stub
-
+        // Nothing to be done
     }
 
     @Override
@@ -93,5 +126,44 @@ public class PlayerViewImpl extends Composite implements PlayerView {
         audio.setSrc(audioUrl);
         audio.setVisible(true);
         audio.play();
+    }
+
+    @Override
+    public void setNowPlayingTitle(String title) {
+        if (title != null && title.length() > 0) {
+            titleLabel.setText(title);
+            titlePanel.setVisible(true);
+        } else {
+            titlePanel.setVisible(false);
+            titleLabel.setText("");
+        }
+
+        showOrHideInfoPanelBasedOnContent();
+    }
+
+    @Override
+    public void setNowPlayingArtist(String artist) {
+        if (artist != null && artist.length() > 0) {
+            artistLabel.setText(artist);
+            artistPanel.setVisible(true);
+        } else {
+            artistPanel.setVisible(false);
+            artistLabel.setText("");
+        }
+
+        showOrHideInfoPanelBasedOnContent();
+    }
+
+    @Override
+    public void setNowPlayingRequestedBy(String requestedBy) {
+        if (requestedBy != null && requestedBy.length() > 0) {
+            requestedByLabel.setText(requestedBy);
+            requestedByPanel.setVisible(true);
+        } else {
+            requestedByPanel.setVisible(false);
+            requestedByLabel.setText("");
+        }
+
+        showOrHideInfoPanelBasedOnContent();
     }
 }

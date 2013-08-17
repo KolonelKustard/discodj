@@ -3,139 +3,35 @@ html, body {
 	margin: 0;
 	border: none;
 	font-family: sans-serif;
-	background-color: #FFF;
+	background-color: #000;
 	color: #515151;
 }
 
-.search {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 60%;
-	height: 3em;
-	box-shadow: 0 0 10px #CCC inset;
-	border-bottom: 1px solid #CCC;
-	border-right: 1px solid #CCC;
+video, audio {
+	width: 100%;
+	height: 100%;
 }
 
-.searchInput {
+.info {
+	position: absolute;
 	width: 90%;
-	height: 3em;
-	padding: 0.5em 2em 0 1em;
-	margin: 0;
-	border: 0;
-	background: transparent;
-}
-
-.search span {
-	position: absolute;
-	display: block;
-	top: 1em;
-	right: 1em;
-	width: 16px;
-	height: 16px;
-	background: url(images/clearinput.png);
-	cursor: pointer;
-}
-
-.artistFacets {
-	position: absolute;
-	top: 3em;
-	left: 0;
-	width: 20%;
-	height: 54%;
-	height: -moz-calc(54% - 3em - 1px);
-    height: -webkit-calc(54% - 3em - 1px);
-    height: calc(54% - 3em - 1px);
-    overflow: auto;
-    background: #252A3A;
-    color: #FFF;
-    border-bottom: 1px solid #CCC;
-}
-
-.albumFacets {
-	position: absolute;
-	top: 54%;
-	left: 0;
-	width: 20%;
-	height: 46%;
-	overflow: auto;
-	background: #252A3A;
+	left: 5%;
+	bottom: 5%;
+	background-color: rgba(37, 42, 58, 0.6);
 	color: #FFF;
+	border: 1px dashed #CCC;
+	font-size: 3em;
 }
 
-.facet {
-	display: block;
-	padding: 0.5em 0.5em;
-}
-
-.facet:hover {
-	background: #373C5A;
-}
-
-.searchResults {
-	position: absolute;
-	top: 3em;
-	left: 20%;
-	width: 40%;
-	height: -moz-calc(100% - 3em);
-    height: -webkit-calc(100% - 3em);
-    height: calc(100% - 3em);
-    overflow: auto;
-    border-right: 1px solid #CCC;
-}
-
-#paging {
-	padding: 0.5em;
-}
-
-.backButton {
-	float: left;
-}
-
-.pagination {
-	text-align: center;
-}
-
-.nextButton {
+.requestedBy {
 	float: right;
+	padding: 0.5em 1em;
 }
 
-.nowPlaying {
-	position: absolute;
-	top: 0;
-	left: 60%;
-	width: 40%;
-	height: 3em;
-	background: #252A3A;
-	color: #FFF;
-	border-bottom: 1px solid #CCC;
+.title {
+	padding: 0.5em 1em 0 1em;
 }
 
-.nowPlaying div {
-	padding: 1em;
-}
-
-.playlist {
-	position: absolute;
-	top: 3em;
-	left: 60%;
-	width: 40%;
-	height: -moz-calc(100% - 3em);
-    height: -webkit-calc(100% - 3em);
-    height: calc(100% - 3em);
-    overflow: auto;
-}
-
-.mediaItem {
-	padding: 1em;
-	border-bottom: 1px solid #CCC;
-}
-
-.mediaItem:hover {
-	background-color: #EEE;
-}
-
-.disabled {
-	color: #888;
+.artist {
+	padding: 0 1em 0.5em 1em;
 }

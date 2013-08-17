@@ -14,12 +14,48 @@
 			width: 100%;
 			height: 100%;
 		}
+
+		.info {
+			position: absolute;
+			width: 90%;
+			left: 5%;
+			bottom: 5%;
+			background-color: rgba(37, 42, 58, 0.6);
+			color: #FFF;
+			border: 1px dashed #CCC;
+			font-size: 3em;
+		}
+
+		.requestedBy {
+			float: right;
+			padding: 0.5em 1em;
+		}
+
+		.title {
+			padding: 0.5em 1em 0 1em;
+		}
+
+		.artist {
+			padding: 0 1em 0.5em 1em;
+		}
 	</ui:style>
 	
 	<g:AbsolutePanel styleName="{style.boundaryPanel}" width="100%" height="100%">
 		<g:HTMLPanel>
 			<m:Audio ui:field="audio" styleName="{style.fullscreen}" />
 			<m:Video ui:field="video" styleName="{style.fullscreen}" />
+		</g:HTMLPanel>
+		
+		<g:HTMLPanel ui:field="infoPanel" styleName="{style.info}" visible="false">
+			<g:HTMLPanel ui:field="requestedByPanel" styleName="{style.requestedBy}">
+			    <ui:msg>Requested by <g:InlineLabel ui:field="requestedByLabel" /></ui:msg>
+			</g:HTMLPanel>
+			<g:HTMLPanel ui:field="titlePanel" styleName="{style.title}">
+			    <g:InlineLabel ui:field="titleLabel" />
+			</g:HTMLPanel>
+			<g:HTMLPanel ui:field="artistPanel" styleName="{style.artist}">
+			    <g:InlineLabel ui:field="artistLabel" />
+			</g:HTMLPanel>
 		</g:HTMLPanel>
 	</g:AbsolutePanel>
 </ui:UiBinder>
