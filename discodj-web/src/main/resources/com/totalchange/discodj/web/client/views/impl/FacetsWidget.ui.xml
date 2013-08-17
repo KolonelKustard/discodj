@@ -4,18 +4,18 @@
     ui:generateKeys="com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator"
     ui:generateLocales="default"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style>
-		.facets label {
+	<ui:style type="com.totalchange.discodj.web.client.views.impl.FacetsWidget.Style">
+		.facet {
 			display: block;
 			padding: 0.5em 0.5em;
 		}
 		
-		.facets label:hover {
+		.facet:hover {
 			background: #373C5A;
 		}
 	</ui:style>
 	
 	<g:HTMLPanel>
-		<g:VerticalPanel ui:field="checkboxesPanel" styleName="{style.facets}" />
+		<g:VerticalPanel ui:field="checkboxesPanel" width="100%" />
 	</g:HTMLPanel>
 </ui:UiBinder>

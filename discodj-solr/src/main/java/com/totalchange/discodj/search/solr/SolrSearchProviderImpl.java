@@ -46,7 +46,7 @@ public final class SolrSearchProviderImpl implements SearchProvider {
         sq.setRows((int) query.getRows());
 
         if (query.getKeywords() != null && !query.getKeywords().isEmpty()) {
-            sq.setQuery(F_TEXT + ":" + query.getKeywords());
+            sq.setQuery(F_TEXT + ":" + query.getKeywords() + "*");
         } else {
             sq.setQuery("*:*");
         }

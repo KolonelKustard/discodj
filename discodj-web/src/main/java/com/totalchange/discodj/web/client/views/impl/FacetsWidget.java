@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -20,6 +21,13 @@ public class FacetsWidget extends Composite {
 
     private static FacetsWidgetUiBinder uiBinder = GWT
             .create(FacetsWidgetUiBinder.class);
+
+    interface Style extends CssResource {
+        String facet();
+    }
+
+    @UiField
+    Style style;
 
     @UiField
     VerticalPanel checkboxesPanel;
@@ -39,6 +47,7 @@ public class FacetsWidget extends Composite {
 
         for (final SearchFacet facet : facets) {
             final CheckBox checkbox = new CheckBox();
+            checkbox.addStyleName(style.facet());
             checkbox.setText(facet.getName() + " (" + facet.getNumMatches()
                     + ")");
             checkbox.setValue(facet.isSelected());

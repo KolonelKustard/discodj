@@ -4,7 +4,7 @@
     ui:generateKeys="com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator"
     ui:generateLocales="default"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style  type="com.totalchange.discodj.web.client.views.impl.MediaWidget.Style">
+	<ui:style type="com.totalchange.discodj.web.client.views.impl.MediaWidget.Style">
 		.mediaItem {
 			padding: 1em;
 			border-bottom: 1px solid #CCC;
