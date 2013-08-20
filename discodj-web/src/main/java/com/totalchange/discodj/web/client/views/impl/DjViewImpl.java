@@ -101,6 +101,9 @@ public class DjViewImpl extends Composite implements DjView {
     @UiField
     TextBox searchTextBox;
 
+    @UiField
+    AbsolutePanel deleteZone;
+
     public DjViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
         initDnd();
@@ -119,10 +122,15 @@ public class DjViewImpl extends Composite implements DjView {
                 playlistPanel);
         songDragController.registerDropController(playlistDropController);
 
+        AbsolutePositionDropController deleteZoneController = new AbsolutePositionDropController(
+                deleteZone);
+        songDragController.registerDropController(deleteZoneController);
+
         songDragController.addDragHandler(new DragHandlerAdapter() {
             @Override
             public void onDragEnd(DragEndEvent event) {
                 moveAnyMediaWidgetsFromDropZoneToPlaylist();
+                removeAnyMediaWidgetsFromDeleteZone();
                 presenter.playlistPossiblyChanged();
             }
         });
@@ -130,7 +138,8 @@ public class DjViewImpl extends Composite implements DjView {
 
     private void moveAnyMediaWidgetsFromDropZoneToPlaylist() {
         for (int num = 0; num < dropZone.getWidgetCount(); num++) {
-            Object widget = dropZone.getWidget(num);
+            Widget rootWidget = dropZone.getWidget(num);
+            Widget widget = rootWidget;
 
             if (widget instanceof FocusPanel) {
                 FocusPanel focusPanel = (FocusPanel) widget;
@@ -138,9 +147,24 @@ public class DjViewImpl extends Composite implements DjView {
             }
 
             if (widget != null && widget instanceof MediaWidget) {
-                MediaWidget mediaWidget = (MediaWidget) widget;
-                dropZone.remove(mediaWidget);
-                playlistPanel.add(mediaWidget);
+                dropZone.remove(rootWidget);
+                playlistPanel.add(rootWidget);
+            }
+        }
+    }
+
+    private void removeAnyMediaWidgetsFromDeleteZone() {
+        for (int num = 0; num < deleteZone.getWidgetCount(); num++) {
+            Widget rootWidget = deleteZone.getWidget(num);
+            Widget widget = rootWidget;
+
+            if (widget instanceof FocusPanel) {
+                FocusPanel focusPanel = (FocusPanel) widget;
+                widget = focusPanel.getWidget();
+            }
+
+            if (widget != null && widget instanceof MediaWidget) {
+                deleteZone.remove(rootWidget);
             }
         }
     }
