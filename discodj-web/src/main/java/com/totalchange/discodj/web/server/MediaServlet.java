@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.totalchange.discodj.catalogue.Catalogue;
 import com.totalchange.discodj.media.Media;
@@ -18,6 +20,8 @@ import com.totalchange.discodj.media.Media;
 @Singleton
 public final class MediaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+
+    private static Logger logger = LoggerFactory.getLogger(MediaServlet.class);
 
     public static final String PATH = "/media";
     public static final String PARAM_ID = "id";
@@ -44,7 +48,16 @@ public final class MediaServlet extends HttpServlet {
                         + id, ioEx);
             }
 
-            // TODO Pass back content type
+            // TODO Improve content type handling
+            if (media.getId().toLowerCase().endsWith(".mp3")) {
+                logger.trace("MP3 content type for media {}", media);
+                response.setContentType("audio/mpeg");
+            } else if (media.getId().toLowerCase().endsWith(".mp4")) {
+                logger.trace("MP4 content type for media {}", media);
+                response.setContentType("video/mp4");
+            } else {
+                logger.warn("Unknown content type for media {}", media);
+            }
 
             try {
                 IOUtils.copy(in, response.getOutputStream());
