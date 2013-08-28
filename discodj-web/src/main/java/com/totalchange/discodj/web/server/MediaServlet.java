@@ -1,5 +1,6 @@
 package com.totalchange.discodj.web.server;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -37,6 +38,8 @@ public final class MediaServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter(PARAM_ID);
+        logger.trace("Received request for ID {}", id);
+
         if (id != null && id.length() > 0) {
             Media media;
             InputStream in;
@@ -44,9 +47,15 @@ public final class MediaServlet extends HttpServlet {
                 media = catalogue.getMedia(id);
                 in = catalogue.getMediaData(media);
             } catch (IOException ioEx) {
+                logger.error("Error fetching media", ioEx);
                 throw new ServletException("Failed to get media item with id "
                         + id, ioEx);
             }
+
+            // TODO: Work with ranges
+            response.addHeader("Accept-Ranges", "none");
+
+            response.setContentLength((int) new File(id).length());
 
             // TODO Improve content type handling
             if (media.getId().toLowerCase().endsWith(".mp3")) {
@@ -60,7 +69,9 @@ public final class MediaServlet extends HttpServlet {
             }
 
             try {
+                logger.trace("Streaming back");
                 IOUtils.copy(in, response.getOutputStream());
+                logger.trace("Finished streaming");
             } finally {
                 in.close();
             }
