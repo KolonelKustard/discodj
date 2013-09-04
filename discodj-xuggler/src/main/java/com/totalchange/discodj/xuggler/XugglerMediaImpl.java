@@ -23,7 +23,7 @@ final class XugglerMediaImpl extends AbstractMedia {
         } catch (NumberFormatException nfEx) {
             year = -1;
         }
-        requestedBy = md.getValue("comments");
+        requestedBy = md.getValue("comment");
         title = md.getValue("title");
     }
 
