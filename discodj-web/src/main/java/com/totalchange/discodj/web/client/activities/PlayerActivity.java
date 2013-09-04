@@ -33,12 +33,16 @@ import com.totalchange.discodj.web.shared.player.GetNextFromPlaylistResult.Media
 
 public class PlayerActivity extends AbstractActivity implements
         PlayerView.Presenter {
+    private static final int STATUS_CHECK_INTERVAL_MS = 1000;
+
     private static final Logger logger = Logger.getLogger(PlayerActivity.class
             .getName());
 
     private PlayerView playerView;
     private DispatchAsync dispatch;
     private ErrorHandler errorHandler;
+
+    private boolean requestForNextInProgress = false;
 
     @Inject
     public PlayerActivity(PlayerView playerView, DispatchAsync dispatch,
@@ -71,19 +75,33 @@ public class PlayerActivity extends AbstractActivity implements
 
     private void loadNext() {
         logger.finer("Loading next media");
+        requestForNextInProgress = true;
         dispatch.execute(new GetNextFromPlaylistAction(),
                 new AsyncCallback<GetNextFromPlaylistResult>() {
                     @Override
                     public void onFailure(Throwable caught) {
+                        requestForNextInProgress = false;
                         errorHandler.loadingError(caught);
                     }
 
                     @Override
                     public void onSuccess(GetNextFromPlaylistResult result) {
+                        requestForNextInProgress = false;
                         logger.finer("Got next media");
                         playNext(result);
                     }
                 });
+    }
+
+    private void checkStatus() {
+        logger.finest("Checking status");
+
+        if (!playerView.isSomethingPlaying() && !requestForNextInProgress) {
+            logger.fine("Nothing playing and no request in progress");
+            loadNext();
+        }
+
+        logger.finest("Status checked");
     }
 
     @Override
@@ -92,6 +110,12 @@ public class PlayerActivity extends AbstractActivity implements
         container.setWidget(playerView.asWidget());
         loadNext();
         logger.finer("Finished starting up InitJizzActivity");
+    }
+
+    @Override
+    public void onStop() {
+        logger.finer("Stopping");
+        logger.finer("Stopped");
     }
 
     @Override

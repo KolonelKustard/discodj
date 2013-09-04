@@ -92,6 +92,7 @@ public class PlayerViewImpl extends Composite implements PlayerView {
     void audioEnded(EndedEvent ev) {
         audio.setVisible(false);
         video.setVisible(false);
+        audio.setSrc(null);
         presenter.finishedPlayingCurrent();
     }
 
@@ -99,6 +100,7 @@ public class PlayerViewImpl extends Composite implements PlayerView {
     void videoEnded(EndedEvent ev) {
         audio.setVisible(false);
         video.setVisible(false);
+        video.setSrc(null);
         presenter.finishedPlayingCurrent();
     }
 
@@ -165,5 +167,20 @@ public class PlayerViewImpl extends Composite implements PlayerView {
         }
 
         showOrHideInfoPanelBasedOnContent();
+    }
+
+    @Override
+    public boolean isSomethingPlaying() {
+        if (audio.getCurrentSrc() != null && !audio.hasEnded()
+                && audio.getError() == null) {
+            return true;
+        }
+
+        if (video.getCurrentSrc() != null && !video.hasEnded()
+                && video.getError() == null) {
+            return true;
+        }
+
+        return false;
     }
 }

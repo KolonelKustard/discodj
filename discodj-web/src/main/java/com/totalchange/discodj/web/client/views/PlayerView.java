@@ -28,4 +28,6 @@ public interface PlayerView extends CommonView {
     void setNowPlayingTitle(String title);
     void setNowPlayingArtist(String artist);
     void setNowPlayingRequestedBy(String requestedBy);
+
+    boolean isSomethingPlaying();
 }
