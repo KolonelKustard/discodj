@@ -2,6 +2,7 @@ package com.totalchange.discodj.catalogue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 import com.totalchange.discodj.media.Media;
@@ -14,6 +15,11 @@ import com.totalchange.discodj.media.Media;
  * @author Ralph Jones
  */
 public interface Catalogue {
+    public interface CatalogueEntity {
+        String getId();
+        Date getLastModified();
+    }
+
     public interface Listener {
         void yetMoreMedia(Media media);
         void warn(String msg, Throwable cause);
