@@ -1,6 +1,6 @@
 package com.totalchange.discodj.search.solr;
 
-import static org.easymock.EasyMock.*;
+import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
@@ -9,29 +9,25 @@ import java.util.Collection;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
-import org.easymock.EasyMockSupport;
-import org.easymock.IAnswer;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
-public class SolrSearchPopulatorImplTests extends EasyMockSupport {
+public class SolrSearchPopulatorImplTests {
     private SolrServer solrServer;
     private SolrSearchPopulatorImpl populator;
 
     @Before
     public void setUp() {
-        solrServer = createMock(SolrServer.class);
+        solrServer = mock(SolrServer.class);
         populator = new SolrSearchPopulatorImpl(solrServer);
     }
 
     @Test
     public void deletesAllOnCreate() throws IOException, SolrServerException {
-        expect(solrServer.deleteByQuery("*:*")).andStubReturn(null);
-        expect(solrServer.commit()).andStubReturn(null);
-
-        replayAll();
-        populator = new SolrSearchPopulatorImpl(solrServer);
-        verifyAll();
+        verify(solrServer).deleteByQuery("*:*");
+        verify(solrServer).commit();
     }
 
     @Test
@@ -43,11 +39,10 @@ public class SolrSearchPopulatorImplTests extends EasyMockSupport {
         for (int num = 0; num < numOfCommits; num++) {
             final int copyOfNum = num;
 
-            solrServer.add(anyObject(Collection.class));
-            expectLastCall().andAnswer(new IAnswer<Object>() {
+            when(solrServer.add(any(Collection.class))).then(new Answer<Object>() {
                 @Override
-                public Object answer() throws Throwable {
-                    Collection<SolrInputDocument> docs = (Collection<SolrInputDocument>) getCurrentArguments()[0];
+                public Object answer(InvocationOnMock invocation) throws Throwable {
+                    Collection<SolrInputDocument> docs = (Collection<SolrInputDocument>) invocation.getArguments()[0];
                     for (SolrInputDocument doc : docs) {
                         assertEquals("Test ID " + copyOfNum,
                                 doc.getFieldValue(SolrSearchProviderImpl.F_ID));
@@ -70,9 +65,7 @@ public class SolrSearchPopulatorImplTests extends EasyMockSupport {
             });
         }
 
-        replayAll();
         populator.addMedia(null);
         populator.commit();
-        verifyAll();
     }
 }

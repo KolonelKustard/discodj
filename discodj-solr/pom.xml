@@ -15,11 +15,11 @@
 	<description>Does searching SOLR style</description>
 
 	<dependencies>
-	    <dependency>
+		<dependency>
 			<groupId>com.totalchange.discodj</groupId>
 			<artifactId>discodj-core</artifactId>
 		</dependency>
-	    
+
 		<dependency>
 			<artifactId>solr-solrj</artifactId>
 			<groupId>org.apache.solr</groupId>
@@ -30,21 +30,26 @@
 			<groupId>org.apache.solr</groupId>
 			<version>4.3.0</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<scope>provided</scope>
 		</dependency>
-        
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymock</artifactId>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

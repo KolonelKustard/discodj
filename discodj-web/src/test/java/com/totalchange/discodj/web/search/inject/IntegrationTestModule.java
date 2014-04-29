@@ -1,6 +1,6 @@
 package com.totalchange.discodj.web.search.inject;
 
-import static org.easymock.EasyMock.*;
+import static org.mockito.Mockito.*;
 
 import javax.servlet.ServletContext;
 
@@ -21,13 +21,12 @@ public class IntegrationTestModule extends AbstractModule {
     @Provides
     ServletContext provideMockServletContext() {
         logger.trace("Making mock ServletContext");
-        ServletContext sc = createMock(ServletContext.class);
-        expect(sc.getRealPath("/WEB-INF/solr")).andReturn(
+        ServletContext sc = mock(ServletContext.class);
+        when(sc.getRealPath("/WEB-INF/solr")).thenReturn(
                 "./src/main/webapp/WEB-INF/solr");
-        expect(sc.getRealPath("/WEB-INF/catalogue")).andReturn(
+        when(sc.getRealPath("/WEB-INF/catalogue")).thenReturn(
                 "./src/test/catalogue");
 
-        replay(sc);
         logger.trace("Returning mock ServletContext");
         return sc;
     }
