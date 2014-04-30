@@ -1,5 +1,6 @@
 package com.totalchange.discodj.populator;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -14,27 +15,78 @@ import static org.junit.Assert.assertEquals;
 public class IteratorComparatorTests {
     @Test
     public void allNewItems() {
-        Iterator<Catalogue.CatalogueEntity> src = new ListBuilder().add("1", 1)
+        List<Catalogue.CatalogueEntity> src = new ListBuilder().add("1", 1)
                 .add("2", 2).add("3", 3).add("4", 4).build();
-        Iterator<Catalogue.CatalogueEntity> dest = new ListBuilder().build();
+        List<Catalogue.CatalogueEntity> dest = new ListBuilder().build();
 
         IteratorComparator comparator = new IteratorComparator();
-        ActionsToTake actions = comparator.compare(src, dest);
+        ActionsToTake actions = comparator.compare(src.iterator(),
+                dest.iterator());
 
         assertIteratorEquals(src, actions.getToAdd());
+        assertIteratorEmpty(actions.getToDelete());
+        assertIteratorEmpty(actions.getToUpdate());
     }
 
-    private void assertIteratorEquals(
-            Iterator<Catalogue.CatalogueEntity> expected,
+    @Test
+    public void deleteAllItems() {
+        List<Catalogue.CatalogueEntity> src = new ListBuilder().build();
+        List<Catalogue.CatalogueEntity> dest = new ListBuilder().add("1", 1)
+                .add("2", 2).add("3", 3).add("4", 4).build();
+
+        IteratorComparator comparator = new IteratorComparator();
+        ActionsToTake actions = comparator.compare(src.iterator(),
+                dest.iterator());
+
+        assertIteratorEquals(dest, actions.getToDelete());
+        assertIteratorEmpty(actions.getToAdd());
+        assertIteratorEmpty(actions.getToUpdate());
+    }
+
+    @Test
+    public void missingSomeItems() {
+        List<Catalogue.CatalogueEntity> src = new ListBuilder().add("1", 1)
+                .add("2", 2).add("3", 3).add("4", 4).add("5", 5).build();
+        List<Catalogue.CatalogueEntity> dest = new ListBuilder().add("1", 1)
+                .add("3", 3).add("4", 4).build();
+
+        IteratorComparator comparator = new IteratorComparator();
+        ActionsToTake actions = comparator.compare(src.iterator(),
+                dest.iterator());
+
+        assertIteratorEquals(new ListBuilder().add("2", "5").build(),
+                actions.getToAdd());
+        assertIteratorEmpty(actions.getToDelete());
+        assertIteratorEmpty(actions.getToUpdate());
+    }
+
+    @Test
+    public void needToDeleteSomeItems() {
+        List<Catalogue.CatalogueEntity> src = new ListBuilder().add("1", 1)
+                .add("3", 3).add("4", 4).build();
+        List<Catalogue.CatalogueEntity> dest = new ListBuilder().add("1", 1)
+                .add("2", 2).add("3", 3).add("4", 4).add("5", 5).build();
+
+        IteratorComparator comparator = new IteratorComparator();
+        ActionsToTake actions = comparator.compare(src.iterator(),
+                dest.iterator());
+
+        assertIteratorEquals(new ListBuilder().add("2", "5").build(),
+                actions.getToDelete());
+        assertIteratorEmpty(actions.getToAdd());
+        assertIteratorEmpty(actions.getToUpdate());
+    }
+
+    private void assertIteratorEquals(List<Catalogue.CatalogueEntity> expected,
             Iterator<String> actual) {
         StringBuilder expectedStr = new StringBuilder();
         StringBuilder actualStr = new StringBuilder();
 
-        while (expected.hasNext()) {
+        for (Catalogue.CatalogueEntity entity : expected) {
             if (expectedStr.length() > 0) {
                 expectedStr.append(", ");
             }
-            expectedStr.append(expected.next().getId());
+            expectedStr.append(entity.getId());
         }
 
         while (actual.hasNext()) {
@@ -45,6 +97,11 @@ public class IteratorComparatorTests {
         }
 
         assertEquals(expectedStr.toString(), actualStr.toString());
+    }
+
+    private void assertIteratorEmpty(Iterator<String> actual) {
+        assertIteratorEquals(
+                Collections.<Catalogue.CatalogueEntity> emptyList(), actual);
     }
 
     private class ListBuilder {
@@ -80,8 +137,15 @@ public class IteratorComparatorTests {
             return this;
         }
 
-        Iterator<Catalogue.CatalogueEntity> build() {
-            return things.iterator();
+        public ListBuilder add(final String... ids) {
+            for (String id : ids) {
+                add(id, -1);
+            }
+            return this;
+        }
+
+        List<Catalogue.CatalogueEntity> build() {
+            return things;
         }
     }
 }
