@@ -3,6 +3,7 @@ package com.totalchange.discodj.catalogue;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import com.totalchange.discodj.media.Media;
@@ -20,11 +21,12 @@ public interface Catalogue {
         Date getLastModified();
     }
 
+    @Deprecated
     public interface Listener {
         void yetMoreMedia(Media media);
         void warn(String msg, Throwable cause);
     }
-    
+
     /**
      * <p>
      * Lists all the songs in the catalogue and blocks until completed. Numerous
@@ -35,8 +37,10 @@ public interface Catalogue {
      * @param listener
      *            receives events as the catalogue is listed
      */
+    @Deprecated
     void listAllSongs(Listener listener);
-    
+
+    Iterator<CatalogueEntity> listAllAlphabeticallyById();
     Media getMedia(String mediaId);
     List<Media> getDefaultPlaylist();
     InputStream getMediaData(Media media) throws IOException;
