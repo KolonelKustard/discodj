@@ -14,34 +14,22 @@ import static org.junit.Assert.assertEquals;
 
 public class IteratorComparatorTests {
     @Test
-<<<<<<< HEAD
     public void noChanges() {
         List<Catalogue.CatalogueEntity> src = new ListBuilder().add("1", 1)
                 .add("2", 2).add("3", 3).add("4", 4).add("5", 5).build();
         List<Catalogue.CatalogueEntity> dest = new ListBuilder().add("1", 1)
                 .add("2", 2).add("3", 3).add("4", 4).add("5", 5).build();
-=======
-    public void allNewItems() {
-        List<Catalogue.CatalogueEntity> src = new ListBuilder().add("1", 1)
-                .add("2", 2).add("3", 3).add("4", 4).build();
-        List<Catalogue.CatalogueEntity> dest = new ListBuilder().build();
->>>>>>> branch 'master' of https://github.com/KolonelKustard/discodj.git
 
         IteratorComparator comparator = new IteratorComparator();
         ActionsToTake actions = comparator.compare(src.iterator(),
                 dest.iterator());
 
-<<<<<<< HEAD
         assertIteratorEmpty(actions.getToAdd());
-=======
-        assertIteratorEquals(src, actions.getToAdd());
->>>>>>> branch 'master' of https://github.com/KolonelKustard/discodj.git
         assertIteratorEmpty(actions.getToDelete());
         assertIteratorEmpty(actions.getToUpdate());
     }
 
     @Test
-<<<<<<< HEAD
     public void allNewItems() {
         List<Catalogue.CatalogueEntity> src = new ListBuilder().add("1", 1)
                 .add("2", 2).add("3", 3).add("4", 4).build();
@@ -158,54 +146,6 @@ public class IteratorComparatorTests {
                 actions.getToAdd());
         assertIteratorEquals(new ListBuilder().add("2", "5").build(),
                 actions.getToUpdate());
-=======
-    public void deleteAllItems() {
-        List<Catalogue.CatalogueEntity> src = new ListBuilder().build();
-        List<Catalogue.CatalogueEntity> dest = new ListBuilder().add("1", 1)
-                .add("2", 2).add("3", 3).add("4", 4).build();
-
-        IteratorComparator comparator = new IteratorComparator();
-        ActionsToTake actions = comparator.compare(src.iterator(),
-                dest.iterator());
-
-        assertIteratorEquals(dest, actions.getToDelete());
-        assertIteratorEmpty(actions.getToAdd());
-        assertIteratorEmpty(actions.getToUpdate());
-    }
-
-    @Test
-    public void missingSomeItems() {
-        List<Catalogue.CatalogueEntity> src = new ListBuilder().add("1", 1)
-                .add("2", 2).add("3", 3).add("4", 4).add("5", 5).build();
-        List<Catalogue.CatalogueEntity> dest = new ListBuilder().add("1", 1)
-                .add("3", 3).add("4", 4).build();
-
-        IteratorComparator comparator = new IteratorComparator();
-        ActionsToTake actions = comparator.compare(src.iterator(),
-                dest.iterator());
-
-        assertIteratorEquals(new ListBuilder().add("2", "5").build(),
-                actions.getToAdd());
-        assertIteratorEmpty(actions.getToDelete());
-        assertIteratorEmpty(actions.getToUpdate());
-    }
-
-    @Test
-    public void needToDeleteSomeItems() {
-        List<Catalogue.CatalogueEntity> src = new ListBuilder().add("1", 1)
-                .add("3", 3).add("4", 4).build();
-        List<Catalogue.CatalogueEntity> dest = new ListBuilder().add("1", 1)
-                .add("2", 2).add("3", 3).add("4", 4).add("5", 5).build();
-
-        IteratorComparator comparator = new IteratorComparator();
-        ActionsToTake actions = comparator.compare(src.iterator(),
-                dest.iterator());
-
-        assertIteratorEquals(new ListBuilder().add("2", "5").build(),
-                actions.getToDelete());
-        assertIteratorEmpty(actions.getToAdd());
-        assertIteratorEmpty(actions.getToUpdate());
->>>>>>> branch 'master' of https://github.com/KolonelKustard/discodj.git
     }
 
     private void assertIteratorEquals(List<Catalogue.CatalogueEntity> expected,
