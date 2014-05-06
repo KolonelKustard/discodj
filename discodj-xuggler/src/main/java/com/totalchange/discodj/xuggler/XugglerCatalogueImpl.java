@@ -99,7 +99,7 @@ public final class XugglerCatalogueImpl implements Catalogue {
 
     @Override
     public Iterator<CatalogueEntity> listAllAlphabeticallyById() {
-        return new XugglerCatalogueEntityIterator(root);
+        return new FileCatalogueEntityIterator(root);
     }
 
     @Override

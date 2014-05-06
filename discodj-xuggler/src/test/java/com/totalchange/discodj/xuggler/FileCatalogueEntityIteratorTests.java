@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
-public class XugglerCatalogueEntityIteratorTests {
+public class FileCatalogueEntityIteratorTests {
     @Test
     public void iteratesOverNestedFileList() throws IOException {
         F root = new F("music", new F[] {
@@ -32,7 +32,7 @@ public class XugglerCatalogueEntityIteratorTests {
             })
         });
 
-        XugglerCatalogueEntityIterator it = new XugglerCatalogueEntityIterator(
+        FileCatalogueEntityIterator it = new FileCatalogueEntityIterator(
                 root.build(), ".mp3", ".mp4");
 
         assertEquals("/music/bob/blonde/achilles.mp3", it.next().getId());

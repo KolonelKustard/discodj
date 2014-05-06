@@ -10,7 +10,7 @@ import java.util.Queue;
 
 import com.totalchange.discodj.catalogue.Catalogue.CatalogueEntity;
 
-class XugglerCatalogueEntityIterator implements Iterator<CatalogueEntity> {
+class FileCatalogueEntityIterator implements Iterator<CatalogueEntity> {
     private class FileCatalogueEntity implements CatalogueEntity {
         private String id;
         private Date lastModified;
@@ -39,7 +39,7 @@ class XugglerCatalogueEntityIterator implements Iterator<CatalogueEntity> {
     private Queue<File> queue = new ArrayDeque<>();
     private File next;
 
-    public XugglerCatalogueEntityIterator(File root,
+    public FileCatalogueEntityIterator(File root,
             String... allowedExtensions) {
         this.allowedExtensions = allowedExtensions;
         queue.add(root);
