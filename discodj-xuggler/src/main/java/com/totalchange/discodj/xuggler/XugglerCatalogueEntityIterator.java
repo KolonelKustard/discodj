@@ -1,7 +1,6 @@
 package com.totalchange.discodj.xuggler;
 
 import java.io.File;
-<<<<<<< HEAD
 import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
