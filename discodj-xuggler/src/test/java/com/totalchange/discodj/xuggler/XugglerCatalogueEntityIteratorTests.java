@@ -12,9 +12,16 @@ public class XugglerCatalogueEntityIteratorTests {
     @Test
     public void iteratesOverNestedFileList() throws IOException {
         F root = new F("music", new F[] {
+            new F("dolly", new F[] {
+                new F("hello", new F[] {
+                    new F("dumb.mp3"),
+                    new F("wasted.mp3")
+                })
+            }),
             new F("bob", new F[] {
                 new F("changin", new F[] {
                     new F("ballad.mp3"),
+                    new F("readme.txt"),
                     new F("pawn.mp3"),
                     new F("hattie.mp3")
                 }),
@@ -22,23 +29,17 @@ public class XugglerCatalogueEntityIteratorTests {
                     new F("want.mp3"),
                     new F("achilles.mp3")
                 })
-            }),
-            new F("dolly", new F[] {
-                new F("hello", new F[] {
-                    new F("dumb.mp3"),
-                    new F("wasted.mp3")
-                })
             })
         });
 
         XugglerCatalogueEntityIterator it = new XugglerCatalogueEntityIterator(
-                root.build());
+                root.build(), ".mp3", ".mp4");
 
-        assertEquals("/music/bob/changin/ballad.mp3", it.next().getId());
-        assertEquals("/music/bob/changin/pawn.mp3", it.next().getId());
-        assertEquals("/music/bob/changin/hattie.mp3", it.next().getId());
-        assertEquals("/music/bob/blonde/want.mp3", it.next().getId());
         assertEquals("/music/bob/blonde/achilles.mp3", it.next().getId());
+        assertEquals("/music/bob/blonde/want.mp3", it.next().getId());
+        assertEquals("/music/bob/changin/ballad.mp3", it.next().getId());
+        assertEquals("/music/bob/changin/hattie.mp3", it.next().getId());
+        assertEquals("/music/bob/changin/pawn.mp3", it.next().getId());
         assertEquals("/music/dolly/hello/dumb.mp3", it.next().getId());
         assertEquals("/music/dolly/hello/wasted.mp3", it.next().getId());
     }
@@ -62,8 +63,10 @@ public class XugglerCatalogueEntityIteratorTests {
 
         private File makeFile(F f, String parent) throws IOException {
             File file = mock(File.class);
+            when(file.getName()).thenReturn(f.name);
             when(file.getCanonicalPath()).thenReturn(parent + f.name);
             when(file.isDirectory()).thenReturn(f.directory);
+            when(file.isFile()).thenReturn(!f.directory);
 
             File[] children = new File[f.children.length];
             for (int num = 0; num < f.children.length; num++) {
