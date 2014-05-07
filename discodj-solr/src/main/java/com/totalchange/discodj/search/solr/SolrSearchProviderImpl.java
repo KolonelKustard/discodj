@@ -1,5 +1,7 @@
 package com.totalchange.discodj.search.solr;
 
+import java.util.Iterator;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -8,6 +10,8 @@ import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
+import com.totalchange.discodj.catalogue.Catalogue.CatalogueEntity;
+import com.totalchange.discodj.search.SearchException;
 import com.totalchange.discodj.search.SearchPopulator;
 import com.totalchange.discodj.search.SearchProvider;
 import com.totalchange.discodj.search.SearchQuery;
@@ -16,6 +20,7 @@ import com.totalchange.discodj.search.SearchResults;
 @Singleton
 public final class SolrSearchProviderImpl implements SearchProvider {
     static final String F_ID = "id";
+    static final String F_LAST_MODIFIED = "lastModified";
     static final String F_ARTIST = "artist";
     static final String F_ALBUM = "album";
     static final String F_GENRE = "genre";
@@ -31,6 +36,13 @@ public final class SolrSearchProviderImpl implements SearchProvider {
     @Inject
     public SolrSearchProviderImpl(SolrServer solrServer) {
         this.solrServer = solrServer;
+    }
+
+    @Override
+    public Iterator<CatalogueEntity> listAllAlphabeticallyById()
+            throws SearchException {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
