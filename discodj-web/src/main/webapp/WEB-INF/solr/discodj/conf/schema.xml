@@ -2,6 +2,7 @@
 <schema name="discodj" version="1.5">
 	<fields>
 		<field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+		<field name="lastModified" type="date" indexed="true" stored="true" required="true" multiValued="false" />
 		<field name="artist" type="string" indexed="true" stored="true" required="false" multiValued="false" />
 		<field name="album" type="string" indexed="true" stored="true" required="false" multiValued="false" />
 		<field name="genre" type="string" indexed="true" stored="true" required="false" multiValued="false" />
