@@ -78,7 +78,7 @@ public class SyncSearchFromCatalogueTests {
         }
 
         assertTrue(syncSearchFromCatalogue.isInProgress());
-        assertEquals("Looking for changes to be made",
+        assertEquals(Messages.getStatusFindingChanges(),
                 syncSearchFromCatalogue.getStatus());
         try {
             syncSearchFromCatalogue.sync();
