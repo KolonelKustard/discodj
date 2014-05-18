@@ -2,7 +2,6 @@ package com.totalchange.discodj.populator;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -149,7 +148,7 @@ public class IteratorComparatorTests {
     }
 
     private void assertIteratorEquals(List<Catalogue.CatalogueEntity> expected,
-            Iterator<String> actual) {
+            List<String> actual) {
         StringBuilder expectedStr = new StringBuilder();
         StringBuilder actualStr = new StringBuilder();
 
@@ -160,17 +159,17 @@ public class IteratorComparatorTests {
             expectedStr.append(entity.getId());
         }
 
-        while (actual.hasNext()) {
+        for (String id : actual) {
             if (actualStr.length() > 0) {
                 actualStr.append(", ");
             }
-            actualStr.append(actual.next());
+            actualStr.append(id);
         }
 
         assertEquals(expectedStr.toString(), actualStr.toString());
     }
 
-    private void assertIteratorEmpty(Iterator<String> actual) {
+    private void assertIteratorEmpty(List<String> actual) {
         assertIteratorEquals(
                 Collections.<Catalogue.CatalogueEntity> emptyList(), actual);
     }

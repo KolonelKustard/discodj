@@ -1,6 +1,5 @@
 package com.totalchange.discodj.populator;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,16 +8,16 @@ class ActionsToTake {
     private List<String> toUpdate = new LinkedList<>();
     private List<String> toDelete = new LinkedList<>();
 
-    Iterator<String> getToAdd() {
-        return toAdd.iterator();
+    List<String> getToAdd() {
+        return toAdd;
     }
 
-    Iterator<String> getToUpdate() {
-        return toUpdate.iterator();
+    List<String> getToUpdate() {
+        return toUpdate;
     }
 
-    Iterator<String> getToDelete() {
-        return toDelete.iterator();
+    List<String> getToDelete() {
+        return toDelete;
     }
 
     void add(String id) {
