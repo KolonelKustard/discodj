@@ -40,7 +40,7 @@ public final class CataloguePopulator implements Runnable {
     @Override
     public void run() {
         logger.trace("Re-indexing search collection");
-        final SearchPopulator searchPopulator = searchProvider.repopulate();
+        final SearchPopulator searchPopulator = searchProvider.createPopulator();
 
         try {
             catalogue.listAllSongs(new Catalogue.Listener() {

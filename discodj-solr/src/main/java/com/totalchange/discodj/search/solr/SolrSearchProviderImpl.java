@@ -46,7 +46,7 @@ public final class SolrSearchProviderImpl implements SearchProvider {
     }
 
     @Override
-    public SearchPopulator repopulate() throws SolrSearchException {
+    public SearchPopulator createPopulator() throws SolrSearchException {
         return new SolrSearchPopulatorImpl(solrServer);
     }
 

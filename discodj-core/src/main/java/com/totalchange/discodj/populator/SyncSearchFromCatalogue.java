@@ -71,7 +71,7 @@ public class SyncSearchFromCatalogue {
         assertNotInProgress();
 
         logger.trace("Deleting all");
-        SearchPopulator populator = searchProvider.repopulate();
+        SearchPopulator populator = searchProvider.createPopulator();
         populator.deleteAll();
         populator.commit();
 
@@ -100,7 +100,7 @@ public class SyncSearchFromCatalogue {
         }
 
         if (totalChanges > 0) {
-            SearchPopulator searchPopulator = searchProvider.repopulate();
+            SearchPopulator searchPopulator = searchProvider.createPopulator();
             currentItem = 0;
 
             delete(searchPopulator, actionsToTake.getToDelete());

@@ -38,7 +38,7 @@ public class SyncSearchFromCatalogueTests {
         toUpdate = new ArrayList<>();
         toDelete = new ArrayList<>();
 
-        when(searchProvider.repopulate()).thenReturn(searchPopulator);
+        when(searchProvider.createPopulator()).thenReturn(searchPopulator);
         when(iteratorComparator.compare(null, null)).thenReturn(actionsToTake);
         when(actionsToTake.getToAdd()).thenReturn(toAdd);
         when(actionsToTake.getToUpdate()).thenReturn(toUpdate);

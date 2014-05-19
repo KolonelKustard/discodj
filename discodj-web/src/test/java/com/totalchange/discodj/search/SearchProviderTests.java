@@ -77,7 +77,7 @@ public class SearchProviderTests {
 
     @Test
     public void order001_populateIndexes() {
-        SearchPopulator pop = searchProvider.repopulate();
+        SearchPopulator pop = searchProvider.createPopulator();
 
         int genreNum = 0;
         for (int artistNum = 0; artistNum < NUM_TEST_ARTISTS; artistNum++) {

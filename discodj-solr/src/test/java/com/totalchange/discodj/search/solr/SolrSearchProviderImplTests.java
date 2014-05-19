@@ -38,7 +38,7 @@ public class SolrSearchProviderImplTests {
         when(solrServer.deleteByQuery("*:*")).thenReturn(null);
         when(solrServer.commit()).thenReturn(null);
 
-        SearchPopulator populator = searchProvider.repopulate();
+        SearchPopulator populator = searchProvider.createPopulator();
 
         assertTrue(populator instanceof SolrSearchPopulatorImpl);
     }

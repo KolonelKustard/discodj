@@ -7,6 +7,6 @@ import com.totalchange.discodj.catalogue.Catalogue;
 public interface SearchProvider {
     Iterator<Catalogue.CatalogueEntity> listAllAlphabeticallyById()
             throws SearchException;
-    SearchPopulator repopulate() throws SearchException;
+    SearchPopulator createPopulator() throws SearchException;
     SearchResults search(SearchQuery query) throws SearchException;
 }
