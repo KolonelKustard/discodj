@@ -9,6 +9,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import com.totalchange.discodj.catalogue.Catalogue;
+import com.totalchange.discodj.media.Media;
 import com.totalchange.discodj.search.SearchPopulator;
 import com.totalchange.discodj.search.SearchProvider;
 
@@ -90,5 +91,61 @@ public class SyncSearchFromCatalogueTests {
         synchronized (waitUntilCompleted) {
             waitUntilCompleted.notify();
         }
+    }
+
+    @Test
+    public void doesAWholeLoadOfSyncing() {
+        toAdd.add("a1");
+        toAdd.add("a2");
+        toAdd.add("a3");
+        toDelete.add("d1");
+        toDelete.add("d2");
+        toDelete.add("d3");
+        toUpdate.add("u1");
+        toUpdate.add("u2");
+        toUpdate.add("u3");
+
+        Media add1 = mock(Media.class);
+        Media add2 = mock(Media.class);
+        Media add3 = mock(Media.class);
+        when(catalogue.getMedia("a1")).thenReturn(add1);
+        when(catalogue.getMedia("a2")).thenReturn(add2);
+        when(catalogue.getMedia("a3")).thenReturn(add3);
+
+        Media update1 = mock(Media.class);
+        Media update2 = mock(Media.class);
+        Media update3 = mock(Media.class);
+        when(catalogue.getMedia("u1")).thenReturn(update1);
+        when(catalogue.getMedia("u2")).thenReturn(update2);
+        when(catalogue.getMedia("u3")).thenReturn(update3);
+
+        syncSearchFromCatalogue.sync();
+
+        verify(searchPopulator).deleteMedia("d1");
+        verify(searchPopulator).deleteMedia("d2");
+        verify(searchPopulator).deleteMedia("d3");
+
+        verify(searchPopulator).addMedia(add1);
+        verify(searchPopulator).addMedia(add2);
+        verify(searchPopulator).addMedia(add3);
+
+        verify(searchPopulator).updateMedia(update1);
+        verify(searchPopulator).updateMedia(update2);
+        verify(searchPopulator).updateMedia(update3);
+
+        verify(searchPopulator).commit();
+    }
+
+    @Test
+    public void deletesAllWhenDoingFullRefresh() {
+        toAdd.add("a1");
+        Media add1 = mock(Media.class);
+        when(catalogue.getMedia("a1")).thenReturn(add1);
+
+        syncSearchFromCatalogue.fullRefresh();
+
+        verify(searchPopulator).deleteAll();
+        verify(searchPopulator).addMedia(add1);
+        verify(searchPopulator, times(2)).commit();
     }
 }
