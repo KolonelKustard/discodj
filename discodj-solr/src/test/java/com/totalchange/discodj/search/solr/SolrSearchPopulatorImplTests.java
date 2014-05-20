@@ -1,18 +1,20 @@
 package com.totalchange.discodj.search.solr;
 
-import static org.mockito.Matchers.argThat;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.common.SolrInputDocument;
-import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentMatcher;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import com.totalchange.discodj.media.AbstractMedia;
 import com.totalchange.discodj.media.Media;
@@ -31,6 +33,9 @@ public class SolrSearchPopulatorImplTests {
     public void add9635MediaItems() throws IOException, SolrServerException {
         int numToAdd = 9635;
 
+        when(solrServer.add(any(SolrInputDocument.class))).then(
+                new IncrementalDocAnswerAsserter());
+
         for (int num = 0; num < numToAdd; num++) {
             populator.addMedia(makeFakeMedia("Test ID " + num, "Test Artist "
                     + num, "Test Album " + num, "Test Title " + num,
@@ -38,42 +43,44 @@ public class SolrSearchPopulatorImplTests {
         }
         populator.commit();
 
-        for (int num = 0; num < numToAdd; num++) {
-            verify(solrServer).add(argThat(new SolrInputDocumentMatcher(num)));
-        }
         verify(solrServer).commit();
     }
 
-    private class SolrInputDocumentMatcher extends
-            ArgumentMatcher<SolrInputDocument> {
-        private int num;
+    private class IncrementalDocAnswerAsserter implements Answer<Object> {
+        private int num = 0;
 
-        private SolrInputDocumentMatcher(int num) {
-            this.num = num;
+        private int toDecade(int year) {
+            String y = String.valueOf(year);
+            y = y.substring(0, y.length() - 1);
+            y += "0";
+            return Integer.parseInt(y);
         }
 
         @Override
-        public boolean matches(Object item) {
-            SolrInputDocument doc = (SolrInputDocument) item;
-            return doc.getFieldValue(SolrSearchProviderImpl.F_ID)
-                    .equals("Test ID " + num)
-                    && doc.getFieldValue(SolrSearchProviderImpl.F_ARTIST)
-                            .equals("Test Artist " + num)
-                    && doc.getFieldValue(SolrSearchProviderImpl.F_ALBUM)
-                            .equals("Test Album " + num)
-                    && doc.getFieldValue(SolrSearchProviderImpl.F_GENRE)
-                            .equals("Test Genre " + num)
-                    && doc.getFieldValue(SolrSearchProviderImpl.F_REQUESTED_BY)
-                            .equals("Test Requested By " + num)
-                    //&& doc.getFieldValue(SolrSearchProviderImpl.F_YEAR).equals(
-                    //        String.valueOf(num))
-                    && doc.getFieldValue(SolrSearchProviderImpl.F_TITLE)
-                            .equals("Test Title " + num);
-        }
+        public Object answer(InvocationOnMock invocation) throws Throwable {
+            SolrInputDocument doc = (SolrInputDocument) invocation
+                    .getArguments()[0];
 
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("Test SOLR Document number " + num);
+            assertEquals("ID for " + doc.toString(), "Test ID " + num,
+                    doc.getFieldValue(SolrSearchProviderImpl.F_ID));
+            assertEquals("Artist for " + doc.toString(), "Test Artist " + num,
+                    doc.getFieldValue(SolrSearchProviderImpl.F_ARTIST));
+            assertEquals("Album for " + doc.toString(), "Test Album " + num,
+                    doc.getFieldValue(SolrSearchProviderImpl.F_ALBUM));
+            assertEquals("Genre for " + doc.toString(), "Test Genre " + num,
+                    doc.getFieldValue(SolrSearchProviderImpl.F_GENRE));
+            assertEquals("Requested By for " + doc.toString(),
+                    "Test Requested By " + num,
+                    doc.getFieldValue(SolrSearchProviderImpl.F_REQUESTED_BY));
+            assertEquals("Year for " + doc.toString(), num,
+                    doc.getFieldValue(SolrSearchProviderImpl.F_YEAR));
+            assertEquals("Decade for " + doc.toString(), toDecade(num),
+                    doc.getFieldValue(SolrSearchProviderImpl.F_DECADE));
+            assertEquals("Title for " + doc.toString(), "Test Title " + num,
+                    doc.getFieldValue(SolrSearchProviderImpl.F_TITLE));
+
+            num++;
+            return null;
         }
     }
 

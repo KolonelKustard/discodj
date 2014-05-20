@@ -24,8 +24,8 @@ public class SolrSearchPopulatorImpl implements SearchPopulator {
         this.solrServer = solrServer;
     }
 
-    private int roundYearToDecade(int year) {
-        return ((year + 5) / 10) * 10;
+    private int floorYearToDecade(int year) {
+        return (year / 10) * 10;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class SolrSearchPopulatorImpl implements SearchPopulator {
         doc.setField(SolrSearchProviderImpl.F_GENRE, media.getGenre());
         doc.setField(SolrSearchProviderImpl.F_YEAR, media.getYear());
         doc.setField(SolrSearchProviderImpl.F_DECADE,
-                roundYearToDecade(media.getYear()));
+                floorYearToDecade(media.getYear()));
         doc.setField(SolrSearchProviderImpl.F_REQUESTED_BY,
                 media.getRequestedBy());
         doc.setField(SolrSearchProviderImpl.F_TITLE, media.getTitle());
