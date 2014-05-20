@@ -30,8 +30,10 @@ public class SolrSearchPopulatorImplTests {
     }
 
     @Test
-    public void add9635MediaItems() throws IOException, SolrServerException {
+    public void add4657AndUpdate3654MediaItems() throws IOException,
+            SolrServerException {
         int numToAdd = 9635;
+        int numToUpdate = 3654;
 
         when(solrServer.add(any(SolrInputDocument.class))).then(
                 new IncrementalDocAnswerAsserter());
@@ -41,14 +43,44 @@ public class SolrSearchPopulatorImplTests {
                     + num, "Test Album " + num, "Test Title " + num,
                     "Test Genre " + num, num, "Test Requested By " + num));
         }
-        populator.commit();
 
+        for (int num = numToAdd; num < numToUpdate; num++) {
+            populator.updateMedia(makeFakeMedia("Test ID " + num,
+                    "Test Artist " + num, "Test Album " + num, "Test Title "
+                            + num, "Test Genre " + num, num,
+                    "Test Requested By " + num));
+        }
+    }
+
+    @Test
+    public void passesOnDeleteById() throws IOException, SolrServerException {
+        populator.deleteMedia("123");
+        verify(solrServer).deleteById("123");
+    }
+
+    @Test
+    public void deletesAll() throws IOException, SolrServerException {
+        populator.deleteAll();
+        verify(solrServer).deleteByQuery("*:*");
+    }
+
+    @Test
+    public void passesOnCommit() throws IOException, SolrServerException {
+        populator.commit();
         verify(solrServer).commit();
     }
 
     private class IncrementalDocAnswerAsserter implements Answer<Object> {
         private int num = 0;
 
+        /**
+         * Intentionally using an alternate implementation so got a bit of
+         * confidence the decade parsing is working.
+         * 
+         * @param year
+         *            year to round down to nearest decade
+         * @return the decade the year occurs in
+         */
         private int toDecade(int year) {
             String y = String.valueOf(year);
             y = y.substring(0, y.length() - 1);
