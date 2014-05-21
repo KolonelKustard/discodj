@@ -41,8 +41,7 @@ public final class SolrSearchProviderImpl implements SearchProvider {
     @Override
     public Iterator<CatalogueEntity> listAllAlphabeticallyById()
             throws SearchException {
-        // TODO Auto-generated method stub
-        return null;
+        return new SolrCatalogueEntityIterator(solrServer);
     }
 
     @Override
