@@ -6,20 +6,25 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocumentList;
 
 import com.totalchange.discodj.catalogue.Catalogue.CatalogueEntity;
 import com.totalchange.discodj.search.SearchException;
 
 public class SolrCatalogueEntityIterator implements Iterator<CatalogueEntity> {
     private static final int NUM_PER_PAGE = 10000;
+    private static final int OFFSET_FINISHED = -1;
 
     private SolrServer solrServer;
 
     private int currentPage = 0;
+    private SolrDocumentList docs;
     private int nextOffset;
 
-    public SolrCatalogueEntityIterator(SolrServer solrServer) {
+    public SolrCatalogueEntityIterator(SolrServer solrServer)
+            throws SolrSearchException {
         this.solrServer = solrServer;
+        getNextLoadFromSolr();
     }
 
     private void getNextLoadFromSolr() throws SolrSearchException {
@@ -31,7 +36,7 @@ public class SolrCatalogueEntityIterator implements Iterator<CatalogueEntity> {
 
         try {
             QueryResponse res = solrServer.query(sq);
-            res.getResults();
+            docs = res.getResults();
         } catch (SolrServerException sEx) {
             throw new SolrSearchException(sEx);
         }
@@ -39,14 +44,19 @@ public class SolrCatalogueEntityIterator implements Iterator<CatalogueEntity> {
 
     @Override
     public boolean hasNext() {
-        // TODO Auto-generated method stub
-        return false;
+        return nextOffset != OFFSET_FINISHED;
     }
 
     @Override
-    public CatalogueEntity next() throws SearchException {
-        // TODO Auto-generated method stub
-        return null;
+    public CatalogueEntity next() throws SolrSearchException {
+        CatalogueEntity next = new SolrCatalogueEntity(docs.get(nextOffset));
+
+        nextOffset++;
+        if (nextOffset >= docs.size()) {
+            getNextLoadFromSolr();
+        }
+
+        return next;
     }
 
     @Override
