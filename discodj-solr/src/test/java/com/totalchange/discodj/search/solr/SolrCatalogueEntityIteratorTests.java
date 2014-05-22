@@ -1,6 +1,11 @@
 package com.totalchange.discodj.search.solr;
 
-import java.util.Iterator;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
@@ -11,9 +16,6 @@ import org.apache.solr.common.SolrDocumentList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
-
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 
 public class SolrCatalogueEntityIteratorTests {
     private SolrServer solrServer;
