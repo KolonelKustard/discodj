@@ -1,5 +1,7 @@
 package com.totalchange.discodj.search.solr;
 
+import java.util.Date;
+
 import org.apache.solr.common.SolrDocument;
 
 import com.totalchange.discodj.media.AbstractMedia;
@@ -14,6 +16,11 @@ final class SolrMediaImpl extends AbstractMedia {
     @Override
     public String getId() {
         return (String) doc.get(SolrSearchProviderImpl.F_ID);
+    }
+
+    @Override
+    public Date getLastModified() {
+        return (Date) doc.get(SolrSearchProviderImpl.F_LAST_MODIFIED);
     }
 
     @Override

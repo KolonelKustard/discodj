@@ -3,6 +3,7 @@ package com.totalchange.discodj.search;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -46,6 +47,11 @@ public class SearchProviderTests {
             public String getId() {
                 return "Test Artist " + artistNum + ", Album " + albumNum
                         + ", Title " + titleNum;
+            }
+
+            @Override
+            public Date getLastModified() {
+                return null;
             }
 
             @Override

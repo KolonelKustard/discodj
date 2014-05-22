@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -123,6 +124,11 @@ public class SolrSearchPopulatorImplTests {
             @Override
             public int getYear() {
                 return year;
+            }
+
+            @Override
+            public Date getLastModified() {
+                return null;
             }
 
             @Override

@@ -32,6 +32,8 @@ public class SolrSearchPopulatorImpl implements SearchPopulator {
     public void addMedia(Media media) throws SolrSearchException {
         SolrInputDocument doc = new SolrInputDocument();
         doc.setField(SolrSearchProviderImpl.F_ID, media.getId());
+        doc.setField(SolrSearchProviderImpl.F_LAST_MODIFIED,
+                media.getLastModified());
         doc.setField(SolrSearchProviderImpl.F_ARTIST, media.getArtist());
         doc.setField(SolrSearchProviderImpl.F_ALBUM, media.getAlbum());
         doc.setField(SolrSearchProviderImpl.F_GENRE, media.getGenre());

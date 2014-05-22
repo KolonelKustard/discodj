@@ -49,13 +49,16 @@ public final class XugglerCatalogueImpl implements Catalogue {
     }
 
     private Media makeMedia(String filename) throws XugglerException {
+        File file = new File(filename);
+
         IContainer container = IContainer.make();
         XugglerException.throwIfInError(container.open(filename,
                 IContainer.Type.READ, null));
         try {
             IMetaData metadata = container.getMetaData();
             logger.trace("Got Xuggler metadata: {}", metadata);
-            return new XugglerMediaImpl(filename, metadata);
+            return new XugglerMediaImpl(filename, file.lastModified(),
+                    metadata);
         } finally {
             logger.trace("Closing Xuggler container");
             XugglerException.throwIfInError(container.close());

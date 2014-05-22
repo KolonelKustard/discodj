@@ -1,9 +1,12 @@
 package com.totalchange.discodj.catalogue;
 
+import java.util.Date;
+
 import com.totalchange.discodj.media.Media;
 
 final class TestMediaBuilder {
     private String id;
+    private Date lastModified;
     private String artist;
     private String album;
     private String genre;
@@ -13,6 +16,11 @@ final class TestMediaBuilder {
 
     TestMediaBuilder withId(String id) {
         this.id = id;
+        return this;
+    }
+
+    TestMediaBuilder withLastModified(Date lastModified) {
+        this.lastModified = lastModified;
         return this;
     }
 
@@ -51,6 +59,11 @@ final class TestMediaBuilder {
             @Override
             public String getId() {
                 return id;
+            }
+
+            @Override
+            public Date getLastModified() {
+                return lastModified;
             }
 
             @Override

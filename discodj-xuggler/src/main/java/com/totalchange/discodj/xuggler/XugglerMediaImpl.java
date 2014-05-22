@@ -1,10 +1,13 @@
 package com.totalchange.discodj.xuggler;
 
+import java.util.Date;
+
 import com.totalchange.discodj.media.AbstractMedia;
 import com.xuggle.xuggler.IMetaData;
 
 final class XugglerMediaImpl extends AbstractMedia {
     private String id;
+    private Date lastModified;
     private String artist;
     private String album;
     private String genre;
@@ -12,8 +15,9 @@ final class XugglerMediaImpl extends AbstractMedia {
     private String requestedBy;
     private String title;
 
-    XugglerMediaImpl(String id, IMetaData md) {
+    XugglerMediaImpl(String id, long lastModified, IMetaData md) {
         this.id = id;
+        this.lastModified = new Date(lastModified);
 
         artist = md.getValue("artist");
         album = md.getValue("album");
@@ -30,6 +34,11 @@ final class XugglerMediaImpl extends AbstractMedia {
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public Date getLastModified() {
+        return lastModified;
     }
 
     @Override
