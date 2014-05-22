@@ -1,5 +1,92 @@
 package com.totalchange.discodj.search.solr;
 
+import java.util.Iterator;
+
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentMatcher;
+
+import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
+
 public class SolrCatalogueEntityIteratorTests {
-    
+    private SolrServer solrServer;
+    private SolrCatalogueEntityIterator solrCatalogueEntityIterator;
+
+    @Before
+    public void setUp() {
+        solrServer = mock(SolrServer.class);
+    }
+
+    @Test
+    public void shouldPageResultsOk() throws SolrServerException {
+        QueryResponse res1 = makeDocList("1", "2");
+        QueryResponse res2 = makeDocList("3", "4", "5");
+        QueryResponse res3 = makeDocList("6");
+        QueryResponse res4 = makeDocList();
+
+        when(solrServer.query(argThat(new SolrQueryMatcher(0)))).thenReturn(
+                res1);
+        when(solrServer.query(argThat(new SolrQueryMatcher(2)))).thenReturn(
+                res2);
+        when(solrServer.query(argThat(new SolrQueryMatcher(5)))).thenReturn(
+                res3);
+        when(solrServer.query(argThat(new SolrQueryMatcher(6)))).thenReturn(
+                res4);
+
+        solrCatalogueEntityIterator = new SolrCatalogueEntityIterator(
+                solrServer);
+
+        assertTrue(solrCatalogueEntityIterator.hasNext());
+        assertEquals("1", solrCatalogueEntityIterator.next().getId());
+        assertTrue(solrCatalogueEntityIterator.hasNext());
+        assertEquals("2", solrCatalogueEntityIterator.next().getId());
+        assertTrue(solrCatalogueEntityIterator.hasNext());
+        assertEquals("3", solrCatalogueEntityIterator.next().getId());
+        assertTrue(solrCatalogueEntityIterator.hasNext());
+        assertEquals("4", solrCatalogueEntityIterator.next().getId());
+        assertTrue(solrCatalogueEntityIterator.hasNext());
+        assertEquals("5", solrCatalogueEntityIterator.next().getId());
+        assertTrue(solrCatalogueEntityIterator.hasNext());
+        assertEquals("6", solrCatalogueEntityIterator.next().getId());
+        assertFalse(solrCatalogueEntityIterator.hasNext());
+    }
+
+    private QueryResponse makeDocList(String... ids) {
+        SolrDocumentList list = new SolrDocumentList();
+        for (String id : ids) {
+            SolrDocument doc = new SolrDocument();
+            doc.setField(SolrSearchProviderImpl.F_ID, id);
+            list.add(doc);
+        }
+
+        QueryResponse res = mock(QueryResponse.class);
+        when(res.getResults()).thenReturn(list);
+
+        return res;
+    }
+
+    private class SolrQueryMatcher extends ArgumentMatcher<SolrQuery> {
+        private int start;
+
+        private SolrQueryMatcher(int start) {
+            this.start = start;
+        }
+
+        @Override
+        public boolean matches(Object argument) {
+            if (argument == null) {
+                return false;
+            } else {
+                SolrQuery query = (SolrQuery) argument;
+                return query.getStart() == start;
+            }
+        }
+    }
 }
