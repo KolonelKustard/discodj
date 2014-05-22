@@ -28,7 +28,8 @@ class SolrCatalogueEntityIterator implements Iterator<CatalogueEntity> {
 
     private void grabTheNextPage() throws SolrSearchException {
         SolrQuery sq = new SolrQuery();
-        sq.setFields(SolrSearchProviderImpl.F_ID);
+        sq.setFields(SolrSearchProviderImpl.F_ID,
+                SolrSearchProviderImpl.F_LAST_MODIFIED);
         sq.setQuery("*:*");
         sq.setSort(SolrSearchProviderImpl.F_ID, SolrQuery.ORDER.asc);
         sq.setStart(nextPageStart);
