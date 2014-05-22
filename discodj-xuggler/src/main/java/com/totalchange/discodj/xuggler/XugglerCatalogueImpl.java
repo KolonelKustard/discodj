@@ -48,17 +48,6 @@ public final class XugglerCatalogueImpl implements Catalogue {
         this.root = root;
     }
 
-    private boolean shouldAddFile(File file) {
-        String name = file.getName().toLowerCase();
-        if (name.endsWith(".mp3")) {
-            return true;
-        } else if (name.endsWith(".mp4")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     private Media makeMedia(String filename) throws XugglerException {
         IContainer container = IContainer.make();
         XugglerException.throwIfInError(container.open(filename,
@@ -71,30 +60,6 @@ public final class XugglerCatalogueImpl implements Catalogue {
             logger.trace("Closing Xuggler container");
             XugglerException.throwIfInError(container.close());
         }
-    }
-
-    private void addFile(File file, Listener listener) {
-        try {
-            listener.yetMoreMedia(makeMedia(file.getCanonicalPath()));
-        } catch (Throwable th) {
-            listener.warn("Couldn't read metadata from file " + file
-                    + " with error: " + th.getMessage(), th);
-        }
-    }
-
-    private void recurseForMedia(File dir, Listener listener) {
-        for (File child : dir.listFiles()) {
-            if (child.isFile() && shouldAddFile(child)) {
-                addFile(child, listener);
-            } else if (child.isDirectory()) {
-                recurseForMedia(child, listener);
-            }
-        }
-    }
-
-    @Override
-    public void listAllSongs(Listener listener) {
-        recurseForMedia(root, listener);
     }
 
     @Override

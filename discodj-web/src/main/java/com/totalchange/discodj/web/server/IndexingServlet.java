@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.totalchange.discodj.util.CataloguePopulator;
+import com.totalchange.discodj.populator.SyncSearchFromCatalogue;
 
 @Singleton
 public final class IndexingServlet extends HttpServlet {
@@ -17,17 +17,17 @@ public final class IndexingServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory
             .getLogger(IndexingServlet.class);
 
-    private CataloguePopulator indexer;
+    private SyncSearchFromCatalogue sync;
 
     @Inject
-    public IndexingServlet(CataloguePopulator indexer) {
-        this.indexer = indexer;
+    public IndexingServlet(SyncSearchFromCatalogue sync) {
+        this.sync = sync;
     }
 
     @Override
     public void init() throws ServletException {
         logger.trace("Init being used to re-index catalogue");
-        indexer.run();
+        sync.sync();
         logger.trace("Finito");
     }
 }
