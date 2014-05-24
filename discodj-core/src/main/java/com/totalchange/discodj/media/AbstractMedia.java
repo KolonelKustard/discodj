@@ -34,8 +34,9 @@ public abstract class AbstractMedia implements Media {
 
     @Override
     public String toString() {
-        return "id=" + getId() + ", artist=" + getArtist() + ", album="
-                + getAlbum() + ", genre=" + getGenre() + ", year=" + getYear()
+        return "id=" + getId() + ", lastModified=" + getLastModified()
+                + ", artist=" + getArtist() + ", album=" + getAlbum()
+                + ", genre=" + getGenre() + ", year=" + getYear()
                 + ", requestedBy=" + getRequestedBy() + ", title=" + getTitle();
     }
 }
