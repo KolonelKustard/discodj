@@ -51,7 +51,7 @@ public class SearchProviderTests {
 
             @Override
             public Date getLastModified() {
-                return null;
+                return new Date();
             }
 
             @Override
@@ -79,11 +79,15 @@ public class SearchProviderTests {
 
     @AfterClass
     public static void shutdown() {
+        SearchPopulator pop = searchProvider.createPopulator();
+        pop.deleteAll();
+        pop.commit();
     }
 
     @Test
     public void order001_populateIndexes() {
         SearchPopulator pop = searchProvider.createPopulator();
+        pop.deleteAll();
 
         int genreNum = 0;
         for (int artistNum = 0; artistNum < NUM_TEST_ARTISTS; artistNum++) {
@@ -108,7 +112,7 @@ public class SearchProviderTests {
     @Test
     public void order002KeywordSearchOnArtist() {
         SearchQuery query = new SearchQuery();
-        query.setKeywords("\"Test Artist 5\"");
+        query.setKeywords("500");
 
         SearchResults res = searchProvider.search(query);
         assertEquals(NUM_ALBUMS_PER_ARTIST * NUM_TRACKS_PER_ALBUM,

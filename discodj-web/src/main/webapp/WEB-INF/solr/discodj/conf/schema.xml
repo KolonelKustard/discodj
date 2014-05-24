@@ -30,6 +30,7 @@
 	
 	<types>
 		<fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+		<fieldType name="date" class="solr.TrieDateField" />
 		<fieldType name="int" class="solr.TrieIntField"	precisionStep="0" positionIncrementGap="0" />
 
 		<!-- A general text field that has reasonable, generic cross-language defaults: 

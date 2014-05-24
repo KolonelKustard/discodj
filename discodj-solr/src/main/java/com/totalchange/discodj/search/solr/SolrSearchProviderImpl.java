@@ -9,6 +9,8 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.totalchange.discodj.catalogue.Catalogue.CatalogueEntity;
 import com.totalchange.discodj.search.SearchException;
@@ -19,6 +21,9 @@ import com.totalchange.discodj.search.SearchResults;
 
 @Singleton
 public final class SolrSearchProviderImpl implements SearchProvider {
+    private static final Logger logger = LoggerFactory
+            .getLogger(SolrSearchProviderImpl.class);
+
     static final String F_ID = "id";
     static final String F_LAST_MODIFIED = "lastModified";
     static final String F_ARTIST = "artist";
@@ -41,11 +46,13 @@ public final class SolrSearchProviderImpl implements SearchProvider {
     @Override
     public Iterator<CatalogueEntity> listAllAlphabeticallyById()
             throws SearchException {
+        logger.trace("Listing all alphabetically by id");
         return new SolrCatalogueEntityIterator(solrServer);
     }
 
     @Override
     public SearchPopulator createPopulator() throws SolrSearchException {
+        logger.trace("Creating new populator");
         return new SolrSearchPopulatorImpl(solrServer);
     }
 
@@ -71,9 +78,8 @@ public final class SolrSearchProviderImpl implements SearchProvider {
             sq.addFilterQuery(id);
         }
 
-        // TODO Add exclusions based on playlist
-
         try {
+            logger.debug("Performing search using query {}", sq);
             QueryResponse res = solrServer.query(sq);
             return new SolrSearchResultsImpl(res);
         } catch (SolrServerException sEx) {
