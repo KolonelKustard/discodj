@@ -1,8 +1,9 @@
 package com.totalchange.discodj.xuggler;
 
+import com.totalchange.discodj.catalogue.CatalogueException;
 import com.xuggle.xuggler.IError;
 
-final class XugglerException extends Exception {
+final class XugglerException extends CatalogueException {
     private static final long serialVersionUID = 1L;
 
     private XugglerException(String msg) {

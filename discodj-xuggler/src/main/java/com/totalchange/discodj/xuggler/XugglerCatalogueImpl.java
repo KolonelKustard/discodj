@@ -20,6 +20,7 @@ import com.xuggle.xuggler.IContainer;
 import com.xuggle.xuggler.IMetaData;
 
 public final class XugglerCatalogueImpl implements Catalogue {
+    private static final String[] SUPPORTED_FILE_EXTENSIONS = { ".mp3", ".mp4" };
     private static final String DEFAULT_PLAYLIST = "default.m3u";
 
     private static final Logger logger = LoggerFactory
@@ -57,8 +58,7 @@ public final class XugglerCatalogueImpl implements Catalogue {
         try {
             IMetaData metadata = container.getMetaData();
             logger.trace("Got Xuggler metadata: {}", metadata);
-            return new XugglerMediaImpl(filename, file.lastModified(),
-                    metadata);
+            return new XugglerMediaImpl(filename, file.lastModified(), metadata);
         } finally {
             logger.trace("Closing Xuggler container");
             XugglerException.throwIfInError(container.close());
@@ -67,16 +67,12 @@ public final class XugglerCatalogueImpl implements Catalogue {
 
     @Override
     public Iterator<CatalogueEntity> listAllAlphabeticallyById() {
-        return new FileCatalogueEntityIterator(root);
+        return new FileCatalogueEntityIterator(root, SUPPORTED_FILE_EXTENSIONS);
     }
 
     @Override
-    public Media getMedia(String mediaId) {
-        try {
-            return makeMedia(mediaId);
-        } catch (XugglerException xugEx) {
-            throw new RuntimeException(xugEx);
-        }
+    public Media getMedia(String mediaId) throws XugglerException {
+        return makeMedia(mediaId);
     }
 
     @Override

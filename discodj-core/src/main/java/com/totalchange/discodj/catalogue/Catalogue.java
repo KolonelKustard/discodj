@@ -21,8 +21,10 @@ public interface Catalogue {
         Date getLastModified();
     }
 
-    Iterator<CatalogueEntity> listAllAlphabeticallyById();
-    Media getMedia(String mediaId);
-    List<Media> getDefaultPlaylist();
-    InputStream getMediaData(Media media) throws IOException;
+    Iterator<CatalogueEntity> listAllAlphabeticallyById()
+            throws CatalogueException;
+    Media getMedia(String mediaId) throws CatalogueException;
+    List<Media> getDefaultPlaylist() throws CatalogueException;
+    InputStream getMediaData(Media media) throws IOException,
+            CatalogueException;
 }

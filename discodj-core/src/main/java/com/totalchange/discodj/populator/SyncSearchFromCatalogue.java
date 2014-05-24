@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.totalchange.discodj.catalogue.Catalogue;
+import com.totalchange.discodj.catalogue.CatalogueException;
 import com.totalchange.discodj.media.Media;
 import com.totalchange.discodj.search.SearchPopulator;
 import com.totalchange.discodj.search.SearchProvider;
@@ -94,7 +95,7 @@ public class SyncSearchFromCatalogue {
                 + actionsToTake.getToDelete().size();
         if (logger.isTraceEnabled()) {
             logger.trace(actionsToTake.getToAdd().size() + " additions, "
-                    + actionsToTake.getToDelete() + " deletions and "
+                    + actionsToTake.getToDelete().size() + " deletions and "
                     + actionsToTake.getToUpdate().size()
                     + " updates to be made (" + totalChanges + " in total)");
         }
@@ -152,16 +153,21 @@ public class SyncSearchFromCatalogue {
     private void add(SearchPopulator searchPopulator, List<String> itemsToAdd) {
         for (String id : itemsToAdd) {
             currentItem++;
-            Media media = catalogue.getMedia(id);
+            try {
+                Media media = grabAndCheckMediaIsSafe(id);
 
-            setStatus(Messages.getStatusAdding(currentItem, totalChanges,
-                    media.getTitle(), media.getArtist()));
-            if (logger.isTraceEnabled()) {
-                logger.trace("Adding item " + currentItem + " of "
-                        + totalChanges + " (id: " + id + ")");
+                setStatus(Messages.getStatusAdding(currentItem, totalChanges,
+                        media.getTitle(), media.getArtist()));
+                if (logger.isTraceEnabled()) {
+                    logger.trace("Adding item " + currentItem + " of "
+                            + totalChanges + " (id: " + id + ")");
+                }
+
+                searchPopulator.addMedia(media);
+            } catch (CatalogueException catEx) {
+                logger.info("Skipped adding media item with id " + id
+                        + " because of catalogue failure", catEx);
             }
-
-            searchPopulator.addMedia(media);
         }
     }
 
@@ -169,16 +175,30 @@ public class SyncSearchFromCatalogue {
             List<String> itemsToUpdate) {
         for (String id : itemsToUpdate) {
             currentItem++;
-            Media media = catalogue.getMedia(id);
 
-            setStatus(Messages.getStatusUpdating(currentItem, totalChanges,
-                    media.getTitle(), media.getArtist()));
-            if (logger.isTraceEnabled()) {
-                logger.trace("Updating item " + currentItem + " of "
-                        + totalChanges + " (id: " + id + ")");
+            try {
+                Media media = grabAndCheckMediaIsSafe(id);
+
+                setStatus(Messages.getStatusUpdating(currentItem, totalChanges,
+                        media.getTitle(), media.getArtist()));
+                if (logger.isTraceEnabled()) {
+                    logger.trace("Updating item " + currentItem + " of "
+                            + totalChanges + " (id: " + id + ")");
+                }
+
+                searchPopulator.updateMedia(media);
+            } catch (CatalogueException catEx) {
+                logger.info("Skipped updating media item with id " + id, catEx);
             }
+        }
+    }
 
-            searchPopulator.updateMedia(media);
+    private Media grabAndCheckMediaIsSafe(String id) throws CatalogueException {
+        Media media = catalogue.getMedia(id);
+        if (media.getTitle() == null || media.getTitle().trim().length() <= 0) {
+            throw new CatalogueException("No title for media " + id);
+        } else {
+            return media;
         }
     }
 }

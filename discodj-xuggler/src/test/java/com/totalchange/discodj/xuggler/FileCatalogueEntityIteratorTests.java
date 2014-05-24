@@ -27,6 +27,7 @@ public class FileCatalogueEntityIteratorTests {
                 }),
                 new F("blonde", new F[] {
                     new F("want.mp3"),
+                    new F("skip-me.m3u"),
                     new F("achilles.mp3")
                 })
             })
