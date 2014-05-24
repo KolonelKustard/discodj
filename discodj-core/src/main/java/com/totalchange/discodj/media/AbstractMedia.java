@@ -1,6 +1,11 @@
 package com.totalchange.discodj.media;
 
-public abstract class AbstractMedia implements Media {
+public abstract class AbstractMedia implements Media, Comparable<Media> {
+    @Override
+    public int compareTo(Media media) {
+        return new MediaComparator().compare(this, media);
+    }
+
     @Override
     public int hashCode() {
         return getId().hashCode();

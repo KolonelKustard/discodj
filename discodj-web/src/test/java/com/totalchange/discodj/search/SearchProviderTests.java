@@ -12,6 +12,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import com.totalchange.discodj.media.GenericMediaBuilder;
 import com.totalchange.discodj.media.Media;
 import com.totalchange.discodj.web.search.inject.IntegrationTestInjector;
 
@@ -25,50 +26,16 @@ public class SearchProviderTests {
 
     private static SearchProvider searchProvider;
 
-    private Media makeTestMedia(final int artistNum, final int albumNum,
-            final int titleNum, final int genreNum, final int decade) {
-        return new Media() {
-            @Override
-            public int getYear() {
-                return decade;
-            }
-
-            @Override
-            public String getTitle() {
-                return "Test Title " + titleNum;
-            }
-
-            @Override
-            public String getRequestedBy() {
-                return "Requested By Someone";
-            }
-
-            @Override
-            public String getId() {
-                return "Test Artist " + artistNum + ", Album " + albumNum
-                        + ", Title " + titleNum;
-            }
-
-            @Override
-            public Date getLastModified() {
-                return new Date();
-            }
-
-            @Override
-            public String getGenre() {
-                return "Test Genre " + genreNum;
-            }
-
-            @Override
-            public String getArtist() {
-                return "Test Artist " + artistNum;
-            }
-
-            @Override
-            public String getAlbum() {
-                return "Test Album " + albumNum;
-            }
-        };
+    private Media makeTestMedia(int artistNum, int albumNum, int titleNum,
+            int genreNum, int decade) {
+        return new GenericMediaBuilder()
+                .withId("Test Artist " + artistNum + ", Album " + albumNum
+                        + ", Title " + titleNum).withLastModified(new Date())
+                .withArtist("Test Artist " + artistNum)
+                .withAlbum("Test Album " + albumNum)
+                .withTitle("Test Title " + titleNum)
+                .withGenre("Test Genre " + genreNum).withYear(decade)
+                .withRequestedBy("Request By Someone").build();
     }
 
     @BeforeClass

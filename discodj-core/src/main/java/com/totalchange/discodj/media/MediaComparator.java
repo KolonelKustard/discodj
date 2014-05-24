@@ -1,8 +1,6 @@
-package com.totalchange.discodj.catalogue;
+package com.totalchange.discodj.media;
 
 import java.util.Comparator;
-
-import com.totalchange.discodj.media.Media;
 
 final class MediaComparator implements Comparator<Media> {
     private int compare(String s1, String s2) {

@@ -7,7 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.util.Date;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -17,7 +16,7 @@ import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import com.totalchange.discodj.media.AbstractMedia;
+import com.totalchange.discodj.media.GenericMediaBuilder;
 import com.totalchange.discodj.media.Media;
 
 public class SolrSearchPopulatorImplTests {
@@ -40,16 +39,23 @@ public class SolrSearchPopulatorImplTests {
                 new IncrementalDocAnswerAsserter());
 
         for (int num = 0; num < numToAdd; num++) {
-            populator.addMedia(makeFakeMedia("Test ID " + num, "Test Artist "
-                    + num, "Test Album " + num, "Test Title " + num,
-                    "Test Genre " + num, num, "Test Requested By " + num));
+            Media media = new GenericMediaBuilder().withId("Test ID " + num)
+                    .withArtist("Test Artist " + num)
+                    .withAlbum("Test Album " + num)
+                    .withTitle("Test Title " + num)
+                    .withGenre("Test Genre " + num).withYear(num)
+                    .withRequestedBy("Test Requested By " + num).build();
+            populator.addMedia(media);
         }
 
         for (int num = numToAdd; num < numToUpdate; num++) {
-            populator.updateMedia(makeFakeMedia("Test ID " + num,
-                    "Test Artist " + num, "Test Album " + num, "Test Title "
-                            + num, "Test Genre " + num, num,
-                    "Test Requested By " + num));
+            Media media = new GenericMediaBuilder().withId("Test ID " + num)
+                    .withArtist("Test Artist " + num)
+                    .withAlbum("Test Album " + num)
+                    .withTitle("Test Title " + num)
+                    .withGenre("Test Genre " + num).withYear(num)
+                    .withRequestedBy("Test Requested By " + num).build();
+            populator.updateMedia(media);
         }
     }
 
@@ -115,51 +121,5 @@ public class SolrSearchPopulatorImplTests {
             num++;
             return null;
         }
-    }
-
-    private Media makeFakeMedia(final String id, final String artist,
-            final String album, final String title, final String genre,
-            final int year, final String requestedBy) {
-        return new AbstractMedia() {
-            @Override
-            public int getYear() {
-                return year;
-            }
-
-            @Override
-            public Date getLastModified() {
-                return null;
-            }
-
-            @Override
-            public String getTitle() {
-                return title;
-            }
-
-            @Override
-            public String getRequestedBy() {
-                return requestedBy;
-            }
-
-            @Override
-            public String getId() {
-                return id;
-            }
-
-            @Override
-            public String getGenre() {
-                return genre;
-            }
-
-            @Override
-            public String getArtist() {
-                return artist;
-            }
-
-            @Override
-            public String getAlbum() {
-                return album;
-            }
-        };
     }
 }
