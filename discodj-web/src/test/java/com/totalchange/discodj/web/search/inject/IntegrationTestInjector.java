@@ -5,8 +5,10 @@ import com.google.inject.Injector;
 import com.totalchange.discodj.web.server.inject.DiscoDjModule;
 
 public class IntegrationTestInjector {
-    public static Injector makeIntegrationTestInjector() {
-        return Guice.createInjector(new IntegrationTestModule(),
-                new DiscoDjModule());
+    private static Injector instance = Guice.createInjector(
+            new IntegrationTestModule(), new DiscoDjModule());;
+
+    public static Injector getInjector() {
+        return instance;
     }
 }

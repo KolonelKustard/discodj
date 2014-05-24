@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -17,14 +17,14 @@ import com.totalchange.discodj.media.Media;
 import com.totalchange.discodj.web.search.inject.IntegrationTestInjector;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class SearchProviderTests {
+public class SearchProviderIntegrationTests {
     private static final int NUM_TEST_ARTISTS = 1000;
     private static final int NUM_ALBUMS_PER_ARTIST = 10;
     private static final int NUM_TRACKS_PER_ALBUM = 10;
     private static final int START_DECADE = 1900;
     private static final int NUM_GENRES_TO_CYCLE_ARTISTS_THROUGH = 10;
 
-    private static SearchProvider searchProvider;
+    private SearchProvider searchProvider;
 
     private Media makeTestMedia(int artistNum, int albumNum, int titleNum,
             int genreNum, int decade) {
@@ -38,15 +38,17 @@ public class SearchProviderTests {
                 .withRequestedBy("Request By Someone").build();
     }
 
-    @BeforeClass
-    public static void setUp() {
-        searchProvider = IntegrationTestInjector.makeIntegrationTestInjector()
+    @Before
+    public void setUp() {
+        searchProvider = IntegrationTestInjector.getInjector()
                 .getInstance(SearchProvider.class);
     }
 
     @AfterClass
     public static void shutdown() {
-        SearchPopulator pop = searchProvider.createPopulator();
+        SearchPopulator pop = IntegrationTestInjector
+                .getInjector()
+                .getInstance(SearchProvider.class).createPopulator();
         pop.deleteAll();
         pop.commit();
     }

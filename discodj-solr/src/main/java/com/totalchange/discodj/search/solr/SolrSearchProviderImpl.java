@@ -40,6 +40,8 @@ public final class SolrSearchProviderImpl implements SearchProvider {
 
     @Inject
     public SolrSearchProviderImpl(SolrServer solrServer) {
+        logger.trace("Creating new SolrSearchProviderImpl for server {}",
+                solrServer);
         this.solrServer = solrServer;
     }
 
