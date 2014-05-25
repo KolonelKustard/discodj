@@ -30,3 +30,13 @@
 /discodj-acceptance/.settings
 /discodj-acceptance/.classpath
 /discodj-acceptance/.project
+
+/discodj-debian/target
+/discodj-debian/.settings
+/discodj-debian/.classpath
+/discodj-debian/.project
+
+/discodj-debian/discodj-debian-war/target
+/discodj-debian/discodj-debian-war/.settings
+/discodj-debian/discodj-debian-war/.classpath
+/discodj-debian/discodj-debian-war/.project

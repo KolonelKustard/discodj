@@ -16,7 +16,7 @@
 		<module>discodj-solr</module>
 		<module>discodj-xuggler</module>
 		<module>discodj-web</module>
-		<module>discodj-acceptance</module>
+		<module>discodj-debian</module>
 	</modules>
 	
 	<properties>
