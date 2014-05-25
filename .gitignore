@@ -26,7 +26,6 @@
 /discodj-web/.project
 /discodj-web/.gwt
 /discodj-web/src/main/webapp/WEB-INF/solr/discodj/data
-/discodj-web/src/main/webapp/WEB-INF/catalogue
 
 /discodj-acceptance/target
 /discodj-acceptance/.settings

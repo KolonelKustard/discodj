@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.name.Names;
+import com.totalchange.discodj.web.server.inject.DiscoDjConfigurationModule;
 
 public class IntegrationTestModule extends AbstractModule {
     private static final Logger logger = LoggerFactory
@@ -16,6 +18,9 @@ public class IntegrationTestModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        bindConstant().annotatedWith(
+                Names.named(DiscoDjConfigurationModule.CATALOGUE_ROOT)).to(
+                "./src/test/catalogue");
     }
 
     @Provides
@@ -24,8 +29,6 @@ public class IntegrationTestModule extends AbstractModule {
         ServletContext sc = mock(ServletContext.class);
         when(sc.getRealPath("/WEB-INF/solr")).thenReturn(
                 "./src/main/webapp/WEB-INF/solr");
-        when(sc.getRealPath("/WEB-INF/catalogue")).thenReturn(
-                "./src/test/catalogue");
 
         logger.trace("Returning mock ServletContext");
         return sc;

@@ -41,15 +41,4 @@ public class DiscoDjModule extends AbstractModule {
         logger.trace("Returning SolrServer instance {}", server);
         return server;
     }
-    
-    @Provides
-    XugglerCatalogueImpl provideXugglerCatalogueImpl(ServletContext servletContext) throws FileNotFoundException {
-        logger.trace("Creating Xuggler catalogue");
-        
-        File root = new File(servletContext.getRealPath("/WEB-INF/catalogue"));
-        XugglerCatalogueImpl catalogue = new XugglerCatalogueImpl(root);
-        
-        logger.trace("Returning Xuggler catalogue {}", catalogue);
-        return catalogue;
-    }
 }
