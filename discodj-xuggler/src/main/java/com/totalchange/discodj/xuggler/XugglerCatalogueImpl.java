@@ -10,6 +10,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +50,12 @@ public final class XugglerCatalogueImpl implements Catalogue {
         }
 
         this.root = root;
+    }
+
+    @Inject
+    public XugglerCatalogueImpl(@Named("catalogueRoot") String rootFilename)
+            throws FileNotFoundException {
+        this(new File(rootFilename));
     }
 
     private Media makeMedia(String filename) throws XugglerException {

@@ -3,6 +3,7 @@ package com.totalchange.discodj.web.server.inject;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import javax.inject.Named;
 import javax.servlet.ServletContext;
 
 import org.apache.solr.client.solrj.SolrServer;
@@ -30,26 +31,15 @@ public class DiscoDjModule extends AbstractModule {
     }
 
     @Provides
-    SolrServer provideSolrServer(ServletContext servletContext) throws FileNotFoundException {
+    SolrServer provideSolrServer(ServletContext servletContext,
+            @Named(DiscoDjConfigurationModule.SOLR_HOME) String solrHome)
+            throws FileNotFoundException {
         logger.trace("Creating SolrServer instance");
-
-        File home = new File(servletContext.getRealPath("/WEB-INF/solr"));
+        File home = new File(solrHome);
         CoreContainer container = new CoreContainer(home.getAbsolutePath());
-        container.load(home.getAbsolutePath(), new File(home, "solr.xml"));
-
+        container.load();
         SolrServer server = new EmbeddedSolrServer(container, "discodj");
         logger.trace("Returning SolrServer instance {}", server);
         return server;
-    }
-    
-    @Provides
-    XugglerCatalogueImpl provideXugglerCatalogueImpl(ServletContext servletContext) throws FileNotFoundException {
-        logger.trace("Creating Xuggler catalogue");
-        
-        File root = new File(servletContext.getRealPath("/WEB-INF/catalogue"));
-        XugglerCatalogueImpl catalogue = new XugglerCatalogueImpl(root);
-        
-        logger.trace("Returning Xuggler catalogue {}", catalogue);
-        return catalogue;
     }
 }
