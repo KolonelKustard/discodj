@@ -16,7 +16,7 @@
 	
 	<properties>
 		<!-- convenience to define GWT version in one place -->
-		<gwt.version>2.5.0</gwt.version>
+		<gwt.version>2.6.1</gwt.version>
 	</properties>
 	
 	<build>
@@ -25,7 +25,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
-				<version>2.5.0</version>
+				<version>2.6.1</version>
 				<executions>
 					<execution>
 						<goals>
@@ -35,7 +35,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<runTarget>Jizz.html</runTarget>
+					<module>com.totalchange.discodj.web.DiscoDj</module>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -107,7 +107,7 @@
 		<dependency>
 			<groupId>com.allen-sauer.gwt.dnd</groupId>
 			<artifactId>gwt-dnd</artifactId>
-			<version>3.2.2</version>
+			<version>3.3.0</version>
 			<scope>provided</scope>
 		</dependency>
 		
