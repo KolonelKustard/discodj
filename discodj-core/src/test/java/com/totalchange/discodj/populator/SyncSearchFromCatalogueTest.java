@@ -9,6 +9,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import com.totalchange.discodj.catalogue.Catalogue;
+import com.totalchange.discodj.media.GenericMediaBuilder;
 import com.totalchange.discodj.media.Media;
 import com.totalchange.discodj.search.SearchPopulator;
 import com.totalchange.discodj.search.SearchProvider;
@@ -16,7 +17,7 @@ import com.totalchange.discodj.search.SearchProvider;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
-public class SyncSearchFromCatalogueTests {
+public class SyncSearchFromCatalogueTest {
     private Catalogue catalogue;
     private SearchProvider searchProvider;
     private SearchPopulator searchPopulator;
@@ -105,16 +106,16 @@ public class SyncSearchFromCatalogueTests {
         toUpdate.add("u2");
         toUpdate.add("u3");
 
-        Media add1 = mock(Media.class);
-        Media add2 = mock(Media.class);
-        Media add3 = mock(Media.class);
+        Media add1 = makeFakeMedia("a1");
+        Media add2 = makeFakeMedia("a2");
+        Media add3 = makeFakeMedia("a3");
         when(catalogue.getMedia("a1")).thenReturn(add1);
         when(catalogue.getMedia("a2")).thenReturn(add2);
         when(catalogue.getMedia("a3")).thenReturn(add3);
 
-        Media update1 = mock(Media.class);
-        Media update2 = mock(Media.class);
-        Media update3 = mock(Media.class);
+        Media update1 = makeFakeMedia("u1");
+        Media update2 = makeFakeMedia("u2");
+        Media update3 = makeFakeMedia("u3");
         when(catalogue.getMedia("u1")).thenReturn(update1);
         when(catalogue.getMedia("u2")).thenReturn(update2);
         when(catalogue.getMedia("u3")).thenReturn(update3);
@@ -139,7 +140,7 @@ public class SyncSearchFromCatalogueTests {
     @Test
     public void deletesAllWhenDoingFullRefresh() {
         toAdd.add("a1");
-        Media add1 = mock(Media.class);
+        Media add1 = makeFakeMedia("a1");
         when(catalogue.getMedia("a1")).thenReturn(add1);
 
         syncSearchFromCatalogue.fullRefresh();
@@ -147,5 +148,9 @@ public class SyncSearchFromCatalogueTests {
         verify(searchPopulator).deleteAll();
         verify(searchPopulator).addMedia(add1);
         verify(searchPopulator, times(2)).commit();
+    }
+    
+    private Media makeFakeMedia(String id) {
+        return new GenericMediaBuilder().withId(id).withTitle(id).build();
     }
 }

@@ -17,7 +17,7 @@ import com.totalchange.discodj.media.Media;
 import com.totalchange.discodj.web.search.inject.IntegrationTestInjector;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class SearchProviderIntegrationTests {
+public class SearchProviderIntegrationTest {
     private static final int NUM_TEST_ARTISTS = 1000;
     private static final int NUM_ALBUMS_PER_ARTIST = 10;
     private static final int NUM_TRACKS_PER_ALBUM = 10;

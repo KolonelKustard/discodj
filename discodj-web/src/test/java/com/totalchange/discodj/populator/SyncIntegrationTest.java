@@ -11,7 +11,7 @@ import com.totalchange.discodj.search.SearchProvider;
 import com.totalchange.discodj.web.search.inject.IntegrationTestInjector;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class SyncIntegrationTests {
+public class SyncIntegrationTest {
     private SyncSearchFromCatalogue syncSearchFromCatalogue;
 
     @Before

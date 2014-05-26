@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
-public class FileCatalogueEntityIteratorTests {
+public class FileCatalogueEntityIteratorTest {
     @Test
     public void iteratesOverNestedFileList() throws IOException {
         F root = new F("music", new F[] {

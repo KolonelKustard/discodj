@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 
-public class SolrCatalogueEntityIteratorTests {
+public class SolrCatalogueEntityIteratorTest {
     private SolrServer solrServer;
     private SolrCatalogueEntityIterator solrCatalogueEntityIterator;
 

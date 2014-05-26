@@ -19,7 +19,7 @@ import org.mockito.stubbing.Answer;
 import com.totalchange.discodj.media.GenericMediaBuilder;
 import com.totalchange.discodj.media.Media;
 
-public class SolrSearchPopulatorImplTests {
+public class SolrSearchPopulatorImplTest {
     private SolrServer solrServer;
     private SolrSearchPopulatorImpl populator;
 

@@ -23,7 +23,7 @@ import com.totalchange.discodj.search.SearchPopulator;
 import com.totalchange.discodj.search.SearchQuery;
 import com.totalchange.discodj.search.SearchResults;
 
-public class SolrSearchProviderImplTests {
+public class SolrSearchProviderImplTest {
     private SolrServer solrServer;
     private SolrSearchProviderImpl searchProvider;
 
@@ -89,7 +89,7 @@ public class SolrSearchProviderImplTests {
                     @Override
                     public QueryResponse answer(InvocationOnMock invocation) throws Throwable {
                         SolrQuery sq = (SolrQuery) invocation.getArguments()[0];
-                        assertEquals("text:Test", sq.getQuery());
+                        assertEquals("text:Test*", sq.getQuery());
 
                         return response;
                     }

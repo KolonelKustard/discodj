@@ -11,7 +11,7 @@ import com.totalchange.discodj.catalogue.Catalogue;
 
 import static org.junit.Assert.assertEquals;
 
-public class IteratorComparatorTests {
+public class IteratorComparatorTest {
     @Test
     public void noChanges() {
         List<Catalogue.CatalogueEntity> src = new ListBuilder().add("1", 1)
