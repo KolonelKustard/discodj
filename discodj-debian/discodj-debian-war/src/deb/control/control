@@ -1,8 +1,8 @@
-Package: [[name]]
+Package: discodj
 Version: [[version]]
 Section: misc
 Priority: low
 Architecture: all
-Description: [[description]]
+Description: A simple application for a requests based playlist suited for wedding DJ type scenarios
 Maintainer: Ralph Jones <ralph@totalchange.com>
-Depends: tomcat7
+Depends: tomcat8
