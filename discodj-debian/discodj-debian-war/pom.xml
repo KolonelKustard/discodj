@@ -52,8 +52,8 @@
 								<mapper>
 									<type>perm</type>
 									<prefix>/var/discodj/solr</prefix>
-									<user>tomcat-users</user>
-									<group>tomcat-users</group>
+									<user>tomcat7</user>
+									<group>tomcat7</group>
 								</mapper>
 							</data>
 							<data>

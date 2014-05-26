@@ -5,4 +5,4 @@ Priority: low
 Architecture: all
 Description: A simple application for a requests based playlist suited for wedding DJ type scenarios
 Maintainer: Ralph Jones <ralph@totalchange.com>
-Depends: tomcat8
+Depends: tomcat7
