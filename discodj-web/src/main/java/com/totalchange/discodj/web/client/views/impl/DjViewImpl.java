@@ -18,11 +18,7 @@ package com.totalchange.discodj.web.client.views.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.allen_sauer.gwt.dnd.client.DragEndEvent;
-import com.allen_sauer.gwt.dnd.client.DragHandlerAdapter;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
-import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
-import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
@@ -31,7 +27,6 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -52,9 +47,6 @@ public class DjViewImpl extends Composite implements DjView {
 
     private Presenter presenter;
     private PickupDragController songDragController;
-
-    @UiField
-    AbsolutePanel boundaryPanel;
 
     @UiField
     FacetsWidget artistFacets;
@@ -81,9 +73,6 @@ public class DjViewImpl extends Composite implements DjView {
     InlineLabel totalPagesLabel;
 
     @UiField
-    AbsolutePanel dropZone;
-
-    @UiField
     VerticalPanel playlistPanel;
 
     @UiField
@@ -101,72 +90,8 @@ public class DjViewImpl extends Composite implements DjView {
     @UiField
     TextBox searchTextBox;
 
-    @UiField
-    AbsolutePanel deleteZone;
-
     public DjViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
-        initDnd();
-    }
-
-    private void initDnd() {
-        this.songDragController = new PickupDragController(boundaryPanel, false);
-        songDragController.setBehaviorMultipleSelection(false);
-        songDragController.setBehaviorDragStartSensitivity(3);
-
-        AbsolutePositionDropController dropZoneController = new AbsolutePositionDropController(
-                dropZone);
-        songDragController.registerDropController(dropZoneController);
-
-        VerticalPanelDropController playlistDropController = new VerticalPanelDropController(
-                playlistPanel);
-        songDragController.registerDropController(playlistDropController);
-
-        AbsolutePositionDropController deleteZoneController = new AbsolutePositionDropController(
-                deleteZone);
-        songDragController.registerDropController(deleteZoneController);
-
-        songDragController.addDragHandler(new DragHandlerAdapter() {
-            @Override
-            public void onDragEnd(DragEndEvent event) {
-                moveAnyMediaWidgetsFromDropZoneToPlaylist();
-                removeAnyMediaWidgetsFromDeleteZone();
-                presenter.playlistPossiblyChanged();
-            }
-        });
-    }
-
-    private void moveAnyMediaWidgetsFromDropZoneToPlaylist() {
-        for (int num = 0; num < dropZone.getWidgetCount(); num++) {
-            Widget rootWidget = dropZone.getWidget(num);
-            Widget widget = rootWidget;
-
-            if (widget instanceof FocusPanel) {
-                FocusPanel focusPanel = (FocusPanel) widget;
-                widget = focusPanel.getWidget();
-            }
-
-            if (widget != null && widget instanceof MediaWidget) {
-                dropZone.remove(rootWidget);
-                playlistPanel.add(rootWidget);
-            }
-        }
-    }
-
-    private void removeAnyMediaWidgetsFromDeleteZone() {
-        for (int num = 0; num < deleteZone.getWidgetCount(); num++) {
-            Widget rootWidget = deleteZone.getWidget(num);
-            Widget widget = rootWidget;
-
-            if (widget instanceof FocusPanel) {
-                FocusPanel focusPanel = (FocusPanel) widget;
-                widget = focusPanel.getWidget();
-            }
-
-            if (widget != null && widget instanceof MediaWidget) {
-                deleteZone.remove(rootWidget);
-            }
-        }
     }
 
     @UiHandler("searchTextBox")
@@ -182,12 +107,6 @@ public class DjViewImpl extends Composite implements DjView {
     @UiHandler("nextButton")
     void nextButtonClick(ClickEvent ev) {
         presenter.nextPage();
-    }
-
-    @UiHandler("clearSearchButton")
-    void clearSearchButtonClick(ClickEvent ex) {
-        searchTextBox.setValue("");
-        presenter.search(searchTextBox.getValue());
     }
 
     @Override

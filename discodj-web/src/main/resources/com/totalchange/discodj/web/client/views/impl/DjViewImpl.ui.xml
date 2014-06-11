@@ -3,190 +3,89 @@
     ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
     ui:generateKeys="com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator"
     ui:generateLocales="default"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:dj="urn:import:com.totalchange.discodj.web.client.views.impl">
-	<ui:style>
-		.search {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 60%;
-			height: 3em;
-			box-shadow: 0 0 10px #CCC inset;
-			border-bottom: 1px solid #CCC;
-			border-right: 1px solid #CCC;
-		}
-		
-		.searchTextBox {
-			width: 90%;
-			height: 3em;
-			padding: 0.5em 2em 0 1em;
-			margin: 0;
-			border: 0;
-			background: transparent;
-		}
-		
-		.search span {
-			position: absolute;
-			display: block;
-			top: 1em;
-			right: 1em;
-			width: 16px;
-			height: 16px;
-			background: url(images/clearinput.png);
-			cursor: pointer;
-		}
-		
-		.artistFacets {
-			position: absolute;
-			top: 3em;
-			left: 0;
-			width: 20%;
-			height: 54%;
-			height: literal("-moz-calc(54% - 3em - 1px)");
-		    height: literal("-webkit-calc(54% - 3em - 1px)");
-		    height: literal("calc(54% - 3em - 1px)");
-		    overflow: auto;
-		    background: #252A3A;
-		    color: #FFF;
-		    border-bottom: 1px solid #CCC;
-		}
-		
-		.albumFacets {
-			position: absolute;
-			top: 54%;
-			left: 0;
-			width: 20%;
-			height: 46%;
-			overflow: auto;
-			background: #252A3A;
-			color: #FFF;
-		}
-		
-		.searchResults {
-			position: absolute;
-			top: 3em;
-			left: 20%;
-			width: 40%;
-			height: literal("-moz-calc(100% - 3em)");
-		    height: literal("-webkit-calc(100% - 3em)");
-		    height: literal("calc(100% - 3em)");
-		    overflow: auto;
-		    border-right: 1px solid #CCC;
-		}
+    xmlns:g="urn:import:com.google.gwt.user.client.ui"
+    xmlns:dj="urn:import:com.totalchange.discodj.web.client.views.impl">
+  <ui:style>
+  </ui:style>
 
-		.paging {
-			padding: 0.5em;
-		}
-		
-		.previousButton {
-			float: left;
-		}
-		
-		.pageLabel {
-			text-align: center;
-		}
-		
-		.nextButton {
-			float: right;
-		}
-		
-		.nowPlaying {
-			position: absolute;
-			top: 0;
-			left: 60%;
-			width: 40%;
-			height: 3em;
-			background: #252A3A;
-			color: #FFF;
-			border-bottom: 1px solid #CCC;
-		}
-		
-		.nowPlaying div {
-			padding: 1em;
-		}
-		
-		.playlist {
-			position: absolute;
-			top: 3em;
-			left: 60%;
-			width: 40%;
-			height: literal("-moz-calc(100% - 6em)");
-		    height: literal("-webkit-calc(100% - 6em)");
-		    height: literal("calc(100% - 6em)");
-		    overflow: auto;
-		    border-bottom: 1px solid #CCC;
-		}
-		
-		.playlistPanel {
-			padding-bottom: 4em;
-		}
+  <g:HTMLPanel>
+    <div class="container">
+      <ul class="nav nav-pills nav-justified">
+        <li class="active"><a href="#search" data-toggle="tab">Search</a></li>
+        <li><a href="#playlist" data-toggle="tab">PlayList</a></li>
+      </ul>
 
-		.delete {
-			position: absolute;
-			bottom: 0;
-			right: 0;
-			width: 40%;
-			background: #252A3A;
-			color: #FFF;
-		}
-		
-		.deleteMessage {
-			padding: 1em;
-		}
-	</ui:style>
-	
-	<g:AbsolutePanel ui:field="boundaryPanel" width="100%" height="100%">
-		<g:HTMLPanel>
-			<div class="{style.search}">
-				<dj:SearchTextBox ui:field="searchTextBox" addStyleNames="{style.searchTextBox}" placeholder="Type in here to search for a song">
-					<ui:attribute name="placeholder" />
-				</dj:SearchTextBox>
-				<g:InlineLabel ui:field="clearSearchButton" />
-			</div>
-			<div class="{style.artistFacets}">
-				<dj:FacetsWidget ui:field="artistFacets" />
-			</div>
-			<div class="{style.albumFacets}">
-				<dj:FacetsWidget ui:field="albumFacets" />
-			</div>
-			<div class="{style.searchResults}">
-				<g:VerticalPanel ui:field="resultsPanel" width="100%" />
-				<g:HTMLPanel ui:field="pagingPanel" styleName="{style.paging}" visible="false">
-					<g:Button ui:field="previousButton" addStyleNames="{style.previousButton}">&lt;&lt;</g:Button>
-					<g:Button ui:field="nextButton" addStyleNames="{style.nextButton}">&gt;&gt;</g:Button>
-					<div class="{style.pageLabel}">
-						Page <g:InlineLabel ui:field="pageNumLabel" /> of <g:InlineLabel ui:field="totalPagesLabel" />
-					</div>
-				</g:HTMLPanel>
-			</div>
-			<div class="{style.nowPlaying}">
-				<g:HTMLPanel ui:field="nowPlaying" visible="false">
-					<ui:msg>
-						Now Playing:
-						<g:InlineLabel ui:field="nowPlayingTitleLabel" />
-						by
-						<g:InlineLabel ui:field="nowPlayingArtistLabel" />
-					</ui:msg>
-				</g:HTMLPanel>
-				<g:HTMLPanel ui:field="nothingPlaying">
-					<ui:msg>Now Playing: Nada</ui:msg>
-				</g:HTMLPanel>
-			</div>
-			<div class="{style.playlist}">
-				<g:AbsolutePanel ui:field="dropZone" width="100%" height="100%">
-					<g:ScrollPanel width="100%" height="100%">
-						<g:VerticalPanel ui:field="playlistPanel" width="100%" styleName="{style.playlistPanel}" />
-					</g:ScrollPanel>
-				</g:AbsolutePanel>
-			</div>
-			<div class="{style.delete}">
-				<g:AbsolutePanel ui:field="deleteZone" width="100%" height="100%">
-					<g:HTMLPanel styleName="{style.deleteMessage}">
-						<ui:msg>Drag here to delete</ui:msg>
-					</g:HTMLPanel>
-				</g:AbsolutePanel>
-			</div>
-		</g:HTMLPanel>
-	</g:AbsolutePanel>
+      <div class="tab-content">
+        <div class="tab-pane active" id="search">
+          <form role="form">
+            <div class="form-group">
+              <label for="searchInput" class="sr-only">Keywords</label>
+              <dj:SearchTextBox ui:field="searchTextBox" placeholder="Type in here to search for a song">
+                <ui:attribute name="placeholder" />
+              </dj:SearchTextBox>
+            </div>
+          </form>
+
+          <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseArtists">
+                    Artists
+                  </a>
+                </h3>
+              </div>
+              <div id="collapseArtists" class="panel-body collapse">
+                <form class="form-horizontal" role="form">
+                  <dj:FacetsWidget ui:field="artistFacets" />
+                </form>
+              </div>
+            </div>
+
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseAlbums">
+                    Albums
+                  </a>
+                </h3>
+              </div>
+              <div id="collapseAlbums" class="panel-body collapse">
+                <form class="form-horizontal" role="form">
+                  <dj:FacetsWidget ui:field="albumFacets" />
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <g:VerticalPanel ui:field="resultsPanel" />
+          <g:HTMLPanel ui:field="pagingPanel" visible="false">
+            <ul class="pager">
+              <li class="previous"><g:Button ui:field="previousButton">← Previous</g:Button></li>
+              <li class="next"><g:Button ui:field="nextButton">Next →</g:Button></li>
+              Page <g:InlineLabel ui:field="pageNumLabel" /> of <g:InlineLabel ui:field="totalPagesLabel" />
+            </ul>
+          </g:HTMLPanel>
+        </div>
+
+        <div class="tab-pane" id="playlist">
+          <div class="well">
+            <g:HTMLPanel ui:field="nowPlaying" visible="false">
+              <ui:msg>
+                Now Playing:
+                <g:InlineLabel ui:field="nowPlayingTitleLabel" />
+                by
+                <g:InlineLabel ui:field="nowPlayingArtistLabel" />
+              </ui:msg>
+            </g:HTMLPanel>
+            <g:HTMLPanel ui:field="nothingPlaying">
+              <ui:msg>Now Playing: Nada</ui:msg>
+            </g:HTMLPanel>
+          </div>
+
+          <g:VerticalPanel ui:field="playlistPanel" width="100%" />
+        </div>
+      </div>
+    </div>
+  </g:HTMLPanel>
 </ui:UiBinder>
