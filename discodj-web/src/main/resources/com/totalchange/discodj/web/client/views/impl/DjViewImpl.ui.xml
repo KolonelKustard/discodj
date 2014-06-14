@@ -19,8 +19,9 @@
         <div class="tab-pane active" id="search">
           <form role="form">
             <div class="form-group">
-              <label for="searchInput" class="sr-only">Keywords</label>
-              <dj:SearchTextBox ui:field="searchTextBox" placeholder="Type in here to search for a song">
+              <label for="{searchTextBox.getElement.getId}" class="sr-only">Keywords</label>
+              <dj:SearchTextBox ui:field="searchTextBox" styleName="form-control"
+                  placeholder="Type in here to search for a song">
                 <ui:attribute name="placeholder" />
               </dj:SearchTextBox>
             </div>
@@ -37,7 +38,7 @@
               </div>
               <div id="collapseArtists" class="panel-body collapse">
                 <form class="form-horizontal" role="form">
-                  <dj:FacetsWidget ui:field="artistFacets" />
+                  <g:HTMLPanel ui:field="artistFacets" />
                 </form>
               </div>
             </div>
@@ -52,7 +53,7 @@
               </div>
               <div id="collapseAlbums" class="panel-body collapse">
                 <form class="form-horizontal" role="form">
-                  <dj:FacetsWidget ui:field="albumFacets" />
+                  <g:HTMLPanel ui:field="albumFacets" />
                 </form>
               </div>
             </div>

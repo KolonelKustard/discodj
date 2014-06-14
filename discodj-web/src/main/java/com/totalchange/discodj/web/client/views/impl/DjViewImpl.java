@@ -49,10 +49,10 @@ public class DjViewImpl extends Composite implements DjView {
     private PickupDragController songDragController;
 
     @UiField
-    FacetsWidget artistFacets;
+    HTMLPanel artistFacets;
 
     @UiField
-    FacetsWidget albumFacets;
+    HTMLPanel albumFacets;
 
     @UiField
     VerticalPanel resultsPanel;
@@ -145,9 +145,6 @@ public class DjViewImpl extends Composite implements DjView {
         final FocusPanel wrapper = new FocusPanel(mediaWidget);
 
         if (media.getWhenCanBePlayedAgain() <= -1) {
-            // Make widget draggable (if it can be added to the playlist)
-            songDragController.makeDraggable(wrapper);
-
             // Also allow a double click to move it over
             wrapper.addDoubleClickHandler(new DoubleClickHandler() {
                 @Override
@@ -158,6 +155,13 @@ public class DjViewImpl extends Composite implements DjView {
         }
 
         return wrapper;
+    }
+    
+    private void updateFacets(HTMLPanel panel, List<SearchFacet> facets) {
+        panel.clear();
+        for (SearchFacet facet : facets) {
+            panel.add(new FacetWidget(presenter, facet));
+        }
     }
 
     @Override
@@ -183,12 +187,12 @@ public class DjViewImpl extends Composite implements DjView {
 
     @Override
     public void setArtistFacets(List<SearchFacet> facets) {
-        artistFacets.setFacets(presenter, facets);
+        updateFacets(artistFacets, facets);
     }
 
     @Override
     public void setAlbumFacets(List<SearchFacet> facets) {
-        albumFacets.setFacets(presenter, facets);
+        updateFacets(albumFacets, facets);
     }
 
     @Override
