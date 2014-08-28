@@ -38,7 +38,7 @@ import com.totalchange.discodj.web.shared.dj.SearchResult;
 import com.totalchange.discodj.web.shared.dj.DjMedia;
 
 public class SearchHandler implements ActionHandler<SearchAction, SearchResult> {
-    private static final int RESULTS_PER_PAGE = 30;
+    private static final int RESULTS_PER_PAGE = 10;
 
     private static final Logger logger = LoggerFactory
             .getLogger(SearchHandler.class);

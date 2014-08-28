@@ -53,7 +53,7 @@ public class DiscoDjConfigurationModule extends AbstractModule {
     }
 
     private String defaultSolrHomeLocation() throws IOException {
-        File file = findFirstDir("/var/discodj/solr/solr.xml");
+        File file = findFirstFile("/var/discodj/solr/solr.xml");
         if (file == null) {
             return "no SOLR home directory found - check your "
                     + "configuration :-(";
