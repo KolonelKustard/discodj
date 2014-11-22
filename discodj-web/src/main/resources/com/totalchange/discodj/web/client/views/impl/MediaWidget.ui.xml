@@ -1,34 +1,19 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-    ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
-    ui:generateKeys="com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator"
-    ui:generateLocales="default"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style type="com.totalchange.discodj.web.client.views.impl.MediaWidget.Style">
-		.mediaItem {
-			padding: 1em;
-			border-bottom: 1px solid #CCC;
-		}
-		
-		.mediaItem:hover {
-			background-color: #EEE;
-		}
-		
-		.disabled {
-			color: #888;
-		}
-		
-		.disabled:hover {
-			background-color: inherit;
-		}
-	</ui:style>
-	
-	<g:HTMLPanel>
-		<div ui:field="containerDiv" class="{style.mediaItem}">
-			<ui:msg><g:InlineLabel ui:field="titleLabel" /> by <g:InlineLabel ui:field="artistLabel" /></ui:msg>
-			<g:InlineLabel ui:field="alreadyPlayedLabel" visible="false">
-				<ui:msg>(already played or already in the queue)</ui:msg>
-			</g:InlineLabel>
-		</div>
-	</g:HTMLPanel>
+  ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+  ui:generateKeys="com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator"
+  ui:generateLocales="default"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui">
+  <ui:style type="com.totalchange.discodj.web.client.views.impl.MediaWidget.Style">
+    .disabled {
+      color: #888;
+    }
+  </ui:style>
+
+  <g:HTMLPanel ui:field="containerPanel">
+    <ui:msg><g:InlineLabel ui:field="titleLabel" /> by <g:InlineLabel ui:field="artistLabel" /></ui:msg>
+    <g:InlineLabel ui:field="alreadyPlayedLabel" visible="false">
+      <ui:msg>(already played or already in the queue)</ui:msg>
+    </g:InlineLabel>
+  </g:HTMLPanel>
 </ui:UiBinder>

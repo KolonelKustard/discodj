@@ -16,11 +16,13 @@
 package com.totalchange.discodj.web.client.views.impl;
 
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.LIElement;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiFactory;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Widget;
 import com.totalchange.discodj.web.shared.dj.DjMedia;
@@ -40,7 +42,7 @@ class MediaWidget extends Composite {
     Style style;
 
     @UiField
-    DivElement containerDiv;
+    HTMLPanel containerPanel;
 
     @UiField
     InlineLabel artistLabel;
@@ -68,10 +70,10 @@ class MediaWidget extends Composite {
 
         if (media.getWhenCanBePlayedAgain() > 0) {
             alreadyPlayedLabel.setVisible(true);
-            containerDiv.addClassName(style.disabled());
+            containerPanel.addStyleName(style.disabled());
         } else {
             alreadyPlayedLabel.setVisible(false);
-            containerDiv.removeClassName(style.disabled());
+            containerPanel.removeStyleName(style.disabled());
         }
     }
 

@@ -5,27 +5,24 @@
     ui:generateLocales="default"
     xmlns:g="urn:import:com.google.gwt.user.client.ui"
     xmlns:dj="urn:import:com.totalchange.discodj.web.client.views.impl">
-  <ui:style>
-  </ui:style>
 
-  <g:HTMLPanel>
-    <div class="container">
-      <ul class="nav nav-pills nav-justified">
-        <li class="active"><a href="#search" data-toggle="tab">Search</a></li>
-        <li><a href="#playlist" data-toggle="tab">PlayList</a></li>
-      </ul>
+<g:HTMLPanel>
+  <div class="container">
+    <ul class="nav nav-pills nav-justified">
+      <li class="active"><a href="#search" data-toggle="tab">Search</a></li>
+      <li><a href="#playlist" data-toggle="tab">PlayList</a></li>
+    </ul>
 
-      <div class="tab-content">
-        <div class="tab-pane active" id="search">
-          <form role="form">
-            <div class="form-group">
-              <label for="{searchTextBox.getElement.getId}" class="sr-only">Keywords</label>
-              <dj:SearchTextBox ui:field="searchTextBox" styleName="form-control"
-                  placeholder="Type in here to search for a song">
-                <ui:attribute name="placeholder" />
-              </dj:SearchTextBox>
-            </div>
-          </form>
+    <div class="tab-content">
+      <div class="tab-pane active" id="search">
+        <form role="form">
+          <div class="form-group">
+            <label for="searchInput" class="sr-only">Keywords</label>
+            <input ui:field="searchInput" class="form-control" placeholder="Type in here to search for a song">
+              <ui:attribute name="placeholder" />
+            </input>
+          </div>
+        </form>
 
           <div class="panel-group" id="accordion">
             <div class="panel panel-default">
@@ -59,7 +56,9 @@
             </div>
           </div>
 
-          <g:VerticalPanel ui:field="resultsPanel" />
+          <g:HTMLPanel ui:field="resultsPanel">
+            <ul class="list-group" id="resultsList" />
+          </g:HTMLPanel>
           <g:HTMLPanel ui:field="pagingPanel" visible="false">
             <ul class="pager">
               <li class="previous"><g:Button ui:field="previousButton">← Previous</g:Button></li>

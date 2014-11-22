@@ -20,6 +20,9 @@ import java.util.List;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.dom.client.InputElement;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
@@ -27,11 +30,13 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.InlineLabel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -55,7 +60,7 @@ public class DjViewImpl extends Composite implements DjView {
     HTMLPanel albumFacets;
 
     @UiField
-    VerticalPanel resultsPanel;
+    HTMLPanel resultsPanel;
 
     @UiField
     Button previousButton;
@@ -88,13 +93,32 @@ public class DjViewImpl extends Composite implements DjView {
     HTMLPanel nothingPlaying;
 
     @UiField
+    InputElement searchInput;
     TextBox searchTextBox;
 
     public DjViewImpl() {
         initWidget(uiBinder.createAndBindUi(this));
     }
 
-    @UiHandler("searchTextBox")
+    @Override
+    protected void onLoad() {
+        super.onLoad();
+
+        searchTextBox = TextBox.wrap(searchInput);
+        searchTextBox.addChangeHandler(new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent event) {
+                presenter.search(searchTextBox.getValue());
+            }
+        });
+    }
+
+    @Override
+    protected void onUnload() {
+        RootPanel.detachNow(searchTextBox);
+        super.onUnload();
+    }
+
     void searchTextBoxKeyUp(KeyUpEvent ev) {
         presenter.search(searchTextBox.getValue());
     }
@@ -169,7 +193,7 @@ public class DjViewImpl extends Composite implements DjView {
         resultsPanel.clear();
         for (DjMedia media : results) {
             Widget mediaWidget = makeMediaWidget(media);
-            resultsPanel.add(mediaWidget);
+            resultsPanel.add(mediaWidget, "resultsList");
         }
 
         if (numPages > 1) {
