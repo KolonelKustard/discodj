@@ -15,9 +15,7 @@
  */
 package com.totalchange.discodj.web.shared.player;
 
-import net.customware.gwt.dispatch.shared.Result;
-
-public class GetNextFromPlaylistResult implements Result {
+public class GetNextFromPlaylistResult {
     public enum MediaType {
         Video, Audio
     }

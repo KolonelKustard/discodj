@@ -17,9 +17,7 @@ package com.totalchange.discodj.web.shared.dj;
 
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Result;
-
-public class SearchResult implements Result {
+public class SearchResult {
     private int numPages;
     private List<SearchFacet> artistFacets;
     private List<SearchFacet> albumFacets;

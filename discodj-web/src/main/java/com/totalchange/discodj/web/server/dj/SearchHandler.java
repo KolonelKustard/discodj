@@ -19,10 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import net.customware.gwt.dispatch.server.ActionHandler;
-import net.customware.gwt.dispatch.server.ExecutionContext;
-import net.customware.gwt.dispatch.shared.DispatchException;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +38,8 @@ import com.totalchange.discodj.web.shared.dj.SearchFacet;
 import com.totalchange.discodj.web.shared.dj.SearchResult;
 import com.totalchange.discodj.web.shared.dj.DjMedia;
 
-public class SearchHandler implements ActionHandler<SearchAction, SearchResult> {
+@Path("search")
+public class SearchHandler {
     private static final int RESULTS_PER_PAGE = 10;
 
     private static final Logger logger = LoggerFactory
@@ -89,14 +91,10 @@ public class SearchHandler implements ActionHandler<SearchAction, SearchResult> 
         return djMedia;
     }
 
-    @Override
-    public Class<SearchAction> getActionType() {
-        return SearchAction.class;
-    }
-
-    @Override
-    public SearchResult execute(SearchAction action, ExecutionContext context)
-            throws DispatchException {
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public SearchResult execute(SearchAction action) {
         logger.trace("DJ search underway");
         SearchResult result = new SearchResult();
 
@@ -137,11 +135,5 @@ public class SearchHandler implements ActionHandler<SearchAction, SearchResult> 
 
         logger.trace("DJ search complete with result {}", result);
         return result;
-    }
-
-    @Override
-    public void rollback(SearchAction action, SearchResult result,
-            ExecutionContext context) throws DispatchException {
-        logger.warn("Call to roll back search action will have no effect");
     }
 }

@@ -20,10 +20,11 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 import javax.inject.Inject;
-
-import net.customware.gwt.dispatch.server.ActionHandler;
-import net.customware.gwt.dispatch.server.ExecutionContext;
-import net.customware.gwt.dispatch.shared.DispatchException;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +34,9 @@ import com.totalchange.discodj.queue.PlaylistQueue;
 import com.totalchange.discodj.web.server.MediaServlet;
 import com.totalchange.discodj.web.shared.player.GetNextFromPlaylistAction;
 import com.totalchange.discodj.web.shared.player.GetNextFromPlaylistResult;
-import com.totalchange.discodj.web.shared.player.GetNextFromPlaylistResult.MediaType;
 
-public class GetNextFromPlaylistHandler implements
-        ActionHandler<GetNextFromPlaylistAction, GetNextFromPlaylistResult> {
+@Path("playlist")
+public class GetNextFromPlaylistHandler {
     private static final String MEDIA_SERVLET_URL_PREFIX = MediaServlet.PATH
             + "?" + MediaServlet.PARAM_ID + "=";
     private static final String URL_ENCODING = StandardCharsets.UTF_8.name();
@@ -51,14 +51,10 @@ public class GetNextFromPlaylistHandler implements
         this.playlistQueue = playlistQueue;
     }
 
-    @Override
-    public Class<GetNextFromPlaylistAction> getActionType() {
-        return GetNextFromPlaylistAction.class;
-    }
-
-    @Override
-    public GetNextFromPlaylistResult execute(GetNextFromPlaylistAction action,
-            ExecutionContext context) throws DispatchException {
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public GetNextFromPlaylistResult execute(GetNextFromPlaylistAction action) {
         logger.trace("Fetching next song to play from playlist");
         GetNextFromPlaylistResult result = new GetNextFromPlaylistResult();
 
@@ -70,10 +66,10 @@ public class GetNextFromPlaylistHandler implements
         }
         result.setQueueEmpty(false);
 
-        result.setType(MediaType.Audio);
+        result.setType(GetNextFromPlaylistResult.MediaType.Audio);
         if (media.getId().toLowerCase().endsWith("mp4")) {
             // TODO Improve crude type detection
-            result.setType(MediaType.Video);
+            result.setType(GetNextFromPlaylistResult.MediaType.Video);
         }
 
         try {
@@ -88,12 +84,5 @@ public class GetNextFromPlaylistHandler implements
 
         logger.trace("Returning next song {}", result);
         return result;
-    }
-
-    @Override
-    public void rollback(GetNextFromPlaylistAction action,
-            GetNextFromPlaylistResult result, ExecutionContext context)
-            throws DispatchException {
-        logger.warn("Calls to GetNextFromPlaylistHandler#rollback do nothing");
     }
 }

@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import net.customware.gwt.dispatch.server.ActionHandler;
-import net.customware.gwt.dispatch.server.ExecutionContext;
-import net.customware.gwt.dispatch.shared.DispatchException;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,8 @@ import com.totalchange.discodj.web.shared.dj.DjMedia;
 import com.totalchange.discodj.web.shared.dj.StatusAction;
 import com.totalchange.discodj.web.shared.dj.StatusResult;
 
-public class StatusHandler implements ActionHandler<StatusAction, StatusResult> {
+@Path("status")
+public class StatusHandler {
     private static final Logger logger = LoggerFactory
             .getLogger(StatusHandler.class);
 
@@ -29,14 +31,10 @@ public class StatusHandler implements ActionHandler<StatusAction, StatusResult> 
         this.queue = queue;
     }
 
-    @Override
-    public Class<StatusAction> getActionType() {
-        return StatusAction.class;
-    }
-
-    @Override
-    public StatusResult execute(StatusAction action, ExecutionContext context)
-            throws DispatchException {
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public StatusResult execute(StatusAction action) {
         logger.trace("Executing status update");
 
         StatusResult result = new StatusResult();
@@ -53,11 +51,5 @@ public class StatusHandler implements ActionHandler<StatusAction, StatusResult> 
 
         logger.trace("Executed status update and returning {}", result);
         return result;
-    }
-
-    @Override
-    public void rollback(StatusAction action, StatusResult result,
-            ExecutionContext context) throws DispatchException {
-        logger.warn("Call to roll back status action will have no effect");
     }
 }

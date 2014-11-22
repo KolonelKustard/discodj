@@ -1,7 +1,5 @@
 package com.totalchange.discodj.web.server.inject;
 
-import net.customware.gwt.dispatch.server.guice.ServerDispatchModule;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,8 +15,7 @@ public class BootstrapListener extends GuiceServletContextListener {
     protected Injector getInjector() {
         logger.trace("Creating Guice injector");
         Injector injector = Guice.createInjector(new DiscoDjModule(),
-                new DiscoDjConfigurationModule(), new ServerDispatchModule(),
-                new ActionsModule(), new DispatchServletModule());
+                new DiscoDjConfigurationModule(), new DispatchServletModule());
         logger.trace("Created Guice injector {}", injector);
 
         return injector;

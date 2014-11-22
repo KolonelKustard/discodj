@@ -15,7 +15,5 @@
  */
 package com.totalchange.discodj.web.shared.player;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-public class GetNextFromPlaylistAction implements Action<GetNextFromPlaylistResult> {
+public class GetNextFromPlaylistAction {
 }

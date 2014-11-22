@@ -1,140 +1,93 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<artifactId>discodj-parent</artifactId>
-		<groupId>com.totalchange.discodj</groupId>
-		<version>1.0.0-SNAPSHOT</version>
-	</parent>
+  <parent>
+    <artifactId>discodj-parent</artifactId>
+    <groupId>com.totalchange.discodj</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
 
-	<artifactId>discodj-web</artifactId>
-	<packaging>war</packaging>
-	<name>Disco DJ Web Application</name>
-	<description>Disco DJ assembled WAR</description>
-	
-	<properties>
-		<!-- convenience to define GWT version in one place -->
-		<gwt.version>2.6.1</gwt.version>
-	</properties>
-	
-	<build>
-		<plugins>
-			<!-- GWT Maven Plugin -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>gwt-maven-plugin</artifactId>
-				<version>2.6.1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>compile</goal>
-							<goal>test</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<module>com.totalchange.discodj.web.DiscoDj</module>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-	
-	<dependencies>
-	    <dependency>
-			<groupId>com.totalchange.discodj</groupId>
-			<artifactId>discodj-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.totalchange.discodj</groupId>
-			<artifactId>discodj-solr</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.totalchange.discodj</groupId>
-			<artifactId>discodj-xuggler</artifactId>
-		</dependency>
-	    
-		<!-- Logging -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		
-		<!-- Guice dependency injection for server side -->
-		<dependency>
-			<groupId>com.google.inject</groupId>
-			<artifactId>guice</artifactId>
-			<version>3.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.inject.extensions</groupId>
-			<artifactId>guice-servlet</artifactId>
-			<version>3.0</version>
-		</dependency>
-		
-		<!-- GWT -->
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-servlet</artifactId>
-			<version>${gwt.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
-			<version>${gwt.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.gwt.inject</groupId>
-			<artifactId>gin</artifactId>
-			<version>1.5.0</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<!-- Adds drag and drop widgets to GWT -->
-		<dependency>
-			<groupId>com.allen-sauer.gwt.dnd</groupId>
-			<artifactId>gwt-dnd</artifactId>
-			<version>3.3.0</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<!-- Provides action/result command pattern to GWT -->
-		<dependency>
-			<groupId>net.customware.gwt.dispatch</groupId>
-			<artifactId>gwt-dispatch</artifactId>
-			<version>1.2.0</version>
-		</dependency>
-		
-		<!-- Utils -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
-		</dependency>
-		
-		<!-- Testing -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+  <artifactId>discodj-web</artifactId>
+  <packaging>war</packaging>
+  <name>Disco DJ Web Application</name>
+  <description>Disco DJ assembled WAR</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.totalchange.discodj</groupId>
+      <artifactId>discodj-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.totalchange.discodj</groupId>
+      <artifactId>discodj-solr</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.totalchange.discodj</groupId>
+      <artifactId>discodj-xuggler</artifactId>
+    </dependency>
+
+    <!-- Logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Guice dependency injection for server side -->
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+      <version>3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.inject.extensions</groupId>
+      <artifactId>guice-servlet</artifactId>
+      <version>3.0</version>
+    </dependency>
+
+    <!-- Compile time WS -->
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
+      <version>2.0.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Utils -->
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.4</version>
+    </dependency>
+
+    <!-- Jersey for runtime WS impl. -->
+    <dependency>
+      <groupId>org.glassfish.jersey.containers</groupId>
+      <artifactId>jersey-container-servlet</artifactId>
+      <version>2.13</version>
+    </dependency>
+
+    <!-- Testing -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>

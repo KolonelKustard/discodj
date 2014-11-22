@@ -2,9 +2,7 @@ package com.totalchange.discodj.web.shared.dj;
 
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Action;
-
-public class UpdatePlaylistAction implements Action<StatusResult> {
+public class UpdatePlaylistAction {
     private List<String> revisedPlaylist;
 
     public List<String> getRevisedPlaylist() {

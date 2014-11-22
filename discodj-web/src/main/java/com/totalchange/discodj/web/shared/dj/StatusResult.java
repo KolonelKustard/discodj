@@ -2,9 +2,7 @@ package com.totalchange.discodj.web.shared.dj;
 
 import java.util.List;
 
-import net.customware.gwt.dispatch.shared.Result;
-
-public class StatusResult implements Result {
+public class StatusResult {
     private DjMedia nowPlaying;
     private List<DjMedia> playlist;
 
