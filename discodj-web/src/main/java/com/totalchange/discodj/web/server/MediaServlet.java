@@ -7,6 +7,7 @@ import java.io.InputStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import com.totalchange.discodj.catalogue.Catalogue;
 import com.totalchange.discodj.media.Media;
 
 @Singleton
+@WebServlet("/media")
 public final class MediaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 

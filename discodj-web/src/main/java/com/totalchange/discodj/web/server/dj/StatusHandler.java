@@ -18,6 +18,7 @@ import com.totalchange.discodj.queue.PlaylistQueue;
 import com.totalchange.discodj.web.shared.dj.DjMedia;
 import com.totalchange.discodj.web.shared.dj.StatusAction;
 import com.totalchange.discodj.web.shared.dj.StatusResult;
+import com.totalchange.discodj.ws.search.SearchResource;
 
 @Path("status")
 public class StatusHandler {
@@ -40,12 +41,12 @@ public class StatusHandler {
         StatusResult result = new StatusResult();
 
         Media nowPlaying = queue.getLastPopped();
-        result.setNowPlaying(SearchHandler.copyMedia(nowPlaying, null));
+        result.setNowPlaying(SearchResource.copyMedia(nowPlaying, null));
 
         List<Media> playlist = queue.getPlaylist();
         List<DjMedia> copied = new ArrayList<>(playlist.size());
         for (Media media : playlist) {
-            copied.add(SearchHandler.copyMedia(media, null));
+            copied.add(SearchResource.copyMedia(media, null));
         }
         result.setPlaylist(copied);
 

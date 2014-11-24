@@ -13,9 +13,11 @@
  * You should have received a copy of the GNU General Public License along with
  * Jizz.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.totalchange.discodj.web.shared.dj;
+package com.totalchange.discodj.ws.search;
 
 import java.util.List;
+
+import com.totalchange.discodj.web.shared.dj.DjMedia;
 
 public class SearchResult {
     private int numPages;

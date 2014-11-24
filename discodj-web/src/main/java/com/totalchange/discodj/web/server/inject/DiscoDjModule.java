@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import javax.inject.Named;
-import javax.servlet.ServletContext;
 
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
@@ -15,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.totalchange.discodj.catalogue.Catalogue;
+import com.totalchange.discodj.queue.PlaylistQueue;
 import com.totalchange.discodj.search.SearchProvider;
 import com.totalchange.discodj.search.solr.SolrSearchProviderImpl;
 import com.totalchange.discodj.xuggler.XugglerCatalogueImpl;
@@ -27,11 +27,12 @@ public class DiscoDjModule extends AbstractModule {
         logger.trace("Configuring disco dj Guice bindings");
         bind(SearchProvider.class).to(SolrSearchProviderImpl.class);
         bind(Catalogue.class).to(XugglerCatalogueImpl.class);
+        bind(PlaylistQueue.class);
         logger.trace("Configured disco dj Guice bindings");
     }
 
     @Provides
-    SolrServer provideSolrServer(ServletContext servletContext,
+    SolrServer provideSolrServer(
             @Named(DiscoDjConfigurationModule.SOLR_HOME) String solrHome)
             throws FileNotFoundException {
         logger.trace("Creating SolrServer instance");

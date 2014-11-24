@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU General Public License along with
  * Jizz.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.totalchange.discodj.web.server.dj;
+package com.totalchange.discodj.ws.search;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,23 +33,20 @@ import com.totalchange.discodj.queue.PlaylistQueue;
 import com.totalchange.discodj.search.SearchProvider;
 import com.totalchange.discodj.search.SearchQuery;
 import com.totalchange.discodj.search.SearchResults;
-import com.totalchange.discodj.web.shared.dj.SearchAction;
-import com.totalchange.discodj.web.shared.dj.SearchFacet;
-import com.totalchange.discodj.web.shared.dj.SearchResult;
 import com.totalchange.discodj.web.shared.dj.DjMedia;
 
 @Path("search")
-public class SearchHandler {
+public class SearchResource {
     private static final int RESULTS_PER_PAGE = 10;
 
     private static final Logger logger = LoggerFactory
-            .getLogger(SearchHandler.class);
+            .getLogger(SearchResource.class);
 
     private SearchProvider searchProvider;
     private PlaylistQueue playlistQueue;
 
     @Inject
-    public SearchHandler(SearchProvider searchProvider,
+    public SearchResource(SearchProvider searchProvider,
             PlaylistQueue playlistQueue) {
         this.searchProvider = searchProvider;
         this.playlistQueue = playlistQueue;
@@ -73,7 +70,7 @@ public class SearchHandler {
         return dest;
     }
 
-    static DjMedia copyMedia(Media media, PlaylistQueue playlistQueue) {
+    public static DjMedia copyMedia(Media media, PlaylistQueue playlistQueue) {
         if (media == null) {
             return null;
         }

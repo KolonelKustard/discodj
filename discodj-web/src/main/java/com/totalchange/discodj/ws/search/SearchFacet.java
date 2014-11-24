@@ -1,4 +1,4 @@
-package com.totalchange.discodj.web.shared.dj;
+package com.totalchange.discodj.ws.search;
 
 import java.io.Serializable;
 
