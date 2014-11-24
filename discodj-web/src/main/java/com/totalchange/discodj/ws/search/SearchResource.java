@@ -19,10 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
+import javax.inject.Singleton;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ import com.totalchange.discodj.search.SearchQuery;
 import com.totalchange.discodj.search.SearchResults;
 import com.totalchange.discodj.web.shared.dj.DjMedia;
 
+@Singleton
 @Path("search")
 public class SearchResource {
     private static final int RESULTS_PER_PAGE = 10;
@@ -89,22 +91,22 @@ public class SearchResource {
     }
 
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public SearchResult execute(SearchAction action) {
+    public SearchResult execute(@QueryParam("q") String keywords,
+            @QueryParam("facet") List<String> facetIds, @QueryParam("page") int page) {
         logger.trace("DJ search underway");
         SearchResult result = new SearchResult();
 
         SearchQuery query = new SearchQuery();
-        query.setKeywords(action.getKeywords());
-        if (action.getFacetIds() != null) {
-            for (String id : action.getFacetIds()) {
+        query.setKeywords(keywords);
+        if (facetIds != null) {
+            for (String id : facetIds) {
                 query.addFacetId(id);
             }
         }
         query.setRows(RESULTS_PER_PAGE);
-        if (action.getPage() > 1) {
-            query.setStart((action.getPage() - 1) * RESULTS_PER_PAGE);
+        if (page > 1) {
+            query.setStart((page - 1) * RESULTS_PER_PAGE);
         } else {
             query.setStart(0);
         }
@@ -115,14 +117,10 @@ public class SearchResource {
                 / (double) RESULTS_PER_PAGE);
         result.setNumPages(numPages);
 
-        result.setArtistFacets(copyFacets(action.getFacetIds(),
-                results.getArtistFacets()));
-        result.setAlbumFacets(copyFacets(action.getFacetIds(),
-                results.getAlbumFacets()));
-        result.setGenreFacets(copyFacets(action.getFacetIds(),
-                results.getGenreFacets()));
-        result.setDecadeFacets(copyFacets(action.getFacetIds(),
-                results.getDecadeFacets()));
+        result.setArtistFacets(copyFacets(facetIds, results.getArtistFacets()));
+        result.setAlbumFacets(copyFacets(facetIds, results.getAlbumFacets()));
+        result.setGenreFacets(copyFacets(facetIds, results.getGenreFacets()));
+        result.setDecadeFacets(copyFacets(facetIds, results.getDecadeFacets()));
 
         List<DjMedia> resultMedia = new ArrayList<>(results.getResults().size());
         for (Media media : results.getResults()) {

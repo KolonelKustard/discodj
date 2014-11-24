@@ -81,6 +81,11 @@
       <artifactId>guice-bridge</artifactId>
       <version>2.3.0</version>
     </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.media</groupId>
+      <artifactId>jersey-media-moxy</artifactId>
+      <version>2.13</version>
+    </dependency>
 
     <!-- Testing -->
     <dependency>
