@@ -65,8 +65,12 @@ public class SearchResource {
             boolean selected = selectedFacetIds != null
                     && selectedFacetIds.contains(srcFacet.getId());
 
-            SearchFacet destFacet = new SearchFacet(srcFacet.getId(),
-                    srcFacet.getName(), srcFacet.getNumMatches(), selected);
+            SearchFacet destFacet = new SearchFacet();
+            destFacet.setId(srcFacet.getId());
+            destFacet.setName(srcFacet.getName());
+            destFacet.setNumMatches(srcFacet.getNumMatches());
+            destFacet.setSelected(selected);
+
             dest.add(destFacet);
         }
         return dest;
