@@ -1,0 +1,24 @@
+{
+  "name": "discodj",
+  "version": "1.0.0-SNAPSHOT",
+  "directory": "src/main/webapp/bower_components",
+  "homepage": "https://github.com/KolonelKustard/discodj",
+  "authors": [
+    "Ralph Jones <ralph@totalchange.com>"
+  ],
+  "moduleType": [
+    "amd"
+  ],
+  "license": "GPL",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "src/main/webapp/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.1",
+    "angular": "~1.3.5"
+  }
+}

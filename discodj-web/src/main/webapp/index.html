@@ -1,26 +1,152 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<title>Disco DJ</title>
+<!doctype html>
+<html lang="en" ng-app="discoDjApp">
+<head>
+  <meta charset="utf-8">
+  <title>Disco DJ</title>
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="js/search-ctrl.js"></script>
+</head>
+<body>
+  <div class="container">
+    <ul class="nav nav-pills nav-justified">
+      <li class="active"><a href="#search" data-toggle="tab">Search</a></li>
+      <li><a href="#playlist" data-toggle="tab">PlayList</a></li>
+    </ul>
 
-		<script type="text/javascript" src="DiscoDj/DiscoDj.nocache.js"></script>
-	</head>
-	<body>
-		<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
+    <div class="tab-content">
+      <div class="tab-pane active" id="search" ng-controller="SearchCtrl">
+        <form role="form">
+          <div class="form-group">
+            <label for="searchInput" class="sr-only">Keywords</label>
+            <input class="form-control" id="searchInput" placeholder="Enter an artist, album or title here" type="text">
+          </div>
+        </form>
 
-		<noscript>
-			<h1>Disco DJ</h1>
-			<p>Hi and welcome to Disco DJ.  Disco DJ is a modern web application
-			and it looks like you're going to either need to use an alternative
-			web browser or check the settings of your current browser to make
-			sure you've got &quot;JavaScript&quot; enabled.</p>
-			<p>If you don't have JavaScript enabled for accessibility reasons
-			then I'd recommend familiarising yourself with
-			<a href="http://www.w3.org/WAI/intro/aria.php">W3C's ARIA
-			(Accessible Rich Internet Applications)</a> standards to which Disco
-			DJ adheres. You should be able to get an ARIA compatible browser for
-			free which will make Disco DJ accessible to you.
-		</noscript>
-	</body>
+        <div class="panel-group" id="accordion">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseArtists">
+                  Artists {{results.artistFacets.length}}
+                </a>
+              </h3>
+            </div>
+            <div id="collapseArtists" class="panel-body collapse">
+              <form class="form-horizontal" role="form">
+                <div class="checkbox col-sm-2" ng-repeat="facet in results.artistFacets">
+                  <label>
+                    <input value="{{facet.id}}" type="checkbox">
+                    {{facet.name}} ({{facet.numMatches}})
+                  </label>
+                </div>
+              </form>
+            </div>
+          </div>
+        
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseAlbums">
+                  Albums {{results.albumFacets.length}}
+                </a>
+              </h3>
+            </div>
+            <div id="collapseAlbums" class="panel-body collapse">
+              <form class="form-horizontal" role="form">
+                <div class="checkbox col-sm-2" ng-repeat="facet in results.albumFacets">
+                  <label>
+                    <input value="{{facet.id}}" type="checkbox">
+                    {{facet.name}} ({{facet.numMatches}})
+                  </label>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        
+        <ul class="list-group">
+          <li class="list-group-item" ng-repeat="result in searchResults">
+            <button type="button" class="btn btn-primary btn-xs">Add to PlayList</button>
+            Some Song by Some Artist
+          </li>
+        </ul>
+        <ul class="pager">
+          <li class="previous"><a href="#">← Previous</a></li>
+          <li class="next"><a href="#">Next →</a></li>
+        </ul>
+      </div>
+      
+      <div class="tab-pane" id="playlist">
+        <div class="well">Now Playing: Some Song by Some Artist</div>
+        
+        <ul class="list-group">
+          <li class="list-group-item">
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+            <button type="button" class="btn btn-primary btn-xs disabled"><span class="glyphicon glyphicon-arrow-up"></span></button>
+            Some Song by Some Artist
+          </li>
+          <li class="list-group-item">
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+            Some Song by Some Artist
+          </li>
+          <li class="list-group-item">
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+            Some Song by Some Artist
+          </li>
+          <li class="list-group-item">
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+            Some Song by Some Artist
+          </li>
+          <li class="list-group-item">
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+            Some Song by Some Artist
+          </li>
+          <li class="list-group-item">
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+            Some Song by Some Artist
+          </li>
+          <li class="list-group-item">
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+            Some Song by Some Artist
+          </li>
+          <li class="list-group-item">
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+            Some Song by Some Artist
+          </li>
+          <li class="list-group-item">
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+            Some Song by Some Artist
+          </li>
+          <li class="list-group-item">
+            <button type="button" class="btn btn-primary btn-xs disabled"><span class="glyphicon glyphicon-arrow-down"></span></button>
+            <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+            Some Song by Some Artist
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <noscript>
+    <h1>Disco DJ</h1>
+    <p>Hi and welcome to Disco DJ.  Disco DJ is a modern web application
+    and it looks like you're going to either need to use an alternative
+    web browser or check the settings of your current browser to make
+    sure you've got &quot;JavaScript&quot; enabled.</p>
+    <p>If you don't have JavaScript enabled for accessibility reasons
+    then I'd recommend familiarising yourself with
+    <a href="http://www.w3.org/WAI/intro/aria.php">W3C's ARIA
+    (Accessible Rich Internet Applications)</a> standards to which Disco
+    DJ adheres. You should be able to get an ARIA compatible browser for
+    free which will make Disco DJ accessible to you.
+  </noscript>
+</body>
 </html>
