@@ -20,12 +20,21 @@ import java.util.List;
 import com.totalchange.discodj.web.shared.dj.DjMedia;
 
 public class SearchResult {
+    private int page;
     private int numPages;
     private List<SearchFacet> artistFacets;
     private List<SearchFacet> albumFacets;
     private List<SearchFacet> genreFacets;
     private List<SearchFacet> decadeFacets;
     private List<DjMedia> results;
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
 
     public int getNumPages() {
         return numPages;

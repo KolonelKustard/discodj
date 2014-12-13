@@ -4,8 +4,15 @@
   <meta charset="utf-8">
   <title>Disco DJ</title>
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="css/search.css">
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
   <script src="bower_components/angular/angular.js"></script>
-  <script src="js/search-ctrl.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/services.js"></script>
 </head>
 <body>
   <div class="container">
@@ -43,7 +50,7 @@
               </form>
             </div>
           </div>
-        
+
           <div class="panel panel-default">
             <div class="panel-heading">
               <h3 class="panel-title">
@@ -64,19 +71,20 @@
             </div>
           </div>
         </div>
-        
+
         <ul class="list-group">
-          <li class="list-group-item" ng-repeat="result in searchResults">
+          <li class="list-group-item" ng-repeat="result in results.results">
             <button type="button" class="btn btn-primary btn-xs">Add to PlayList</button>
-            Some Song by Some Artist
+            {{result.title}} by {{result.artist}}
           </li>
         </ul>
+
         <ul class="pager">
-          <li class="previous"><a href="#">← Previous</a></li>
-          <li class="next"><a href="#">Next →</a></li>
+          <li class="previous" ng-show="{{results.page > 0}}"><a href="#"><span aria-hidden="true">&larr; </span>Previous</a></li>
+          <li class="next" ng-show="{{results.numPages > results.page}}"><a href="#">Next<span aria-hidden="true"> &rarr;</span></a></li>
         </ul>
       </div>
-      
+
       <div class="tab-pane" id="playlist">
         <div class="well">Now Playing: Some Song by Some Artist</div>
         

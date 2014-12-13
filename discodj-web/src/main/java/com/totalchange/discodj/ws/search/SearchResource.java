@@ -111,8 +111,10 @@ public class SearchResource {
         query.setRows(RESULTS_PER_PAGE);
         if (page > 1) {
             query.setStart((page - 1) * RESULTS_PER_PAGE);
+            result.setPage(page);
         } else {
             query.setStart(0);
+            result.setPage(0);
         }
 
         SearchResults results = searchProvider.search(query);
