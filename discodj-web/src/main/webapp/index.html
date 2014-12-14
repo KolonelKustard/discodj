@@ -10,6 +10,7 @@
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-route/angular-route.js"></script>
   <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/checklist-model/checklist-model.js"></script>
   <script src="js/app.js"></script>
   <script src="js/controllers.js"></script>
   <script src="js/services.js"></script>
@@ -26,7 +27,8 @@
         <form role="form">
           <div class="form-group">
             <label for="searchInput" class="sr-only">Keywords</label>
-            <input class="form-control" id="searchInput" placeholder="Enter an artist, album or title here" type="text">
+            <input class="form-control" id="searchInput" ng-model="query.q" ng-model-options="{ debounce: 500 }"
+              placeholder="Enter an artist, album or title here" type="text">
           </div>
         </form>
 
@@ -43,7 +45,7 @@
               <form class="form-horizontal" role="form">
                 <div class="checkbox col-sm-2" ng-repeat="facet in results.artistFacets">
                   <label>
-                    <input value="{{facet.id}}" type="checkbox">
+                    <input checklist-model="query.facet" checklist-value="facet.id" type="checkbox">
                     {{facet.name}} ({{facet.numMatches}})
                   </label>
                 </div>
@@ -63,13 +65,18 @@
               <form class="form-horizontal" role="form">
                 <div class="checkbox col-sm-2" ng-repeat="facet in results.albumFacets">
                   <label>
-                    <input value="{{facet.id}}" type="checkbox">
+                    <input type="checkbox" checklist-model="query.facet" checklist-value="facet.id">
                     {{facet.name}} ({{facet.numMatches}})
                   </label>
                 </div>
               </form>
             </div>
           </div>
+        </div>
+
+        <div>
+          Query: {{query.q}}<br>
+          Facets: {{query.facet}}
         </div>
 
         <ul class="list-group">
