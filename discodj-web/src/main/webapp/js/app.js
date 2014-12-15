@@ -12,7 +12,8 @@ discoDjApp.config(["$routeProvider",
     $routeProvider.
       when("/search", {
         templateUrl: "partials/search.html",
-        controller: "SearchCtrl"
+        controller: "SearchCtrl",
+        reloadOnSearch: false
       }).
       otherwise({
         redirectTo: "/search"

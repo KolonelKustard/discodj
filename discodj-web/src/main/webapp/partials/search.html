@@ -1,7 +1,7 @@
 <div class="container">
   <ul class="nav nav-pills nav-justified">
-    <li class="active"><a href="#search" data-toggle="tab">Search</a></li>
-    <li><a href="#playlist" data-toggle="tab">PlayList</a></li>
+    <li class="active"><a href="" data-toggle="tab" data-target="#search">Search</a></li>
+    <li><a href="" data-toggle="tab" data-target="#playlist">PlayList</a></li>
   </ul>
 
   <div class="tab-content">
@@ -18,7 +18,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseArtists">
+              <a data-toggle="collapse" data-parent="#accordion" data-target="#collapseArtists" href="">
                 Artists ({{results.artistFacets.length}})
               </a>
             </h3>
@@ -27,7 +27,7 @@
             <form class="form-horizontal" role="form">
               <div class="checkbox col-sm-2" ng-repeat="facet in results.artistFacets">
                 <label>
-                  <input checklist-model="query.facet" checklist-value="facet.id" ng-click="search()"
+                  <input checklist-model="query.facet" checklist-value="facet.id" ng-click="facetSearch()"
                     type="checkbox">
                   {{facet.name}} ({{facet.numMatches}})
                 </label>
@@ -39,7 +39,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapseAlbums">
+              <a data-toggle="collapse" data-parent="#accordion" data-target="#collapseAlbums" href="">
                 Albums ({{results.albumFacets.length}})
               </a>
             </h3>
@@ -49,18 +49,13 @@
               <div class="checkbox col-sm-2" ng-repeat="facet in results.albumFacets">
                 <label>
                   <input type="checkbox" checklist-model="query.facet" checklist-value="facet.id"
-                    ng-click="search()">
+                    ng-click="facetSearch()">
                   {{facet.name}} ({{facet.numMatches}})
                 </label>
               </div>
             </form>
           </div>
         </div>
-      </div>
-
-      <div>
-        Query: {{query.q}}<br>
-        Facets: {{query.facet}}
       </div>
 
       <ul class="list-group">
