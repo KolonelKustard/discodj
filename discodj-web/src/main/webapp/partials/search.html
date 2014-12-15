@@ -1,0 +1,136 @@
+<div class="container">
+  <ul class="nav nav-pills nav-justified">
+    <li class="active"><a href="#search" data-toggle="tab">Search</a></li>
+    <li><a href="#playlist" data-toggle="tab">PlayList</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane active" id="search" ng-controller="SearchCtrl">
+      <form role="form">
+        <div class="form-group">
+          <label for="searchInput" class="sr-only">Keywords</label>
+          <input class="form-control" id="searchInput" ng-model="query.q" ng-model-options="{ debounce: 500 }"
+            ng-change="search()" placeholder="Enter an artist, album or title here" type="text">
+        </div>
+      </form>
+
+      <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapseArtists">
+                Artists ({{results.artistFacets.length}})
+              </a>
+            </h3>
+          </div>
+          <div id="collapseArtists" class="panel-body collapse">
+            <form class="form-horizontal" role="form">
+              <div class="checkbox col-sm-2" ng-repeat="facet in results.artistFacets">
+                <label>
+                  <input checklist-model="query.facet" checklist-value="facet.id" ng-click="search()"
+                    type="checkbox">
+                  {{facet.name}} ({{facet.numMatches}})
+                </label>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapseAlbums">
+                Albums ({{results.albumFacets.length}})
+              </a>
+            </h3>
+          </div>
+          <div id="collapseAlbums" class="panel-body collapse">
+            <form class="form-horizontal" role="form">
+              <div class="checkbox col-sm-2" ng-repeat="facet in results.albumFacets">
+                <label>
+                  <input type="checkbox" checklist-model="query.facet" checklist-value="facet.id"
+                    ng-click="search()">
+                  {{facet.name}} ({{facet.numMatches}})
+                </label>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        Query: {{query.q}}<br>
+        Facets: {{query.facet}}
+      </div>
+
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="result in results.results">
+          <button type="button" class="btn btn-primary btn-xs">Add to PlayList</button>
+          {{result.title}} by {{result.artist}}
+        </li>
+      </ul>
+
+      <ul class="pager">
+        <li class="previous" ng-show="{{results.page > 0}}"><a href="#"><span aria-hidden="true">&larr; </span>Previous</a></li>
+        <li class="next" ng-show="{{results.numPages > results.page}}"><a href="#">Next<span aria-hidden="true"> &rarr;</span></a></li>
+      </ul>
+    </div>
+
+    <div class="tab-pane" id="playlist">
+      <div class="well">Now Playing: Some Song by Some Artist</div>
+      
+      <ul class="list-group">
+        <li class="list-group-item">
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+          <button type="button" class="btn btn-primary btn-xs disabled"><span class="glyphicon glyphicon-arrow-up"></span></button>
+          Some Song by Some Artist
+        </li>
+        <li class="list-group-item">
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+          Some Song by Some Artist
+        </li>
+        <li class="list-group-item">
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+          Some Song by Some Artist
+        </li>
+        <li class="list-group-item">
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+          Some Song by Some Artist
+        </li>
+        <li class="list-group-item">
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+          Some Song by Some Artist
+        </li>
+        <li class="list-group-item">
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+          Some Song by Some Artist
+        </li>
+        <li class="list-group-item">
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+          Some Song by Some Artist
+        </li>
+        <li class="list-group-item">
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+          Some Song by Some Artist
+        </li>
+        <li class="list-group-item">
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-down"></span></button>
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+          Some Song by Some Artist
+        </li>
+        <li class="list-group-item">
+          <button type="button" class="btn btn-primary btn-xs disabled"><span class="glyphicon glyphicon-arrow-down"></span></button>
+          <button type="button" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-arrow-up"></span></button>
+          Some Song by Some Artist
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
