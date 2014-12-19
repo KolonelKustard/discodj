@@ -57,8 +57,8 @@ public class PlaylistResource {
     @PUT @Path("add")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public PlaylistResult addToPlaylist(String id) {
-        queue.push(id);
+    public PlaylistResult addToPlaylist(PlaylistAdd toAdd) {
+        queue.push(toAdd.getId());
         return getPlaylist();
     }
 }
