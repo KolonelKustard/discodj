@@ -2,8 +2,8 @@
 
 var discoDjControllers = angular.module('discoDjControllers', []);
 
-discoDjControllers.controller("SearchCtrl", ["$scope", "$routeParams", "$route", "Search",
-  function($scope, $routeParams, $route, Search) {
+discoDjControllers.controller("SearchCtrl", ["$scope", "$routeParams", "$route", "Search", "Playlist",
+  function($scope, $routeParams, $route, Search, Playlist) {
     $scope.query = $routeParams;
     $scope.results = Search.query($scope.query);
 
@@ -17,5 +17,17 @@ discoDjControllers.controller("SearchCtrl", ["$scope", "$routeParams", "$route",
       $route.updateParams($scope.query);
       $scope.results = Search.query($scope.query);
     }
+
+    $scope.addToPlaylist = function(mediaId) {
+      Playlist.add({
+        id: mediaId
+      });
+    }
+  }
+]);
+
+discoDjControllers.controller("PlaylistCtrl", ["$scope", "Playlist",
+  function($scope, Playlist) {
+    $scope.playlist = Playlist.query();
   }
 ]);

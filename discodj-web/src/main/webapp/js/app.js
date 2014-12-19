@@ -10,13 +10,13 @@ var discoDjApp = angular.module("discoDjApp", [
 discoDjApp.config(["$routeProvider",
   function($routeProvider) {
     $routeProvider.
-      when("/search", {
-        templateUrl: "partials/search.html",
+      when("/dj-deck", {
+        templateUrl: "partials/dj-deck.html",
         controller: "SearchCtrl",
         reloadOnSearch: false
       }).
       otherwise({
-        redirectTo: "/search"
+        redirectTo: "/dj-deck"
       }
     );
   }

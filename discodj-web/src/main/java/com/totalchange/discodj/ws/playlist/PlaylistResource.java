@@ -1,11 +1,13 @@
-package com.totalchange.discodj.web.server.dj;
+package com.totalchange.discodj.ws.playlist;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -16,29 +18,27 @@ import org.slf4j.LoggerFactory;
 import com.totalchange.discodj.media.Media;
 import com.totalchange.discodj.queue.PlaylistQueue;
 import com.totalchange.discodj.web.shared.dj.DjMedia;
-import com.totalchange.discodj.web.shared.dj.StatusAction;
-import com.totalchange.discodj.web.shared.dj.StatusResult;
 import com.totalchange.discodj.ws.search.SearchResource;
 
-@Path("status")
-public class StatusHandler {
+@Singleton
+@Path("playlist")
+public class PlaylistResource {
     private static final Logger logger = LoggerFactory
-            .getLogger(StatusHandler.class);
+            .getLogger(PlaylistResource.class);
 
     private PlaylistQueue queue;
 
     @Inject
-    public StatusHandler(PlaylistQueue queue) {
+    public PlaylistResource(PlaylistQueue queue) {
         this.queue = queue;
     }
 
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public StatusResult execute(StatusAction action) {
-        logger.trace("Executing status update");
+    public PlaylistResult getPlaylist() {
+        logger.trace("Fetching current playlist");
 
-        StatusResult result = new StatusResult();
+        PlaylistResult result = new PlaylistResult();
 
         Media nowPlaying = queue.getLastPopped();
         result.setNowPlaying(SearchResource.copyMedia(nowPlaying, null));
@@ -50,7 +50,15 @@ public class StatusHandler {
         }
         result.setPlaylist(copied);
 
-        logger.trace("Executed status update and returning {}", result);
+        logger.trace("Built playlist {}", result);
         return result;
+    }
+
+    @PUT @Path("add")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public PlaylistResult addToPlaylist(String id) {
+        queue.push(id);
+        return getPlaylist();
     }
 }

@@ -1,8 +1,10 @@
-package com.totalchange.discodj.web.shared.dj;
+package com.totalchange.discodj.ws.playlist;
 
 import java.util.List;
 
-public class StatusResult {
+import com.totalchange.discodj.web.shared.dj.DjMedia;
+
+public class PlaylistResult {
     private DjMedia nowPlaying;
     private List<DjMedia> playlist;
 

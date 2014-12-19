@@ -102,25 +102,21 @@ public class PlaylistQueue {
         return new ArrayList<>(requestedQueue);
     }
 
-    public synchronized void setPlaylistIds(List<String> playlist) {
-        logger.trace("Setting playlist to {}", playlist);
+    public synchronized void push(String id) {
+        logger.trace("Adding {} to playlist", id);
 
-        requestedQueue.clear();
-        for (String id : playlist) {
-            try {
-                Media media = fetchMedia(id);
-                if (!skipIfInPoppedList(media)) {
-                    requestedQueue.add(media);
-                } else {
-                    logger.trace("Skipping adding {} as is in already popped "
-                            + "list", media);
-                }
-            } catch (Exception ex) {
-                logger.warn(
-                        "Failed to add id " + id
-                                + " with fetch from catalogue error "
-                                + ex.getMessage(), ex);
+        try {
+            Media media = fetchMedia(id);
+            if (!skipIfInPoppedList(media)) {
+                requestedQueue.add(media);
+            } else {
+                logger.trace("Skipping adding {} as is in already popped "
+                        + "list", media);
             }
+        } catch (Exception ex) {
+            logger.warn("Failed to add id " + id
+                    + " with fetch from catalogue error " + ex.getMessage(),
+                    ex);
         }
     }
 
