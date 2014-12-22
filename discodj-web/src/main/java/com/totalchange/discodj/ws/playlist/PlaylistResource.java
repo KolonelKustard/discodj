@@ -5,11 +5,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -54,11 +53,10 @@ public class PlaylistResource {
         return result;
     }
 
-    @PUT @Path("add")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public PlaylistResult addToPlaylist(PlaylistAdd toAdd) {
-        queue.push(toAdd.getId());
-        return getPlaylist();
+    @GET
+    @Path("add")
+    public boolean addToPlaylist(@QueryParam("id") String id) {
+        queue.push(id);
+        return true;
     }
 }

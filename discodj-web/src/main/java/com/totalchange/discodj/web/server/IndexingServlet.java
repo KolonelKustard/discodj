@@ -3,7 +3,6 @@ package com.totalchange.discodj.web.server;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
 import org.slf4j.Logger;
@@ -12,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import com.totalchange.discodj.populator.BackgroundSync;
 
 @Singleton
-@WebServlet
 public final class IndexingServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 

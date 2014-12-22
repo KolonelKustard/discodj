@@ -19,7 +19,7 @@ discoDjServices.factory("Playlist", ["$resource",
         method: "GET"
       },
       add: {
-        method: "PUT",
+        method: "GET",
         url: "resources/playlist/add"
       }
     });

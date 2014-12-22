@@ -107,11 +107,11 @@ public class PlaylistQueue {
 
         try {
             Media media = fetchMedia(id);
-            if (!skipIfInPoppedList(media)) {
+            if (!skipIfInPoppedList(media) && !requestedQueue.contains(media)) {
                 requestedQueue.add(media);
             } else {
-                logger.trace("Skipping adding {} as is in already popped "
-                        + "list", media);
+                logger.trace("Skipping adding {} as is in already in playlist "
+                        + "or has already been played", media);
             }
         } catch (Exception ex) {
             logger.warn("Failed to add id " + id
