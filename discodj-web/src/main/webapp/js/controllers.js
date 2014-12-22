@@ -20,7 +20,6 @@ discoDjControllers.controller("SearchCtrl", ["$scope", "$routeParams", "$route",
 
     $scope.addToPlaylist = function(mediaId) {
       Playlist.add({id: mediaId}, function(added) {
-        console.log(added);
         $location.path("/playlist");
       });
     }
