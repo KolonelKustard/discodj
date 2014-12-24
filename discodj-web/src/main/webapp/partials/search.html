@@ -60,14 +60,15 @@
 
       <ul class="list-group">
         <li class="list-group-item" ng-repeat="result in results.results">
-          <button type="button" class="btn btn-primary btn-xs" ng-click="addToPlaylist(result.id)">Add to PlayList</button>
+          <button type="button" class="btn btn-primary btn-xs" ng-click="addToPlaylist(result.id)"
+            ng-disabled="result.whenCanBePlayedAgain > 0">Add to PlayList</button>
           {{result.title}} by {{result.artist}}
         </li>
       </ul>
 
       <ul class="pager">
-        <li class="previous" ng-show="{{results.page > 0}}"><a href="#"><span aria-hidden="true">&larr; </span>Previous</a></li>
-        <li class="next" ng-show="{{results.numPages > results.page}}"><a href="#">Next<span aria-hidden="true"> &rarr;</span></a></li>
+        <li class="previous" ng-class="{disabled: results.page <= 1}"><a href="" ng-click="prevPage()"><span aria-hidden="true">&larr; </span>Previous</a></li>
+        <li class="next" ng-class="{disabled: results.page >= results.numPages}"><a href="" ng-click="nextPage()">Next<span aria-hidden="true"> &rarr;</span></a></li>
       </ul>
     </div>
   </div>

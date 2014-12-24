@@ -114,7 +114,7 @@ public class SearchResource {
             result.setPage(page);
         } else {
             query.setStart(0);
-            result.setPage(0);
+            result.setPage(1);
         }
 
         SearchResults results = searchProvider.search(query);

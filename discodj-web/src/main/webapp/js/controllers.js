@@ -20,8 +20,28 @@ discoDjControllers.controller("SearchCtrl", ["$scope", "$routeParams", "$route",
 
     $scope.addToPlaylist = function(mediaId) {
       Playlist.add({id: mediaId}, function(added) {
-        $location.path("/playlist");
+        $location.path("/playlist").search($routeParams);
       });
+    }
+
+    $scope.prevPage = function() {
+      if ($scope.query.page || $scope.query.page > 0) {
+        $scope.query.page = $scope.query.page - 1;
+      } else {
+        $scope.query.page = 1;
+      }
+      $route.updateParams($scope.query);
+      $scope.results = Search.query($scope.query);
+    }
+
+    $scope.nextPage = function() {
+      if ($scope.query.page) {
+        $scope.query.page = $scope.query.page + 1;
+      } else {
+        $scope.query.page = 2;
+      }
+      $route.updateParams($scope.query);
+      $scope.results = Search.query($scope.query);
     }
   }
 ]);
