@@ -142,4 +142,28 @@ public class PlaylistQueue {
         logger.trace("Not found in any list so can be played now");
         return -1;
     }
+
+    public synchronized void moveUp(String id) {
+        for (int num = 1; num < requestedQueue.size(); num++) {
+            Media media = requestedQueue.get(num);
+            if (media.getId().equals(id)) {
+                Media swapsy = requestedQueue.get(num - 1);
+                requestedQueue.set(num - 1, media);
+                requestedQueue.set(num, swapsy);
+                break;
+            }
+        }
+    }
+
+    public synchronized void moveDown(String id) {
+        for (int num = 0; num < requestedQueue.size() - 1; num++) {
+            Media media = requestedQueue.get(num);
+            if (media.getId().equals(id)) {
+                Media swapsy = requestedQueue.get(num + 1);
+                requestedQueue.set(num + 1, media);
+                requestedQueue.set(num, swapsy);
+                break;
+            }
+        }
+    }
 }

@@ -21,6 +21,14 @@ discoDjServices.factory("Playlist", ["$resource",
       add: {
         method: "GET",
         url: "resources/playlist/add"
+      },
+      moveUp: {
+        method: "GET",
+        url: "resources/playlist/moveUp"
+      },
+      moveDown: {
+        method: "GET",
+        url: "resources/playlist/moveDown"
       }
     });
   }

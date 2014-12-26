@@ -59,4 +59,18 @@ public class PlaylistResource {
         queue.push(id);
         return true;
     }
+
+    @GET
+    @Path("moveUp")
+    public boolean moveUp(@QueryParam("id") String id) {
+        queue.moveUp(id);
+        return true;
+    }
+
+    @GET
+    @Path("moveDown")
+    public boolean moveDown(@QueryParam("id") String id) {
+        queue.moveDown(id);
+        return true;
+    }
 }
