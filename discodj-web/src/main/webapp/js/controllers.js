@@ -30,7 +30,7 @@ discoDjControllers.controller("SearchCtrl", ["$scope", "$routeParams", "$route",
 
     $scope.prevPage = function() {
       if ($scope.query.page || $scope.query.page > 0) {
-        $scope.query.page = $scope.query.page - 1;
+        $scope.query.page = Number($scope.query.page) - 1;
       } else {
         $scope.query.page = 1;
       }
@@ -40,7 +40,7 @@ discoDjControllers.controller("SearchCtrl", ["$scope", "$routeParams", "$route",
 
     $scope.nextPage = function() {
       if ($scope.query.page) {
-        $scope.query.page = $scope.query.page + 1;
+        $scope.query.page = Number($scope.query.page) + 1;
       } else {
         $scope.query.page = 2;
       }
