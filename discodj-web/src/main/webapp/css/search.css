@@ -9,3 +9,7 @@
 .list-group-item button {
   float: right;
 }
+
+.clear-search {
+  cursor: pointer;
+}

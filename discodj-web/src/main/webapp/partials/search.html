@@ -9,8 +9,12 @@
       <form role="form">
         <div class="form-group">
           <label for="searchInput" class="sr-only">Keywords</label>
-          <input class="form-control" id="searchInput" ng-model="query.q" ng-model-options="{ debounce: 500 }"
-            ng-change="search()" placeholder="Enter an artist, album or title here" type="text">
+          <div class="input-group">
+            <div class="input-group-addon"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></div>
+            <input class="form-control" id="searchInput" ng-model="query.q" ng-model-options="{ debounce: 500 }"
+              ng-change="search()" placeholder="Enter an artist, album or title here" type="text">
+            <div class="input-group-addon clear-search" ng-click="clearSearch()"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></div>
+          </div>
         </div>
       </form>
 

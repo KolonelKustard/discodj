@@ -22,6 +22,12 @@ discoDjControllers.controller("SearchCtrl", ["$scope", "$routeParams", "$route",
       $scope.results = Search.query($scope.query);
     }
 
+    $scope.clearSearch = function() {
+      $scope.query = {};
+      $route.updateParams($scope.query);
+      $scope.results = Search.query();
+    }
+
     $scope.addToPlaylist = function(mediaId) {
       Playlist.add({id: mediaId}, function(added) {
         $scope.gotoPlaylist();
