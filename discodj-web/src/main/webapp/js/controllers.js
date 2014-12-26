@@ -92,6 +92,16 @@ discoDjControllers.controller("PlaylistCtrl", ["$scope", "$location", "$routePar
 
     $scope.moveDown = function(id) {
       Playlist.moveDown({id: id});
+
+      for (var num = 0; num < $scope.playlist.playlist.length - 1; num++) {
+        var media = $scope.playlist.playlist[num];
+        if (media.id === id) {
+          var swapsy = $scope.playlist.playlist[num + 1];
+          $scope.playlist.playlist[num + 1] = media;
+          $scope.playlist.playlist[num] = swapsy;
+          break;
+        }
+      }
     }
   }
 ]);
