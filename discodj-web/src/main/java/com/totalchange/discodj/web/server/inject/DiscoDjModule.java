@@ -19,8 +19,11 @@ import com.totalchange.discodj.search.SearchProvider;
 import com.totalchange.discodj.search.solr.SolrSearchProviderImpl;
 import com.totalchange.discodj.xuggler.XugglerCatalogueImpl;
 
-public class DiscoDjModule extends AbstractModule {
+public class DiscoDjModule extends AbstractModule implements AutoCloseable {
     private static Logger logger = LoggerFactory.getLogger(DiscoDjModule.class);
+
+    private CoreContainer coreContainer = null;
+    private SolrServer solrServer = null;
 
     @Override
     protected void configure() {
@@ -35,12 +38,31 @@ public class DiscoDjModule extends AbstractModule {
     SolrServer provideSolrServer(
             @Named(DiscoDjConfigurationModule.SOLR_HOME) String solrHome)
             throws FileNotFoundException {
-        logger.trace("Creating SolrServer instance");
-        File home = new File(solrHome);
-        CoreContainer container = new CoreContainer(home.getAbsolutePath());
-        container.load();
-        SolrServer server = new EmbeddedSolrServer(container, "discodj");
-        logger.trace("Returning SolrServer instance {}", server);
-        return server;
+        if (solrServer == null) {
+            logger.trace("Creating SolrServer instance");
+            synchronized (this) {
+                if (solrServer == null) {
+                    File home = new File(solrHome);
+                    coreContainer = new CoreContainer(home.getAbsolutePath());
+                    coreContainer.load();
+                    solrServer = new EmbeddedSolrServer(coreContainer, "discodj");
+                }
+            }
+            logger.trace("Created SolrServer instance {}", solrServer);
+        }
+        return solrServer;
+    }
+
+    @Override
+    public void close() throws Exception {
+        if (solrServer != null) {
+            logger.trace("Shutting down SolrServer instance {}", solrServer);
+            solrServer.shutdown();
+        }
+
+        if (coreContainer != null) {
+            logger.trace("Shutting down CoreContainer instance {}", coreContainer);
+            coreContainer.shutdown();
+        }
     }
 }

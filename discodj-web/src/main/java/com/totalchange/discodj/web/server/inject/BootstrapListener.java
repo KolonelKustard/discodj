@@ -1,5 +1,6 @@
 package com.totalchange.discodj.web.server.inject;
 
+import javax.servlet.ServletContextEvent;
 import javax.servlet.annotation.WebListener;
 
 import org.slf4j.Logger;
@@ -17,10 +18,12 @@ public class BootstrapListener extends GuiceServletContextListener {
     private static final Logger logger = LoggerFactory
             .getLogger(BootstrapListener.class);
 
+    private static DiscoDjModule discoDjModule;
     private static Injector injector;
     static {
         logger.trace("Creating Guice injector");
-        injector = Guice.createInjector(new DiscoDjModule(),
+        discoDjModule = new DiscoDjModule();
+        injector = Guice.createInjector(discoDjModule,
             new DiscoDjConfigurationModule(), new ServletModule() {
                 @Override
                 protected void configureServlets() {
@@ -34,6 +37,16 @@ public class BootstrapListener extends GuiceServletContextListener {
     @Override
     protected Injector getInjector() {
         return getGuiceInjector();
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+        try {
+            discoDjModule.close();
+        } catch (Exception ex) {
+            logger.warn("Failed to close DiscoDjModule", ex);
+        }
+        super.contextDestroyed(servletContextEvent);
     }
 
     public static Injector getGuiceInjector() {
