@@ -1,0 +1,16 @@
+<div class="container" ng-controller="PlaylistCtrl">
+  <ul class="nav nav-pills nav-justified">
+    <li><a href="" ng-click="gotoSearch()">Search</a></li>
+    <li class="active"><a href="">PlayList</a></li>
+  </ul>
+
+  <div class="well">Now Playing: {{playlist.nowPlaying.title}} by {{playlist.nowPlaying.artist}}</div>
+
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="media in playlist.playlist">
+      <button type="button" class="btn btn-primary btn-xs" ng-click="moveDown(media.id)" ng-disabled="$last"><span class="glyphicon glyphicon-arrow-down"></span></button>
+      <button type="button" class="btn btn-primary btn-xs" ng-click="moveUp(media.id)" ng-disabled="$first"><span class="glyphicon glyphicon-arrow-up"></span></button>
+      {{media.title}} by {{media.artist}}
+    </li>
+  </ul>
+</div>

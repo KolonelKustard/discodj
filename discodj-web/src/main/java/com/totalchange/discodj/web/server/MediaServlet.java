@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,10 +15,11 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Injector;
 import com.totalchange.discodj.catalogue.Catalogue;
 import com.totalchange.discodj.media.Media;
 
-@Singleton
+@WebServlet("/media")
 public final class MediaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -29,9 +30,13 @@ public final class MediaServlet extends HttpServlet {
 
     private Catalogue catalogue;
 
-    @Inject
-    public MediaServlet(Catalogue catalogue) {
-        this.catalogue = catalogue;
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        logger.trace("Fetching catalogue from Guice");
+        Injector injector = (Injector) config.getServletContext().getAttribute(Injector.class.getName());
+        catalogue = injector.getInstance(Catalogue.class);
     }
 
     @Override

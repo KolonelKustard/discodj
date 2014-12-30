@@ -1,16 +1,17 @@
 package com.totalchange.discodj.web.server;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Injector;
 import com.totalchange.discodj.populator.BackgroundSync;
 
-@Singleton
+@WebServlet(loadOnStartup = 1, value="/indexer")
 public final class IndexingServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -19,15 +20,13 @@ public final class IndexingServlet extends HttpServlet {
 
     private BackgroundSync backgroundSync;
 
-    @Inject
-    public IndexingServlet(BackgroundSync backgroundSync) {
-        this.backgroundSync = backgroundSync;
-    }
-
     @Override
-    public void init() throws ServletException {
-        super.init();
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
         logger.trace("Init being used to start background sync job");
+        Injector injector = (Injector) config.getServletContext().getAttribute(Injector.class.getName());
+        backgroundSync = injector.getInstance(BackgroundSync.class);
         backgroundSync.start();
         logger.trace("Init finished");
     }

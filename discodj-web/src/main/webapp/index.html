@@ -1,26 +1,35 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<title>Disco DJ</title>
+<!doctype html>
+<html lang="en" ng-app="discoDjApp">
+<head>
+  <meta charset="utf-8">
+  <title>Disco DJ</title>
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="css/search.css">
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/checklist-model/checklist-model.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/services.js"></script>
+</head>
+<body>
+  <div ng-view></div>
 
-		<script type="text/javascript" src="DiscoDj/DiscoDj.nocache.js"></script>
-	</head>
-	<body>
-		<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
-
-		<noscript>
-			<h1>Disco DJ</h1>
-			<p>Hi and welcome to Disco DJ.  Disco DJ is a modern web application
-			and it looks like you're going to either need to use an alternative
-			web browser or check the settings of your current browser to make
-			sure you've got &quot;JavaScript&quot; enabled.</p>
-			<p>If you don't have JavaScript enabled for accessibility reasons
-			then I'd recommend familiarising yourself with
-			<a href="http://www.w3.org/WAI/intro/aria.php">W3C's ARIA
-			(Accessible Rich Internet Applications)</a> standards to which Disco
-			DJ adheres. You should be able to get an ARIA compatible browser for
-			free which will make Disco DJ accessible to you.
-		</noscript>
-	</body>
+  <noscript>
+    <h1>Disco DJ</h1>
+    <p>Hi and welcome to Disco DJ.  Disco DJ is a modern web application
+    and it looks like you're going to either need to use an alternative
+    web browser or check the settings of your current browser to make
+    sure you've got &quot;JavaScript&quot; enabled.</p>
+    <p>If you don't have JavaScript enabled for accessibility reasons
+    then I'd recommend familiarising yourself with
+    <a href="http://www.w3.org/WAI/intro/aria.php">W3C's ARIA
+    (Accessible Rich Internet Applications)</a> standards to which Disco
+    DJ adheres. You should be able to get an ARIA compatible browser for
+    free which will make Disco DJ accessible to you.
+  </noscript>
+</body>
 </html>
