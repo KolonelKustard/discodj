@@ -9,9 +9,6 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
-import com.google.inject.servlet.ServletModule;
-import com.totalchange.discodj.web.server.IndexingServlet;
-import com.totalchange.discodj.web.server.MediaServlet;
 
 @WebListener
 public class BootstrapListener extends GuiceServletContextListener {
@@ -23,14 +20,7 @@ public class BootstrapListener extends GuiceServletContextListener {
     static {
         logger.trace("Creating Guice injector");
         discoDjModule = new DiscoDjModule();
-        injector = Guice.createInjector(discoDjModule,
-            new DiscoDjConfigurationModule(), new ServletModule() {
-                @Override
-                protected void configureServlets() {
-                    serve("/indexer/*").with(IndexingServlet.class);
-                    serve("/media/*").with(MediaServlet.class);
-                }
-            });
+        injector = Guice.createInjector(discoDjModule, new DiscoDjConfigurationModule());
         logger.trace("Created Guice injector {}", injector);
     }
 
