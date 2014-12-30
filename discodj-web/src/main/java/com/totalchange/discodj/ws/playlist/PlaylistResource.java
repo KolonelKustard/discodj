@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.totalchange.discodj.media.Media;
 import com.totalchange.discodj.queue.PlaylistQueue;
-import com.totalchange.discodj.web.shared.dj.DjMedia;
+import com.totalchange.discodj.ws.DjMedia;
 import com.totalchange.discodj.ws.search.SearchResource;
 
 @Singleton

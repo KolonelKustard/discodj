@@ -17,7 +17,7 @@ package com.totalchange.discodj.ws.search;
 
 import java.util.List;
 
-import com.totalchange.discodj.web.shared.dj.DjMedia;
+import com.totalchange.discodj.ws.DjMedia;
 
 public class SearchResult {
     private int page;

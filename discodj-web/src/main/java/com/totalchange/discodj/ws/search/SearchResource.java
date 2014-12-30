@@ -34,7 +34,7 @@ import com.totalchange.discodj.queue.PlaylistQueue;
 import com.totalchange.discodj.search.SearchProvider;
 import com.totalchange.discodj.search.SearchQuery;
 import com.totalchange.discodj.search.SearchResults;
-import com.totalchange.discodj.web.shared.dj.DjMedia;
+import com.totalchange.discodj.ws.DjMedia;
 
 @Singleton
 @Path("search")

@@ -2,7 +2,7 @@ package com.totalchange.discodj.ws.playlist;
 
 import java.util.List;
 
-import com.totalchange.discodj.web.shared.dj.DjMedia;
+import com.totalchange.discodj.ws.DjMedia;
 
 public class PlaylistResult {
     private DjMedia nowPlaying;
