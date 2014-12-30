@@ -73,4 +73,33 @@ public class PlaylistResource {
         queue.moveDown(id);
         return true;
     }
+
+    @GET
+    @Path("next")
+    @Produces(MediaType.APPLICATION_JSON)
+    public PlaylistNext next() {
+        logger.trace("Fetching next song to play from playlist");
+        PlaylistNext result = new PlaylistNext();
+
+        Media media = queue.pop();
+
+        if (media == null) {
+            result.setQueueEmpty(true);
+            return result;
+        }
+        result.setQueueEmpty(false);
+
+        result.setType(PlaylistNext.MediaType.Audio);
+        if (media.getId().toLowerCase().endsWith("mp4")) {
+            // TODO Improve crude type detection
+            result.setType(PlaylistNext.MediaType.Video);
+        }
+
+        result.setArtist(media.getArtist());
+        result.setTitle(media.getTitle());
+        result.setRequestedBy(media.getRequestedBy());
+
+        logger.trace("Returning next song {}", result);
+        return result;
+    }
 }
