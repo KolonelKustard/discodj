@@ -95,6 +95,7 @@ public class PlaylistResource {
             result.setType(PlaylistNext.MediaType.Video);
         }
 
+        result.setId(media.getId());
         result.setArtist(media.getArtist());
         result.setTitle(media.getTitle());
         result.setRequestedBy(media.getRequestedBy());

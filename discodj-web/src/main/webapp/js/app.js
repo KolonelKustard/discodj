@@ -17,6 +17,9 @@ discoDjApp.config(["$routeProvider",
       when("/playlist", {
         templateUrl: "partials/playlist.html",
       }).
+      when("/player", {
+        templateUrl: "partials/player.html",
+      }).
       otherwise({
         redirectTo: "/search"
       }

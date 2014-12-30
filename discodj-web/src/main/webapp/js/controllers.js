@@ -111,3 +111,27 @@ discoDjControllers.controller("PlaylistCtrl", ["$scope", "$location", "$routePar
     }
   }
 ]);
+
+discoDjControllers.controller("PlayerCtrl", ["$scope", "Playlist",
+  function($scope, Playlist) {
+    $scope.urls = {
+      videoUrl: null,
+      audioUrl: null
+    };
+
+    var playNext = function() {
+      $scope.nowPlaying = Playlist.next(function(next) {
+        $scope.urls.videoUrl = null;
+        $scope.urls.audioUrl = null;
+        if (!next.queueEmpty) {
+          if (next.type == "Video") {
+            $scope.urls.videoUrl = "./media?id=" + encodeURIComponent(next.id);
+          } else {
+            $scope.urls.audioUrl = "./media?id=" + encodeURIComponent(next.id);
+          }
+        }
+      });
+    }
+    playNext();
+  }
+]);
