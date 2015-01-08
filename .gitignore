@@ -23,6 +23,7 @@
 /discodj-web/target
 /discodj-web/node_modules
 /discodj-web/src/main/webapp/bower_components
+/discodj-web/src/main/webapp/dist
 /discodj-web/.settings
 /discodj-web/.classpath
 /discodj-web/.project
