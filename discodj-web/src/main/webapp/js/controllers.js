@@ -1,5 +1,8 @@
 "use strict";
 
+require("angular");
+require("./services.js");
+
 var discoDjControllers = angular.module('discoDjControllers', []);
 
 discoDjControllers.controller("SearchCtrl", ["$scope", "$routeParams", "$route", "$location", "Search", "Playlist",

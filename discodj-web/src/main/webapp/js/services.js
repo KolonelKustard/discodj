@@ -1,5 +1,8 @@
 "use strict";
 
+require("angular");
+require("angular-resource");
+
 var discoDjServices = angular.module("discoDjServices", ["ngResource"]);
 
 discoDjServices.factory("Search", ["$resource",

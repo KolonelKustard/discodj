@@ -1,5 +1,13 @@
 "use strict";
 
+window.jQuery = require("jquery");
+require("bootstrap");
+require("angular");
+require("angular-route");
+require("../bower_components/checklist-model/checklist-model.js");
+require("./services.js");
+require("./controllers.js");
+
 var discoDjApp = angular.module("discoDjApp", [
   "ngRoute",
   "checklist-model",
