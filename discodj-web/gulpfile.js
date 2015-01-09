@@ -13,6 +13,10 @@ gulp.task("browserify", function () {
     .pipe(gulp.dest("./src/main/webapp/dist"));
 });
 
+gulp.task("watch", function() {
+  gulp.watch("./src/main/webapp/js/**/*.js", ["browserify"]);
+});
+
 gulp.task("test", function() {
 });
 
