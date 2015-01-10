@@ -1,6 +1,7 @@
 var gulp = require("gulp");
 var browserify = require("browserify");
 var transform = require("vinyl-transform");
+var del = require("del");
 
 gulp.task("browserify", function () {
   var browserified = transform(function(filename) {
@@ -15,6 +16,10 @@ gulp.task("browserify", function () {
 
 gulp.task("watch", function() {
   gulp.watch("./src/main/webapp/js/**/*.js", ["browserify"]);
+});
+
+gulp.task("clean", function() {
+  del(["./src/main/webapp/dist"]);
 });
 
 gulp.task("test", function() {

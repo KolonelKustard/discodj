@@ -21,6 +21,7 @@
 /discodj-xuggler/.project
 
 /discodj-web/target
+/discodj-web/node
 /discodj-web/node_modules
 /discodj-web/src/main/webapp/bower_components
 /discodj-web/src/main/webapp/dist
