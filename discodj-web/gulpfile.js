@@ -7,6 +7,8 @@ var concat = require("gulp-concat");
 var exorcist = require("exorcist");
 var uglify = require("gulp-uglify");
 var del = require("del");
+var less = require("gulp-less");
+var minifyCss = require("gulp-minify-css");
 
 gulp.task("scripts", function () {
   var browserified = transform(function(filename) {
@@ -34,8 +36,16 @@ gulp.task("scripts", function () {
     .pipe(gulp.dest("./src/main/webapp/dist"));
 });
 
+gulp.task("less", function() {
+  return gulp.src(["./src/main/webapp/less/discodj.less"])
+    .pipe(less())
+    .pipe(minifyCss())
+    .pipe(gulp.dest("./src/main/webapp/dist"));
+});
+
 gulp.task("watch", function() {
   gulp.watch("./src/main/webapp/js/**/*.js", ["scripts"]);
+  gulp.watch("./src/main/webapp/less/**/*.less", ["less"]);
 });
 
 gulp.task("clean", function() {
@@ -45,5 +55,5 @@ gulp.task("clean", function() {
 gulp.task("test", function() {
 });
 
-gulp.task("default", ["scripts"], function() {
+gulp.task("default", ["scripts", "less"], function() {
 });
