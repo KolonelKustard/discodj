@@ -180,6 +180,13 @@
       <version>2.13</version>
     </dependency>
 
+    <!-- Servlicle for decent file transfers -->
+    <dependency>
+      <groupId>com.totalchange.servlicle</groupId>
+      <artifactId>servlicle</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+
     <!-- Testing -->
     <dependency>
       <groupId>junit</groupId>

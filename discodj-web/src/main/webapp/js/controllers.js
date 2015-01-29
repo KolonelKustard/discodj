@@ -122,15 +122,23 @@ discoDjControllers.controller("PlayerCtrl", ["$scope", "Playlist",
       audioUrl: null
     };
 
+    var playVideo = function(videoId) {
+      $scope.urls.videoUrl = "./media?id=" + encodeURIComponent(videoId);
+    }
+
+    var playAudio = function(audioId) {
+      $scope.urls.audioUrl = "./media?id=" + encodeURIComponent(audioId);
+    }
+
     var playNext = function() {
       $scope.nowPlaying = Playlist.next(function(next) {
         $scope.urls.videoUrl = null;
         $scope.urls.audioUrl = null;
         if (!next.queueEmpty) {
           if (next.type == "Video") {
-            $scope.urls.videoUrl = "./media?id=" + encodeURIComponent(next.id);
+            playVideo(next.id);
           } else {
-            $scope.urls.audioUrl = "./media?id=" + encodeURIComponent(next.id);
+            playAudio(next.id);
           }
         }
       });
