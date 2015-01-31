@@ -6,8 +6,12 @@ import com.xuggle.xuggler.IError;
 final class XugglerException extends CatalogueException {
     private static final long serialVersionUID = 1L;
 
-    private XugglerException(String msg) {
+    XugglerException(String msg) {
         super(msg);
+    }
+
+    XugglerException(Throwable cause) {
+        super(cause);
     }
 
     static void throwIfInError(int errorCode) throws XugglerException {

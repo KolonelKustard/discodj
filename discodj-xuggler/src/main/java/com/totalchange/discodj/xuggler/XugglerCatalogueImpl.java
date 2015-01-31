@@ -1,10 +1,8 @@
 package com.totalchange.discodj.xuggler;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -61,17 +59,35 @@ public final class XugglerCatalogueImpl implements Catalogue {
     private Media makeMedia(String filename) throws XugglerException {
         File file = new File(filename);
 
-        IContainer container = IContainer.make();
-        XugglerException.throwIfInError(container.open(filename,
-                IContainer.Type.READ, null));
-        try {
-            IMetaData metadata = container.getMetaData();
-            logger.trace("Got Xuggler metadata: {}", metadata);
-            return new XugglerMediaImpl(filename, file.lastModified(), metadata);
-        } finally {
-            logger.trace("Closing Xuggler container");
-            XugglerException.throwIfInError(container.close());
+        if (!isBeneathParent(root, file)) {
+            throw new XugglerException(file + " is not a child of " + root);
         }
+
+        IContainer container = IContainer.make();
+        try {
+            XugglerException.throwIfInError(container.open(
+                    file.getCanonicalPath(), IContainer.Type.READ, null));
+            try {
+                IMetaData metadata = container.getMetaData();
+                logger.trace("Got Xuggler metadata: {}", metadata);
+                return new XugglerMediaImpl(file, metadata);
+            } finally {
+                logger.trace("Closing Xuggler container");
+                XugglerException.throwIfInError(container.close());
+            }
+        } catch (IOException ioEx) {
+            throw new XugglerException(ioEx);
+        }
+    }
+
+    private boolean isBeneathParent(File parent, File file) {
+        File dir = file;
+        while ((dir = dir.getParentFile()) != null) {
+            if (dir.equals(parent)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -114,10 +130,5 @@ public final class XugglerCatalogueImpl implements Catalogue {
                     ioEx);
             return Collections.emptyList();
         }
-    }
-
-    @Override
-    public InputStream getMediaData(Media media) throws IOException {
-        return new FileInputStream(media.getId());
     }
 }

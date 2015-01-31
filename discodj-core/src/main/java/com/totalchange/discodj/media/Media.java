@@ -1,5 +1,6 @@
 package com.totalchange.discodj.media;
 
+import java.io.File;
 import java.util.Date;
 
 public interface Media {
@@ -11,4 +12,5 @@ public interface Media {
     int getYear();
     String getRequestedBy();
     String getTitle();
+    File getFile();
 }

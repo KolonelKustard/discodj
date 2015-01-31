@@ -1,7 +1,9 @@
 package com.totalchange.discodj.search.solr;
 
+import java.io.File;
 import java.util.Date;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.solr.common.SolrDocument;
 
 import com.totalchange.discodj.media.AbstractMedia;
@@ -51,6 +53,12 @@ final class SolrMediaImpl extends AbstractMedia {
     @Override
     public String getTitle() {
         return (String) doc.get(SolrSearchProviderImpl.F_TITLE);
+    }
+
+    @Override
+    public File getFile() {
+        throw new NotImplementedException("File's not available from searches"
+                + ", fetch media again from catalogue");
     }
 
     @Override
