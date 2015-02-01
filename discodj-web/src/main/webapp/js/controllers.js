@@ -115,8 +115,8 @@ discoDjControllers.controller("PlaylistCtrl", ["$scope", "$location", "$routePar
   }
 ]);
 
-discoDjControllers.controller("PlayerCtrl", ["$scope", "Playlist",
-  function($scope, Playlist) {
+discoDjControllers.controller("PlayerCtrl", ["$scope", "$interval", "Playlist",
+  function($scope, $interval, Playlist) {
     var videoPlayer = angular.element("video");
     var audioPlayer = angular.element("audio");
 
@@ -125,14 +125,18 @@ discoDjControllers.controller("PlayerCtrl", ["$scope", "Playlist",
       videoPlayer.attr("src", "./media?id=" + encodeURIComponent(videoId));
       videoPlayer.get(0).load();
       videoPlayer.get(0).play();
-    }
+    };
 
     var playAudio = function(audioId) {
       $scope.audioPlayerVisible = true;
       audioPlayer.attr("src", "./media?id=" + encodeURIComponent(audioId));
       audioPlayer.get(0).load();
       audioPlayer.get(0).play();
-    }
+    };
+
+    var playingNowt = function() {
+      
+    };
 
     var playNext = function() {
       $scope.videoPlayerVisible = false;
@@ -146,13 +150,37 @@ discoDjControllers.controller("PlayerCtrl", ["$scope", "Playlist",
           } else {
             playAudio(next.id);
           }
+        } else {
+          playingNowt();
         }
         $scope.loading = false;
       });
-    }
+    };
 
-    videoPlayer.bind("ended", playNext);
-    audioPlayer.bind("ended", playNext);
+    var playNextIfNotLoadingOrPlayingAlready = function() {
+      if (!$scope.loading && !isSomethingPlaying()) {
+        playNext();
+      }
+    };
+
+    var isSomethingPlaying = function() {
+      if (audioPlayer.attr("src") && !audioPlayer.get(0).ended && !audioPlayer.get(0).error) {
+        return true;
+      }
+      if (videoPlayer.attr("src") && !videoPlayer.get(0).ended && !videoPlayer.get(0).error) {
+        return true;
+      }
+      return false;
+    };
+
+    videoPlayer.bind("ended", playNextIfNotLoadingOrPlayingAlready);
+    audioPlayer.bind("ended", playNextIfNotLoadingOrPlayingAlready);
+
+    var stop = $interval(playNextIfNotLoadingOrPlayingAlready, 200);
+
+    $scope.$on("$destroy", function() {
+      $interval.cancel(stop);
+    });
 
     // Init by loading next
     playNext();
