@@ -117,23 +117,29 @@ discoDjControllers.controller("PlaylistCtrl", ["$scope", "$location", "$routePar
 
 discoDjControllers.controller("PlayerCtrl", ["$scope", "Playlist",
   function($scope, Playlist) {
-    $scope.urls = {
-      videoUrl: null,
-      audioUrl: null
-    };
+    var videoPlayer = angular.element("video");
+    var audioPlayer = angular.element("audio");
 
     var playVideo = function(videoId) {
-      $scope.urls.videoUrl = "./media?id=" + encodeURIComponent(videoId);
+      $scope.videoPlayerVisible = true;
+      videoPlayer.attr("src", "./media?id=" + encodeURIComponent(videoId));
+      videoPlayer.get(0).load();
+      videoPlayer.get(0).play();
     }
 
     var playAudio = function(audioId) {
-      $scope.urls.audioUrl = "./media?id=" + encodeURIComponent(audioId);
+      $scope.audioPlayerVisible = true;
+      audioPlayer.attr("src", "./media?id=" + encodeURIComponent(audioId));
+      audioPlayer.get(0).load();
+      audioPlayer.get(0).play();
     }
 
     var playNext = function() {
+      $scope.videoPlayerVisible = false;
+      $scope.audioPlayerVisible = false;
+      $scope.loading = true;
+
       $scope.nowPlaying = Playlist.next(function(next) {
-        $scope.urls.videoUrl = null;
-        $scope.urls.audioUrl = null;
         if (!next.queueEmpty) {
           if (next.type == "Video") {
             playVideo(next.id);
@@ -141,8 +147,14 @@ discoDjControllers.controller("PlayerCtrl", ["$scope", "Playlist",
             playAudio(next.id);
           }
         }
+        $scope.loading = false;
       });
     }
+
+    videoPlayer.bind("ended", playNext);
+    audioPlayer.bind("ended", playNext);
+
+    // Init by loading next
     playNext();
   }
 ]);
