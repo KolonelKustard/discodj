@@ -1,9 +1,11 @@
 package com.totalchange.discodj.media;
 
+import java.io.File;
 import java.util.Date;
 
 public class GenericMediaBuilder {
     private String id;
+    private File file;
     private Date lastModified;
     private String artist;
     private String album;
@@ -14,6 +16,10 @@ public class GenericMediaBuilder {
 
     public GenericMediaBuilder withId(String id) {
         this.id = id;
+        return this;
+    }
+
+    public GenericMediaBuilder withFile(File file) {
         return this;
     }
 
@@ -53,7 +59,7 @@ public class GenericMediaBuilder {
     }
 
     public Media build() {
-        return new GenericMedia(id, lastModified, artist, album, genre, year,
-                requestedBy, title);
+        return new GenericMedia(id, file, lastModified, artist, album, genre,
+                year, requestedBy, title);
     }
 }

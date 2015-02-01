@@ -1,9 +1,11 @@
 package com.totalchange.discodj.media;
 
+import java.io.File;
 import java.util.Date;
 
 class GenericMedia extends AbstractMedia {
     private String id;
+    private File file;
     private Date lastModified;
     private String artist;
     private String album;
@@ -12,11 +14,12 @@ class GenericMedia extends AbstractMedia {
     private String requestedBy;
     private String title;
 
-    GenericMedia(String id, Date lastModified, String artist,
+    GenericMedia(String id, File file, Date lastModified, String artist,
             String album, String genre, int year, String requestedBy,
             String title) {
         super();
         this.id = id;
+        this.file = file;
         this.lastModified = lastModified;
         this.artist = artist;
         this.album = album;
@@ -64,6 +67,11 @@ class GenericMedia extends AbstractMedia {
     @Override
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public File getFile() {
+        return file;
     }
 
     @Override
