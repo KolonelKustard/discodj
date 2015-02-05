@@ -1,4 +1,5 @@
 @import "../bower_components/bootstrap/less/bootstrap.less";
+@import "./elements.less";
 
 .player video {
   width: 100%;
@@ -8,4 +9,16 @@
 .player audio {
   width: 100%;
   height: 100%;
+}
+
+.nowPlaying {
+  position: absolute;
+  width: 94%;
+  left: 3%;
+  bottom: 5%;
+  background-color: rgba(37, 42, 58, 0.6);
+  color: #FFF;
+  .rounded(5px);
+  font-size: 3em;
+  padding: 0.5em 1em;
 }

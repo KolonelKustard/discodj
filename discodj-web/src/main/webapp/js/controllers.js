@@ -135,7 +135,7 @@ discoDjControllers.controller("PlayerCtrl", ["$scope", "$interval", "Playlist",
     };
 
     var playingNowt = function() {
-      
+      $scope.media = null;
     };
 
     var playNext = function() {
@@ -150,6 +150,7 @@ discoDjControllers.controller("PlayerCtrl", ["$scope", "$interval", "Playlist",
           } else {
             playAudio(next.id);
           }
+          $scope.media = next;
         } else {
           playingNowt();
         }

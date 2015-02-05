@@ -1,4 +1,8 @@
 <div ng-controller="PlayerCtrl" class="player">
-  <video></video>
-  <audio></audio>
+  <video ng-show="videoPlayerVisible"></video>
+  <audio ng-show="audioPlayerVisible"></audio>
+  <div class="nowPlaying">
+    <p ng-show="media">{{media.title}} by {{media.artist}}</p>
+    <p ng-hide="media">Waiting...</p>
+  </div>
 </div>
