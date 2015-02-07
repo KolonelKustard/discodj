@@ -5,8 +5,8 @@ module.exports.search = function(allMedia, params) {
   var page = (params && params.page) ? params.page : 1;
 
   return {
-    artistFacets: [],
-    albumFacets: [],
+    artistFacets: workOutFacets(subset, "artist", null),
+    albumFacets: workOutFacets(subset, "album", null),
     results: subArr(subset, (page - 1) * PAGE_SIZE, PAGE_SIZE),
     page: page,
     numPages: Math.ceil(subset.length / PAGE_SIZE)
@@ -49,4 +49,39 @@ var subArr = function(array, start, size) {
     }
   }
   return subset;
+};
+
+var workOutFacets = function(mediaList, propertyName, selectedFacets) {
+  var facets = [];
+  for (var num = 0; num < mediaList.length; num++) {
+    createOrIncrementFacet(mediaList[num], propertyName, facets);
+  }
+  return facets;
+};
+
+var createOrIncrementFacet = function(media, propertyName, facets) {
+  var id = propertyName + ":" + media[propertyName];
+  var index = findFacet(facets, id);
+  if (index > -1) {
+    facets[index].numMatches++;
+  } else {
+    facets.push(makeFacet(media, propertyName, id));
+  }
+}
+
+var findFacet = function(facets, id) {
+  for (var num = 0; num < facets.length; num++) {
+    if (facets[num].id == id) {
+      return num;
+    }
+  }
+  return -1;
+}
+
+var makeFacet = function(media, propertyName, id) {
+  return {
+    id: id,
+    name: media[propertyName],
+    numMatches: 1
+  };
 };
