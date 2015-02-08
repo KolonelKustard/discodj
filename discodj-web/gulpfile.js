@@ -1,5 +1,6 @@
 var gulp = require("gulp");
 var browserify = require("browserify");
+var aliasify = require("aliasify");
 var transform = require("vinyl-transform");
 var ngHtml2Js = require("gulp-ng-html2js");
 var streamqueue = require("streamqueue");
@@ -11,8 +12,17 @@ var less = require("gulp-less");
 var minifyCss = require("gulp-minify-css");
 
 gulp.task("scripts", function () {
+  aliasify = aliasify.configure({
+    aliases: {
+      "./services.js": "./src/main/webapp/stub/services-stubs.js"
+    },
+    configDir: __dirname,
+    verbose: true
+  });
+
+  var b = browserify({debug: false}).transform(aliasify);
   var browserified = transform(function(filename) {
-    var b = browserify({entries: [filename], debug: false});
+    b.add(filename);
     return b.bundle();
   });
 
@@ -44,7 +54,7 @@ gulp.task("less", function() {
 });
 
 gulp.task("watch", function() {
-  gulp.watch("./src/main/webapp/js/**/*.js", ["scripts"]);
+  gulp.watch(["./src/main/webapp/js/**/*.js", "./src/main/webapp/stub/**/*.js"], ["scripts"]);
   gulp.watch("./src/main/webapp/less/**/*.less", ["less"]);
 });
 
