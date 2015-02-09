@@ -102,6 +102,17 @@
               <arguments>--no-color</arguments>
             </configuration>
           </execution>
+
+          <execution>
+            <id>gulp site</id>
+            <phase>site</phase>
+            <goals>
+              <goal>gulp</goal>
+            </goals>
+            <configuration>
+              <arguments>site --stubbed=true --no-color</arguments>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
     </plugins>

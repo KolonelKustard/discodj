@@ -1,4 +1,5 @@
 var gulp = require("gulp");
+var minimist = require("minimist");
 var browserify = require("browserify");
 var aliasify = require("aliasify");
 var transform = require("vinyl-transform");
@@ -11,21 +12,33 @@ var del = require("del");
 var less = require("gulp-less");
 var minifyCss = require("gulp-minify-css");
 
-gulp.task("scripts", function () {
-  return processScripts();
+var locs = {
+  dest: "./src/main/webapp/dist",
+  siteDest: "./target/site/demo"
+};
+
+var options = minimist(process.argv.slice(2), {
+  boolean: "stubbed",
+  defaults: {
+    stubbed: false
+  }
 });
 
-gulp.task("scriptsStubbed", function() {
-  return processScripts({
-    "./services.js": "./src/main/webapp/stub/services-stubs.js"
-  });
+gulp.task("scripts", function () {
+  if (options.stubbed) {
+    return processScripts({
+      "./services.js": "./src/main/webapp/stub/services-stubs.js"
+    });
+  } else {
+    return processScripts();
+  }
 });
 
 gulp.task("less", function() {
   return gulp.src(["./src/main/webapp/less/discodj.less"])
     .pipe(less())
     .pipe(minifyCss())
-    .pipe(gulp.dest("./src/main/webapp/dist"));
+    .pipe(gulp.dest(locs.dest));
 });
 
 gulp.task("watch", function() {
@@ -34,16 +47,21 @@ gulp.task("watch", function() {
 });
 
 gulp.task("clean", function() {
-  del(["./src/main/webapp/dist"]);
+  del([locs.dest]);
 });
 
 gulp.task("test", function() {
 });
 
-gulp.task("stubbed", ["scriptsStubbed", "less"], function() {
+gulp.task("default", ["scripts", "less"], function() {
 });
 
-gulp.task("default", ["scripts", "less"], function() {
+gulp.task("site", ["default"], function() {
+  gulp.src(["./src/main/webapp/index.html"])
+    .pipe(gulp.dest(locs.siteDest));
+
+  gulp.src([locs.dest + "/**/*"])
+    .pipe(gulp.dest(locs.siteDest + "/dist"));
 });
 
 var processScripts = function(aliases) {
@@ -62,7 +80,7 @@ var processScripts = function(aliases) {
   });
 
   var exorcistified = transform(function() {
-    return exorcist("./src/main/webapp/dist/discodj.min.js.map");
+    return exorcist(locs.dest + "/discodj.min.js.map");
   });
 
   var app = gulp.src(["./src/main/webapp/js/app.js"])
@@ -78,5 +96,5 @@ var processScripts = function(aliases) {
     .pipe(exorcistified)
     .pipe(concat("discodj.min.js"))
     .pipe(uglify())
-    .pipe(gulp.dest("./src/main/webapp/dist"));
+    .pipe(gulp.dest(locs.dest));
 }
