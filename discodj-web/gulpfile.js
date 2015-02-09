@@ -12,15 +12,50 @@ var less = require("gulp-less");
 var minifyCss = require("gulp-minify-css");
 
 gulp.task("scripts", function () {
-  aliasify = aliasify.configure({
-    aliases: {
-      "./services.js": "./src/main/webapp/stub/services-stubs.js"
-    },
-    configDir: __dirname,
-    verbose: true
-  });
+  return processScripts();
+});
 
-  var b = browserify({debug: false}).transform(aliasify);
+gulp.task("scriptsStubbed", function() {
+  return processScripts({
+    "./services.js": "./src/main/webapp/stub/services-stubs.js"
+  });
+});
+
+gulp.task("less", function() {
+  return gulp.src(["./src/main/webapp/less/discodj.less"])
+    .pipe(less())
+    .pipe(minifyCss())
+    .pipe(gulp.dest("./src/main/webapp/dist"));
+});
+
+gulp.task("watch", function() {
+  gulp.watch(["./src/main/webapp/js/**/*.js", "./src/main/webapp/stub/**/*.js"], ["scripts"]);
+  gulp.watch("./src/main/webapp/less/**/*.less", ["less"]);
+});
+
+gulp.task("clean", function() {
+  del(["./src/main/webapp/dist"]);
+});
+
+gulp.task("test", function() {
+});
+
+gulp.task("stubbed", ["scriptsStubbed", "less"], function() {
+});
+
+gulp.task("default", ["scripts", "less"], function() {
+});
+
+var processScripts = function(aliases) {
+  var b = browserify({debug: false});
+  if (aliases) {
+    var a = aliasify.configure({
+      aliases: aliases,
+      configDir: __dirname,
+      verbose: true
+    });
+    b.transform(a);
+  }
   var browserified = transform(function(filename) {
     b.add(filename);
     return b.bundle();
@@ -44,26 +79,4 @@ gulp.task("scripts", function () {
     .pipe(concat("discodj.min.js"))
     .pipe(uglify())
     .pipe(gulp.dest("./src/main/webapp/dist"));
-});
-
-gulp.task("less", function() {
-  return gulp.src(["./src/main/webapp/less/discodj.less"])
-    .pipe(less())
-    .pipe(minifyCss())
-    .pipe(gulp.dest("./src/main/webapp/dist"));
-});
-
-gulp.task("watch", function() {
-  gulp.watch(["./src/main/webapp/js/**/*.js", "./src/main/webapp/stub/**/*.js"], ["scripts"]);
-  gulp.watch("./src/main/webapp/less/**/*.less", ["less"]);
-});
-
-gulp.task("clean", function() {
-  del(["./src/main/webapp/dist"]);
-});
-
-gulp.task("test", function() {
-});
-
-gulp.task("default", ["scripts", "less"], function() {
-});
+}
