@@ -1,5 +1,7 @@
 var gulp = require("gulp");
+var minimist = require("minimist");
 var browserify = require("browserify");
+var aliasify = require("aliasify");
 var transform = require("vinyl-transform");
 var ngHtml2Js = require("gulp-ng-html2js");
 var streamqueue = require("streamqueue");
@@ -10,14 +12,64 @@ var del = require("del");
 var less = require("gulp-less");
 var minifyCss = require("gulp-minify-css");
 
+var options = minimist(process.argv.slice(2), {
+  "string": ["target"],
+  "boolean": ["stubbed"],
+  "default": {
+    "target": "./src/main/webapp/dist",
+    "stubbed": false
+  }
+});
+
 gulp.task("scripts", function () {
+  if (options.stubbed) {
+    return processScripts({
+      "./services.js": "./src/main/webapp/stub/services-stubs.js"
+    });
+  } else {
+    return processScripts();
+  }
+});
+
+gulp.task("less", function() {
+  return gulp.src(["./src/main/webapp/less/discodj.less"])
+    .pipe(less())
+    .pipe(minifyCss())
+    .pipe(gulp.dest(options.target));
+});
+
+gulp.task("watch", function() {
+  gulp.watch(["./src/main/webapp/js/**/*.js", "./src/main/webapp/stub/**/*.js"], ["scripts"]);
+  gulp.watch("./src/main/webapp/less/**/*.less", ["less"]);
+});
+
+gulp.task("clean", function() {
+  del([options.target]);
+});
+
+gulp.task("test", function() {
+});
+
+gulp.task("default", ["scripts", "less"], function() {
+});
+
+var processScripts = function(aliases) {
+  var b = browserify({debug: false});
+  if (aliases) {
+    var a = aliasify.configure({
+      aliases: aliases,
+      configDir: __dirname,
+      verbose: true
+    });
+    b.transform(a);
+  }
   var browserified = transform(function(filename) {
-    var b = browserify({entries: [filename], debug: false});
+    b.add(filename);
     return b.bundle();
   });
 
   var exorcistified = transform(function() {
-    return exorcist("./src/main/webapp/dist/discodj.min.js.map");
+    return exorcist(options.target + "/discodj.min.js.map");
   });
 
   var app = gulp.src(["./src/main/webapp/js/app.js"])
@@ -33,27 +85,5 @@ gulp.task("scripts", function () {
     .pipe(exorcistified)
     .pipe(concat("discodj.min.js"))
     .pipe(uglify())
-    .pipe(gulp.dest("./src/main/webapp/dist"));
-});
-
-gulp.task("less", function() {
-  return gulp.src(["./src/main/webapp/less/discodj.less"])
-    .pipe(less())
-    .pipe(minifyCss())
-    .pipe(gulp.dest("./src/main/webapp/dist"));
-});
-
-gulp.task("watch", function() {
-  gulp.watch("./src/main/webapp/js/**/*.js", ["scripts"]);
-  gulp.watch("./src/main/webapp/less/**/*.less", ["less"]);
-});
-
-gulp.task("clean", function() {
-  del(["./src/main/webapp/dist"]);
-});
-
-gulp.task("test", function() {
-});
-
-gulp.task("default", ["scripts", "less"], function() {
-});
+    .pipe(gulp.dest(options.target));
+}
