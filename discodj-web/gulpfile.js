@@ -12,15 +12,12 @@ var del = require("del");
 var less = require("gulp-less");
 var minifyCss = require("gulp-minify-css");
 
-var locs = {
-  dest: "./src/main/webapp/dist",
-  siteDest: "./target/site/demo"
-};
-
 var options = minimist(process.argv.slice(2), {
-  boolean: "stubbed",
-  defaults: {
-    stubbed: false
+  "string": ["target"],
+  "boolean": ["stubbed"],
+  "default": {
+    "target": "./src/main/webapp/dist",
+    "stubbed": false
   }
 });
 
@@ -38,7 +35,7 @@ gulp.task("less", function() {
   return gulp.src(["./src/main/webapp/less/discodj.less"])
     .pipe(less())
     .pipe(minifyCss())
-    .pipe(gulp.dest(locs.dest));
+    .pipe(gulp.dest(options.target));
 });
 
 gulp.task("watch", function() {
@@ -47,21 +44,13 @@ gulp.task("watch", function() {
 });
 
 gulp.task("clean", function() {
-  del([locs.dest]);
+  del([options.target]);
 });
 
 gulp.task("test", function() {
 });
 
 gulp.task("default", ["scripts", "less"], function() {
-});
-
-gulp.task("site", ["default"], function() {
-  gulp.src(["./src/main/webapp/index.html"])
-    .pipe(gulp.dest(locs.siteDest));
-
-  gulp.src([locs.dest + "/**/*"])
-    .pipe(gulp.dest(locs.siteDest + "/dist"));
 });
 
 var processScripts = function(aliases) {
@@ -80,7 +69,7 @@ var processScripts = function(aliases) {
   });
 
   var exorcistified = transform(function() {
-    return exorcist(locs.dest + "/discodj.min.js.map");
+    return exorcist(options.target + "/discodj.min.js.map");
   });
 
   var app = gulp.src(["./src/main/webapp/js/app.js"])
@@ -96,5 +85,5 @@ var processScripts = function(aliases) {
     .pipe(exorcistified)
     .pipe(concat("discodj.min.js"))
     .pipe(uglify())
-    .pipe(gulp.dest(locs.dest));
+    .pipe(gulp.dest(options.target));
 }

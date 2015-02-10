@@ -110,7 +110,7 @@
               <goal>gulp</goal>
             </goals>
             <configuration>
-              <arguments>site --stubbed=true --no-color</arguments>
+              <arguments>--stubbed=true --target=${project.reporting.outputDirectory}/demo/dist --no-color</arguments>
             </configuration>
           </execution>
         </executions>
