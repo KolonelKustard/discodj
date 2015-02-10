@@ -1,15 +1,15 @@
 var mediaStubs = require("./media-stubs.js");
 var mediaStubUtils = require("./media-stub-utils.js");
+var playlist = require("./playlist-stub.js");
 
 require("angular");
-require("angular-resource");
 
-var discoDjServices = angular.module("discoDjServices", ["ngResource"]);
+var discoDjServices = angular.module("discoDjServices", []);
 
-discoDjServices.factory("Search", ["$resource",
-  function($resource) {
+discoDjServices.factory("Search", [
+  function() {
     var query = function(params) {
-      return mediaStubUtils.search(mediaStubs, params);
+      return mediaStubUtils.search(mediaStubs, params, playlist.query().playlist);
     }
 
     return {
@@ -18,28 +18,44 @@ discoDjServices.factory("Search", ["$resource",
   }
 ]);
 
-discoDjServices.factory("Playlist", [ "$resource",
-  function($resource) {
-    return $resource("resources/playlist", {}, {
-      query : {
-        method : "GET"
+discoDjServices.factory("Playlist", [
+  function() {
+    return {
+      query: function(cb) {
+        var play = playlist.query();
+        if (cb) {
+          cb(play);
+        }
+        return play;
       },
-      add : {
-        method : "GET",
-        url : "resources/playlist/add"
+      add: function(media, cb) {
+        var ok = playlist.add(media.id, mediaStubs);
+        if (cb) {
+          cb(ok);
+        }
+        return ok;
       },
-      moveUp : {
-        method : "GET",
-        url : "resources/playlist/moveUp"
+      moveUp: function(media, cb) {
+        var ok = playlist.moveUp(media.id, mediaStubs);
+        if (cb) {
+          cb(ok);
+        }
+        return ok;
       },
-      moveDown : {
-        method : "GET",
-        url : "resources/playlist/moveDown"
+      moveDown: function(media, cb) {
+        var ok = playlist.moveDown(media.id, mediaStubs);
+        if (cb) {
+          cb(ok);
+        }
+        return ok;
       },
-      next : {
-        method : "GET",
-        url : "resources/playlist/next"
+      next: function(cb) {
+        var next = playlist.next();
+        if (cb) {
+          cb(next);
+        }
+        return next;
       }
-    });
+    };
   }
 ]);

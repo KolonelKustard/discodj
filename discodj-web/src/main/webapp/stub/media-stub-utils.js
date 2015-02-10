@@ -1,13 +1,15 @@
 var PAGE_SIZE = 10;
 
-module.exports.search = function(allMedia, params) {
+module.exports.search = function(allMedia, params, playlist) {
   var subset = search(allMedia, params);
   var page = (params && params.page) ? params.page : 1;
+
+  var results = subArr(subset, (page - 1) * PAGE_SIZE, PAGE_SIZE);
 
   return {
     artistFacets: workOutFacets(subset, "artist", null),
     albumFacets: workOutFacets(subset, "album", null),
-    results: subArr(subset, (page - 1) * PAGE_SIZE, PAGE_SIZE),
+    results: sortOutAlreadyPlayed(results, playlist),
     page: page,
     numPages: Math.ceil(subset.length / PAGE_SIZE)
   };
@@ -16,7 +18,6 @@ module.exports.search = function(allMedia, params) {
 var search = function(allMedia, params) {
   var keyword = (params && params.q) ? params.q : "";
   var facets = (params && params.facet) ? extractFacets(params.facet) : [];
-  console.log(facets);
   var subset = [];
   for (var num = 0; num < allMedia.length; num++) {
     var media = allMedia[num];
@@ -114,4 +115,16 @@ var makeFacet = function(media, propertyName, id) {
     name: media[propertyName],
     numMatches: 1
   };
+};
+
+var sortOutAlreadyPlayed = function(mediaList, playlist) {
+  mediaList.forEach(function(media) {
+    media.whenCanBePlayedAgain = 0;
+    playlist.forEach(function(played) {
+      if (played.id == media.id) {
+        media.whenCanBePlayedAgain = 1;
+      }
+    });
+  });
+  return mediaList;
 };
