@@ -25,6 +25,8 @@
 
     <slf4j.version>1.7.10</slf4j.version>
     <logback.version>1.1.2</logback.version>
+
+    <github.global.server>github</github.global.server>
   </properties>
 
   <issueManagement>
@@ -75,6 +77,7 @@
           <target>1.7</target>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
@@ -96,6 +99,30 @@
             <version>1.6</version>
           </dependency>
         </dependencies>
+        <configuration>
+          <skipDeploy>true</skipDeploy>
+        </configuration>
+      </plugin>
+
+      <!-- Configures deploying site to gh-pages -->
+      <plugin>
+        <groupId>com.github.github</groupId>
+        <artifactId>site-maven-plugin</artifactId>
+        <version>0.11</version>
+        <configuration>
+          <message>Creating site for ${project.artifactId}, ${project.version}</message>
+          <!-- this does the trick to place every module in the correct subfolder -->
+          <path>${project.distributionManagement.site.url}</path>
+          <merge>true</merge>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>site</goal>
+            </goals>
+            <phase>site-deploy</phase>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
@@ -161,4 +188,12 @@
   <reporting>
     <excludeDefaults>true</excludeDefaults>
   </reporting>
+
+  <distributionManagement>
+    <site>
+      <id>github</id>
+      <name>Deployment through GitHub's site deployment plugin</name>
+      <url>site</url>
+    </site>
+  </distributionManagement>
 </project>
