@@ -15,6 +15,11 @@
 /discodj-solr/.classpath
 /discodj-solr/.project
 
+/discodj-lucene/target
+/discodj-lucene/.settings
+/discodj-lucene/.classpath
+/discodj-lucene/.project
+
 /discodj-file-catalogue/target
 /discodj-file-catalogue/.settings
 /discodj-file-catalogue/.classpath
