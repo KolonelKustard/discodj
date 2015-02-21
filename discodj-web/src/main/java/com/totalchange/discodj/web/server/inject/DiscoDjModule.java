@@ -32,7 +32,7 @@ import com.totalchange.discodj.catalogue.Catalogue;
 import com.totalchange.discodj.queue.PlaylistQueue;
 import com.totalchange.discodj.search.SearchProvider;
 import com.totalchange.discodj.search.solr.SolrSearchProviderImpl;
-import com.totalchange.discodj.xuggler.XugglerCatalogueImpl;
+import com.totalchange.discodj.xuggler.FileTikaCatalogueImpl;
 
 public class DiscoDjModule extends AbstractModule implements AutoCloseable {
     private static Logger logger = LoggerFactory.getLogger(DiscoDjModule.class);
@@ -44,7 +44,7 @@ public class DiscoDjModule extends AbstractModule implements AutoCloseable {
     protected void configure() {
         logger.trace("Configuring disco dj Guice bindings");
         bind(SearchProvider.class).to(SolrSearchProviderImpl.class);
-        bind(Catalogue.class).to(XugglerCatalogueImpl.class);
+        bind(Catalogue.class).to(FileTikaCatalogueImpl.class);
         bind(PlaylistQueue.class);
         logger.trace("Configured disco dj Guice bindings");
     }
