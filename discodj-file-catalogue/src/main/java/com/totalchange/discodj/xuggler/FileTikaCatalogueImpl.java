@@ -18,6 +18,8 @@ package com.totalchange.discodj.xuggler;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -26,25 +28,26 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.tika.Tika;
+import org.apache.tika.io.TikaInputStream;
+import org.apache.tika.metadata.Metadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.totalchange.discodj.catalogue.Catalogue;
 import com.totalchange.discodj.media.Media;
 import com.totalchange.discodj.util.M3uPlaylist;
-import com.xuggle.xuggler.IContainer;
-import com.xuggle.xuggler.IMetaData;
 
-public final class XugglerCatalogueImpl implements Catalogue {
+public final class FileTikaCatalogueImpl implements Catalogue {
     private static final String[] SUPPORTED_FILE_EXTENSIONS = { ".mp3", ".mp4" };
     private static final String DEFAULT_PLAYLIST = "default.m3u";
 
     private static final Logger logger = LoggerFactory
-            .getLogger(XugglerCatalogueImpl.class);
+            .getLogger(FileTikaCatalogueImpl.class);
 
     private File root;
 
-    public XugglerCatalogueImpl(File root) throws FileNotFoundException {
+    public FileTikaCatalogueImpl(File root) throws FileNotFoundException {
         logger.trace("Creating new Xuggler catalogue for root {}", root);
 
         if (root == null) {
@@ -66,32 +69,28 @@ public final class XugglerCatalogueImpl implements Catalogue {
     }
 
     @Inject
-    public XugglerCatalogueImpl(@Named("catalogueRoot") String rootFilename)
+    public FileTikaCatalogueImpl(@Named("catalogueRoot") String rootFilename)
             throws FileNotFoundException {
         this(new File(rootFilename));
     }
 
-    private Media makeMedia(String filename) throws XugglerException {
+    private Media makeMedia(String filename) throws FileTikaException {
         File file = new File(filename);
 
         if (!isBeneathParent(root, file)) {
-            throw new XugglerException(file + " is not a child of " + root);
+            throw new FileTikaException(file + " is not a child of " + root);
         }
 
-        IContainer container = IContainer.make();
+        Tika tika = new Tika();
+        Metadata metadata = new Metadata();
         try {
-            XugglerException.throwIfInError(container.open(
-                    file.getCanonicalPath(), IContainer.Type.READ, null));
-            try {
-                IMetaData metadata = container.getMetaData();
-                logger.trace("Got Xuggler metadata: {}", metadata);
-                return new XugglerMediaImpl(file, metadata);
-            } finally {
-                logger.trace("Closing Xuggler container");
-                XugglerException.throwIfInError(container.close());
-            }
-        } catch (IOException ioEx) {
-            throw new XugglerException(ioEx);
+            InputStream in = TikaInputStream.get(file, metadata);
+            Reader reader = tika.parse(in, metadata);
+            in.close();
+            reader.close();
+            return new FileTikaMediaImpl(file, metadata);
+        } catch (Exception ex) {
+            throw new FileTikaException(ex);
         }
     }
 
@@ -111,7 +110,7 @@ public final class XugglerCatalogueImpl implements Catalogue {
     }
 
     @Override
-    public Media getMedia(String mediaId) throws XugglerException {
+    public Media getMedia(String mediaId) throws FileTikaException {
         return makeMedia(mediaId);
     }
 
@@ -131,7 +130,7 @@ public final class XugglerCatalogueImpl implements Catalogue {
             for (File media : files) {
                 try {
                     playlist.add(makeMedia(media.getCanonicalPath()));
-                } catch (XugglerException xEx) {
+                } catch (FileTikaException xEx) {
                     logger.info(
                             "Skipped adding item " + file
                                     + " to default playlist with error: "

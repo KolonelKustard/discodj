@@ -14,7 +14,7 @@
   <modules>
     <module>discodj-core</module>
     <module>discodj-solr</module>
-    <module>discodj-xuggler</module>
+    <module>discodj-file-catalogue</module>
     <module>discodj-web</module>
     <module>discodj-debian</module>
   </modules>
@@ -141,7 +141,7 @@
       </dependency>
       <dependency>
         <groupId>com.totalchange.discodj</groupId>
-        <artifactId>discodj-xuggler</artifactId>
+        <artifactId>discodj-file-catalogue</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

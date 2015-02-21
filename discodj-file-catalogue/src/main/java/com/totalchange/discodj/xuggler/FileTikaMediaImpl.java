@@ -19,10 +19,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
-import com.totalchange.discodj.media.AbstractMedia;
-import com.xuggle.xuggler.IMetaData;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.metadata.TikaCoreProperties;
+import org.apache.tika.metadata.XMPDM;
 
-final class XugglerMediaImpl extends AbstractMedia {
+import com.totalchange.discodj.media.AbstractMedia;
+
+final class FileTikaMediaImpl extends AbstractMedia {
     private String id;
     private File file;
     private Date lastModified;
@@ -33,22 +36,22 @@ final class XugglerMediaImpl extends AbstractMedia {
     private String requestedBy;
     private String title;
 
-    XugglerMediaImpl(File file, IMetaData md)
+    FileTikaMediaImpl(File file, Metadata md)
             throws IOException {
         this.file = file;
         this.id = file.getCanonicalPath();
         this.lastModified = new Date(file.lastModified());
 
-        artist = md.getValue("artist");
-        album = md.getValue("album");
-        genre = md.getValue("genre");
+        artist = md.get(XMPDM.ARTIST);
+        album = md.get(XMPDM.ALBUM);
+        genre = md.get(XMPDM.GENRE);
         try {
-            year = Integer.parseInt(md.getValue("year"));
+            year = Integer.parseInt(md.get(XMPDM.RELEASE_DATE));
         } catch (NumberFormatException nfEx) {
             year = -1;
         }
-        requestedBy = md.getValue("comment");
-        title = md.getValue("title");
+        requestedBy = md.get(XMPDM.LOG_COMMENT);
+        title = md.get(TikaCoreProperties.TITLE);
     }
 
     @Override
@@ -98,6 +101,6 @@ final class XugglerMediaImpl extends AbstractMedia {
 
     @Override
     public String toString() {
-        return "XugglerMediaImpl [" + super.toString() + "]";
+        return "FileTikaMediaImpl [" + super.toString() + "]";
     }
 }
