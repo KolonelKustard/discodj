@@ -149,6 +149,11 @@
         <artifactId>discodj-web</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>com.totalchange.discodj</groupId>
+        <artifactId>discodj-debian-war</artifactId>
+        <version>${project.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>org.slf4j</groupId>
