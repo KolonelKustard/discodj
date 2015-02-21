@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.apache.tika.metadata.Metadata;
+import org.apache.tika.metadata.TikaCoreProperties;
+import org.apache.tika.metadata.XMPDM;
 
 import com.totalchange.discodj.media.AbstractMedia;
 
@@ -40,16 +42,16 @@ final class FileTikaMediaImpl extends AbstractMedia {
         this.id = file.getCanonicalPath();
         this.lastModified = new Date(file.lastModified());
 
-        artist = md.get("artist");
-        album = md.get("album");
-        genre = md.get("genre");
+        artist = md.get(XMPDM.ARTIST);
+        album = md.get(XMPDM.ALBUM);
+        genre = md.get(XMPDM.GENRE);
         try {
-            year = Integer.parseInt(md.get("year"));
+            year = Integer.parseInt(md.get(XMPDM.RELEASE_DATE));
         } catch (NumberFormatException nfEx) {
             year = -1;
         }
-        requestedBy = md.get("comment");
-        title = md.get("title");
+        requestedBy = md.get(XMPDM.LOG_COMMENT);
+        title = md.get(TikaCoreProperties.TITLE);
     }
 
     @Override
