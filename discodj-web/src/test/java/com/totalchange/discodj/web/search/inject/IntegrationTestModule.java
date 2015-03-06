@@ -32,23 +32,20 @@ import com.google.inject.name.Names;
 import com.totalchange.discodj.web.server.inject.DiscoDjConfigurationModule;
 
 public class IntegrationTestModule extends AbstractModule {
-    private static final File SOLR_HOME_SRC = new File(
-            "../discodj-solr/src/main/solr");
-    private static final File SOLR_HOME_DEST = new File(
-            "./target/integration-tests-solr-home");
+    private static final File SEARCH_INDEX_ROOT = new File(
+            "./target/integration-tests-search-index");
 
     private static final Logger logger = LoggerFactory
             .getLogger(IntegrationTestModule.class);
 
     @Override
     protected void configure() {
-        FileUtils.deleteQuietly(SOLR_HOME_DEST);
-        SOLR_HOME_DEST.mkdirs();
+        FileUtils.deleteQuietly(SEARCH_INDEX_ROOT);
+        SEARCH_INDEX_ROOT.mkdirs();
         try {
-            FileUtils.copyDirectory(SOLR_HOME_SRC, SOLR_HOME_DEST);
             bindConstant().annotatedWith(
-                    Names.named(DiscoDjConfigurationModule.SOLR_HOME)).to(
-                    SOLR_HOME_DEST.getCanonicalPath());
+                    Names.named(DiscoDjConfigurationModule.SEARCH_INDEX_ROOT))
+                    .to(SEARCH_INDEX_ROOT.getCanonicalPath());
         } catch (IOException ioEx) {
             throw new RuntimeException(ioEx);
         }

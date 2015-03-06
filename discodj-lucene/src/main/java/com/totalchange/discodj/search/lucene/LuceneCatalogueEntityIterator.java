@@ -48,16 +48,20 @@ public class LuceneCatalogueEntityIterator implements Iterator<CatalogueEntity> 
 
     @Override
     public CatalogueEntity next() throws SearchException {
-        ScoreDoc next = thisPage[nextOffset];
+        LuceneCatalogueEntity entity;
+        try {
+            ScoreDoc next = thisPage[nextOffset];
+            entity = new LuceneCatalogueEntity(searcher.doc(next.doc));
+        } catch (IOException ex) {
+            throw new SearchException(ex);
+        }
+
         nextOffset++;
         if (nextOffset >= thisPage.length) {
             grabNextPage();
         }
-        try {
-            return new LuceneCatalogueEntity(searcher.doc(next.doc));
-        } catch (IOException ex) {
-            throw new SearchException(ex);
-        }
+
+        return entity;
     }
 
     @Override
@@ -67,14 +71,15 @@ public class LuceneCatalogueEntityIterator implements Iterator<CatalogueEntity> 
 
     private void grabNextPage() throws SearchException {
         Query query = new MatchAllDocsQuery();
-        Sort sort = new Sort(new SortField(LuceneSearchProvider.F_ID,
-                SortField.Type.STRING));
+        Sort sort = new Sort(new SortField(
+                LuceneSearchProvider.F_ID_FOR_SORTING, SortField.Type.STRING));
         try {
             TopDocs docs;
             if (nextPageAfter == null) {
                 docs = searcher.search(query, PER_PAGE, sort);
             } else {
-                docs = searcher.searchAfter(nextPageAfter, query, PER_PAGE, sort);
+                docs = searcher.searchAfter(nextPageAfter, query, PER_PAGE,
+                        sort);
             }
             thisPage = docs.scoreDocs;
         } catch (IOException ex) {

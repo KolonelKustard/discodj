@@ -20,6 +20,7 @@ public class LuceneSearchProvider implements SearchProvider {
             .getLogger(LuceneSearchProvider.class);
 
     static final String F_ID = "id";
+    static final String F_ID_FOR_SORTING = "idForSorting";
     static final String F_LAST_MODIFIED = "lastModified";
     static final String F_ARTIST = "artist";
     static final String F_ALBUM = "album";

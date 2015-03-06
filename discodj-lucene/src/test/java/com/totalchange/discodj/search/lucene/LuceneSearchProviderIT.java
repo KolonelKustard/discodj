@@ -116,6 +116,7 @@ public class LuceneSearchProviderIT {
                 .listAllAlphabeticallyById();
         iterateOverAndAssertMedia(it, 0, 600);
         iterateOverAndAssertMedia(it, 700, 1000);
+        assertFalse("Should have got to the end", it.hasNext());
     }
 
     private void searchForThatStuff() {

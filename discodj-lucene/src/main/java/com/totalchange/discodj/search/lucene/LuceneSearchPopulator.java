@@ -7,6 +7,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.IntField;
 import org.apache.lucene.document.LongField;
+import org.apache.lucene.document.SortedDocValuesField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.facet.FacetsConfig;
@@ -16,6 +17,7 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.util.BytesRef;
 
 import com.totalchange.discodj.media.Media;
 import com.totalchange.discodj.search.SearchException;
@@ -84,6 +86,8 @@ class LuceneSearchPopulator implements SearchPopulator {
 
     private Document makeDoc(Media media) {
         Document doc = new Document();
+        doc.add(new SortedDocValuesField(LuceneSearchProvider.F_ID_FOR_SORTING,
+                new BytesRef(media.getId())));
         doc.add(new StringField(LuceneSearchProvider.F_ID, media.getId(),
                 Store.YES));
         doc.add(new LongField(LuceneSearchProvider.F_LAST_MODIFIED, media
