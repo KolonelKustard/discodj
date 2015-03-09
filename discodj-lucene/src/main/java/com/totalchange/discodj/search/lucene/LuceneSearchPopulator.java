@@ -1,8 +1,11 @@
 package com.totalchange.discodj.search.lucene;
 
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 
-import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.IntField;
@@ -30,7 +33,8 @@ class LuceneSearchPopulator implements SearchPopulator {
     LuceneSearchPopulator(Directory directory) throws SearchException {
         try {
             indexWriter = new IndexWriter(directory,
-                    new IndexWriterConfig(new WhitespaceAnalyzer())
+                    new IndexWriterConfig(new StandardAnalyzer(
+                            new CharArraySet(0, true)))
                             .setOpenMode(OpenMode.CREATE_OR_APPEND));
         } catch (IOException ex) {
             throw new SearchException(ex);
@@ -93,7 +97,7 @@ class LuceneSearchPopulator implements SearchPopulator {
         doc.add(new LongField(LuceneSearchProvider.F_LAST_MODIFIED, media
                 .getLastModified().getTime(), Store.YES));
         doc.add(new SortedSetDocValuesFacetField(LuceneSearchProvider.F_ARTIST,
-                "Bob"));
+                media.getArtist()));
         doc.add(new SortedSetDocValuesFacetField(LuceneSearchProvider.F_ALBUM,
                 media.getAlbum()));
         doc.add(new SortedSetDocValuesFacetField(LuceneSearchProvider.F_GENRE,
@@ -108,7 +112,7 @@ class LuceneSearchPopulator implements SearchPopulator {
                 Store.YES));
 
         doc.add(new TextField(LuceneSearchProvider.F_TEXT,
-                makeSearchText(media), Store.NO));
+                makeSearchText(media)));
 
         return doc;
     }
@@ -117,13 +121,13 @@ class LuceneSearchPopulator implements SearchPopulator {
         return String.valueOf((year / 10) * 10);
     }
 
-    private String makeSearchText(Media media) {
+    private Reader makeSearchText(Media media) {
         StringBuilder str = new StringBuilder();
         str.append(media.getArtist());
         str.append(' ');
         str.append(media.getAlbum());
         str.append(' ');
         str.append(media.getTitle());
-        return str.toString();
+        return new StringReader(str.toString());
     }
 }

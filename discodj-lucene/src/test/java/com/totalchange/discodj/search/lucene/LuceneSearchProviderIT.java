@@ -121,7 +121,8 @@ public class LuceneSearchProviderIT {
 
     private void searchForThatStuff() {
         SearchQuery query = new SearchQuery();
-        query.setKeywords("500");
+        query.setRows(10);
+        query.setKeywords("\"Test Artist 10\"");
 
         SearchResults res = luceneSearchProvider.search(query);
         assertEquals(NUM_ALBUMS_PER_ARTIST * NUM_TRACKS_PER_ALBUM,

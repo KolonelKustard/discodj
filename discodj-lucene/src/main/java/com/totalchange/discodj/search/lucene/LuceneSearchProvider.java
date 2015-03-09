@@ -1,9 +1,24 @@
 package com.totalchange.discodj.search.lucene;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 import javax.inject.Inject;
 
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.facet.Facets;
+import org.apache.lucene.facet.FacetsCollector;
+import org.apache.lucene.facet.sortedset.DefaultSortedSetDocValuesReaderState;
+import org.apache.lucene.facet.sortedset.SortedSetDocValuesFacetCounts;
+import org.apache.lucene.facet.sortedset.SortedSetDocValuesReaderState;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexNotFoundException;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.MatchAllDocsQuery;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +69,39 @@ public class LuceneSearchProvider implements SearchProvider {
 
     @Override
     public SearchResults search(SearchQuery query) throws SearchException {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            DirectoryReader reader = DirectoryReader.open(directory);
+            try {
+                IndexSearcher searcher = new IndexSearcher(reader);
+                SortedSetDocValuesReaderState state = new DefaultSortedSetDocValuesReaderState(
+                        reader);
+                FacetsCollector fc = new FacetsCollector();
+                TopDocs docs = FacetsCollector.search(searcher,
+                        makeQuery(query), (int) query.getRows(), fc);
+                Facets facets = new SortedSetDocValuesFacetCounts(state, fc);
+
+                return new LuceneSearchResults(searcher, docs, facets);
+            } finally {
+                reader.close();
+            }
+        } catch (IndexNotFoundException ex) {
+            return new LuceneSearchResults();
+        } catch (ParseException ex) {
+            throw new SearchException(ex);
+        } catch (IOException ex) {
+            throw new SearchException(ex);
+        }
+    }
+
+    private Query makeQuery(SearchQuery query) throws ParseException {
+        if (query.getKeywords() != null
+                && query.getKeywords().trim().length() > 0) {
+            StandardAnalyzer analyser = new StandardAnalyzer();
+            QueryParser parser = new QueryParser(LuceneSearchProvider.F_TEXT,
+                    analyser);
+            return parser.parse(query.getKeywords().trim());
+        } else {
+            return new MatchAllDocsQuery();
+        }
     }
 }
