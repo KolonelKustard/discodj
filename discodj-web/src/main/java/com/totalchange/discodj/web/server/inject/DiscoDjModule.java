@@ -16,13 +16,12 @@
 package com.totalchange.discodj.web.server.inject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.inject.Named;
 
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
-import org.apache.solr.core.CoreContainer;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,53 +30,46 @@ import com.google.inject.Provides;
 import com.totalchange.discodj.catalogue.Catalogue;
 import com.totalchange.discodj.queue.PlaylistQueue;
 import com.totalchange.discodj.search.SearchProvider;
-import com.totalchange.discodj.search.solr.SolrSearchProviderImpl;
+import com.totalchange.discodj.search.lucene.LuceneSearchProvider;
 import com.totalchange.discodj.xuggler.FileTikaCatalogueImpl;
 
 public class DiscoDjModule extends AbstractModule implements AutoCloseable {
     private static Logger logger = LoggerFactory.getLogger(DiscoDjModule.class);
 
-    private CoreContainer coreContainer = null;
-    private SolrServer solrServer = null;
+    private Directory directory = null;
 
     @Override
     protected void configure() {
         logger.trace("Configuring disco dj Guice bindings");
-        bind(SearchProvider.class).to(SolrSearchProviderImpl.class);
+        bind(SearchProvider.class).to(LuceneSearchProvider.class);
         bind(Catalogue.class).to(FileTikaCatalogueImpl.class);
         bind(PlaylistQueue.class);
         logger.trace("Configured disco dj Guice bindings");
     }
 
     @Provides
-    SolrServer provideSolrServer(
-            @Named(DiscoDjConfigurationModule.SOLR_HOME) String solrHome)
-            throws FileNotFoundException {
-        if (solrServer == null) {
-            logger.trace("Creating SolrServer instance");
+    Directory provideLuceneDirectory(
+            @Named(DiscoDjConfigurationModule.SEARCH_INDEX_ROOT) String searchRoot)
+            throws IOException {
+        if (directory == null) {
+            logger.trace("Creating Lucene Directory instance");
             synchronized (this) {
-                if (solrServer == null) {
-                    File home = new File(solrHome);
-                    coreContainer = new CoreContainer(home.getAbsolutePath());
-                    coreContainer.load();
-                    solrServer = new EmbeddedSolrServer(coreContainer, "discodj");
+                if (directory == null) {
+                    File home = new File(searchRoot);
+                    directory = FSDirectory.open(home.toPath());
                 }
             }
-            logger.trace("Created SolrServer instance {}", solrServer);
+            logger.trace("Created Lucene Directory instance {}", directory);
         }
-        return solrServer;
+        return directory;
     }
 
     @Override
-    public void close() throws Exception {
-        if (solrServer != null) {
-            logger.trace("Shutting down SolrServer instance {}", solrServer);
-            solrServer.shutdown();
-        }
-
-        if (coreContainer != null) {
-            logger.trace("Shutting down CoreContainer instance {}", coreContainer);
-            coreContainer.shutdown();
+    public void close() throws IOException {
+        if (directory != null) {
+            logger.trace("Shutting down Lucene Directory instance {}",
+                    directory);
+            directory.close();
         }
     }
 }

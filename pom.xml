@@ -13,7 +13,7 @@
 
   <modules>
     <module>discodj-core</module>
-    <module>discodj-solr</module>
+    <module>discodj-lucene</module>
     <module>discodj-file-catalogue</module>
     <module>discodj-web</module>
     <module>discodj-debian</module>
@@ -137,6 +137,11 @@
       <dependency>
         <groupId>com.totalchange.discodj</groupId>
         <artifactId>discodj-solr</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.totalchange.discodj</groupId>
+        <artifactId>discodj-lucene</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchQuery {
-    private long start;
-    private long rows;
-    private String keywords;
+    private long start = 0;
+    private long rows = 10;
+    private String keywords = null;
     private List<String> facetIds = new ArrayList<>();
 
     public long getStart() {

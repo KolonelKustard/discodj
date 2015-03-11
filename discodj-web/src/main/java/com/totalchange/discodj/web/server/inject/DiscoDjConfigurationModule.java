@@ -28,7 +28,7 @@ import com.google.inject.name.Names;
 
 public class DiscoDjConfigurationModule extends AbstractModule {
     public static final String CATALOGUE_ROOT = "catalogueRoot";
-    public static final String SOLR_HOME = "solrHome";
+    public static final String SEARCH_INDEX_ROOT = "searchIndexRoot";
 
     private static final Logger logger = LoggerFactory
             .getLogger(DiscoDjConfigurationModule.class);
@@ -67,10 +67,10 @@ public class DiscoDjConfigurationModule extends AbstractModule {
         }
     }
 
-    private String defaultSolrHomeLocation() throws IOException {
-        File file = findFirstFile("/var/discodj/solr/solr.xml");
+    private String defaultSearchIndexLocation() throws IOException {
+        File file = findFirstDir("/var/discodj/search-index");
         if (file == null) {
-            return "no SOLR home directory found - check your "
+            return "no search index directory found - check your "
                     + "configuration :-(";
         } else {
             return file.getParentFile().getCanonicalPath();
@@ -95,8 +95,8 @@ public class DiscoDjConfigurationModule extends AbstractModule {
             props.put(CATALOGUE_ROOT, defaultCatalogueLocation());
         }
 
-        if (props.getProperty(SOLR_HOME) == null) {
-            props.put(SOLR_HOME, defaultSolrHomeLocation());
+        if (props.getProperty(SEARCH_INDEX_ROOT) == null) {
+            props.put(SEARCH_INDEX_ROOT, defaultSearchIndexLocation());
         }
 
         logger.trace("Configuration set to {}", props);
