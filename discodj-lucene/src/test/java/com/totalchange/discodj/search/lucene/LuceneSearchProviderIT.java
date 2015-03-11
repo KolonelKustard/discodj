@@ -47,6 +47,7 @@ public class LuceneSearchProviderIT {
     @Test
     public void addALoadOfStuffSearchForItAndDeleteIt() {
         checkIndexIsEmpty();
+        checkSearchReturnsNothing();
 
         SearchPopulator searchPopulator = luceneSearchProvider
                 .createPopulator();
@@ -56,13 +57,17 @@ public class LuceneSearchProviderIT {
         searchPopulator.commit();
 
         iterateOverAllThatStuff();
-        searchForThatStuff();
+        searchForAllThatStuff();
+        searchForTheStuffByArtist10();
+        searchWithDifferentStartPoints();
+        searchCantGoPastEnd();
 
         searchPopulator = luceneSearchProvider.createPopulator();
         deleteTheStuff(searchPopulator);
         searchPopulator.commit();
 
         checkIndexIsEmpty();
+        checkSearchReturnsNothing();
     }
 
     private void addLoadsOfStuff(final SearchPopulator searchPopulator) {
@@ -111,6 +116,11 @@ public class LuceneSearchProviderIT {
                 it.hasNext());
     }
 
+    private void checkSearchReturnsNothing() {
+        SearchResults res = luceneSearchProvider.search(new SearchQuery());
+        assertEquals(0, res.getNumFound());
+    }
+
     private void iterateOverAllThatStuff() {
         Iterator<CatalogueEntity> it = luceneSearchProvider
                 .listAllAlphabeticallyById();
@@ -119,7 +129,23 @@ public class LuceneSearchProviderIT {
         assertFalse("Should have got to the end", it.hasNext());
     }
 
-    private void searchForThatStuff() {
+    private void searchForAllThatStuff() {
+        int totalResultsExpected = 900;
+
+        SearchQuery query = new SearchQuery();
+        query.setStart(15);
+        query.setRows(15);
+
+        SearchResults res = luceneSearchProvider.search(query);
+        assertEquals(totalResultsExpected, res.getNumFound());
+        assertEquals(totalResultsExpected / 100, res.getArtistFacets().size());
+        assertEquals(NUM_ALBUMS_PER_ARTIST, res.getAlbumFacets().size());
+        assertEquals(totalResultsExpected / 100, res.getGenreFacets().size());
+        assertEquals(NUM_ALBUMS_PER_ARTIST, res.getDecadeFacets().size());
+        assertEquals(15, res.getResults().size());
+    }
+
+    private void searchForTheStuffByArtist10() {
         SearchQuery query = new SearchQuery();
         query.setRows(10);
         query.setKeywords("\"Test Artist 10\"");
@@ -131,6 +157,31 @@ public class LuceneSearchProviderIT {
         assertEquals(NUM_ALBUMS_PER_ARTIST, res.getAlbumFacets().size());
         assertEquals(1, res.getGenreFacets().size());
         assertEquals(NUM_ALBUMS_PER_ARTIST, res.getDecadeFacets().size());
+        assertEquals(10, res.getResults().size());
+    }
+
+    private void searchWithDifferentStartPoints() {
+        String lastId = "";
+        for (int start = 0; start < 10; start++) {
+            SearchQuery query = new SearchQuery();
+            query.setStart(start);
+            query.setRows(1);
+
+            SearchResults res = luceneSearchProvider.search(query);
+            assertEquals(1, res.getResults().size());
+            assertNotEquals("Should have moved onto the next page of results",
+                    lastId, res.getResults().get(0).getId());
+            lastId = res.getResults().get(0).getId();
+        }
+    }
+
+    private void searchCantGoPastEnd() {
+        SearchQuery query = new SearchQuery();
+        query.setStart(875);
+        query.setRows(50);
+
+        SearchResults res = luceneSearchProvider.search(query);
+        assertEquals(25, res.getResults().size());
     }
 
     private void deleteTheStuff(SearchPopulator searchPopulator) {

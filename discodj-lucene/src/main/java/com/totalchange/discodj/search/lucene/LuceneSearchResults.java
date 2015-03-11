@@ -10,7 +10,6 @@ import org.apache.lucene.facet.FacetResult;
 import org.apache.lucene.facet.Facets;
 import org.apache.lucene.facet.LabelAndValue;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 
 import com.totalchange.discodj.media.Media;
@@ -34,8 +33,8 @@ class LuceneSearchResults implements SearchResults {
         results = Collections.emptyList();
     }
 
-    LuceneSearchResults(IndexSearcher searcher, TopDocs docs, Facets facets)
-            throws IOException {
+    LuceneSearchResults(IndexSearcher searcher, TopDocs docs, long start,
+            long rows, Facets facets) throws IOException {
         numFound = docs.totalHits;
         artistFacets = makeFacets(facets.getTopChildren(10,
                 LuceneSearchProvider.F_ARTIST));
@@ -45,7 +44,7 @@ class LuceneSearchResults implements SearchResults {
                 LuceneSearchProvider.F_GENRE));
         decadeFacets = makeFacets(facets.getTopChildren(10,
                 LuceneSearchProvider.F_DECADE));
-        results = makeResults(searcher, docs);
+        results = makeResults(searcher, docs, start, rows);
     }
 
     @Override
@@ -91,11 +90,12 @@ class LuceneSearchResults implements SearchResults {
         }
     }
 
-    private List<Media> makeResults(IndexSearcher searcher, TopDocs docs)
-            throws IOException {
-        List<Media> media = new ArrayList<>(docs.scoreDocs.length);
-        for (ScoreDoc scoreDoc : docs.scoreDocs) {
-            Document doc = searcher.doc(scoreDoc.doc);
+    private List<Media> makeResults(IndexSearcher searcher, TopDocs docs,
+            long start, long rows) throws IOException {
+        long actualEnd = Math.min(start + rows, docs.scoreDocs.length);
+        List<Media> media = new ArrayList<>((int) rows);
+        for (long num = start; num < actualEnd; num++) {
+            Document doc = searcher.doc(docs.scoreDocs[(int) num].doc);
             media.add(new LuceneSearchMedia(doc));
         }
         return media;

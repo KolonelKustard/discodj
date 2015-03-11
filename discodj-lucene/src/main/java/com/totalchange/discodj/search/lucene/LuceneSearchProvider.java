@@ -71,18 +71,10 @@ public class LuceneSearchProvider implements SearchProvider {
     public SearchResults search(SearchQuery query) throws SearchException {
         try {
             DirectoryReader reader = DirectoryReader.open(directory);
-            try {
-                IndexSearcher searcher = new IndexSearcher(reader);
-                SortedSetDocValuesReaderState state = new DefaultSortedSetDocValuesReaderState(
-                        reader);
-                FacetsCollector fc = new FacetsCollector();
-                TopDocs docs = FacetsCollector.search(searcher,
-                        makeQuery(query), (int) query.getRows(), fc);
-                Facets facets = new SortedSetDocValuesFacetCounts(state, fc);
-
-                return new LuceneSearchResults(searcher, docs, facets);
-            } finally {
-                reader.close();
+            if (query.getRows() > 0 && reader.numDocs() > 0) {
+                return doSearch(query, reader);
+            } else {
+                return new LuceneSearchResults();
             }
         } catch (IndexNotFoundException ex) {
             return new LuceneSearchResults();
@@ -90,6 +82,24 @@ public class LuceneSearchProvider implements SearchProvider {
             throw new SearchException(ex);
         } catch (IOException ex) {
             throw new SearchException(ex);
+        }
+    }
+
+    private SearchResults doSearch(SearchQuery query, DirectoryReader reader)
+            throws IOException, ParseException {
+        try {
+            IndexSearcher searcher = new IndexSearcher(reader);
+            SortedSetDocValuesReaderState state = new DefaultSortedSetDocValuesReaderState(
+                    reader);
+            FacetsCollector fc = new FacetsCollector();
+            TopDocs docs = FacetsCollector.search(searcher, makeQuery(query),
+                    reader.numDocs(), fc);
+            Facets facets = new SortedSetDocValuesFacetCounts(state, fc);
+
+            return new LuceneSearchResults(searcher, docs, query.getStart(),
+                    query.getRows(), facets);
+        } finally {
+            reader.close();
         }
     }
 
