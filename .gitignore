@@ -10,11 +10,6 @@
 /discodj-core/.classpath
 /discodj-core/.project
 
-/discodj-solr/target
-/discodj-solr/.settings
-/discodj-solr/.classpath
-/discodj-solr/.project
-
 /discodj-lucene/target
 /discodj-lucene/.settings
 /discodj-lucene/.classpath

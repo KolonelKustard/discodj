@@ -13,7 +13,6 @@
 
   <modules>
     <module>discodj-core</module>
-    <module>discodj-solr</module>
     <module>discodj-lucene</module>
     <module>discodj-file-catalogue</module>
     <module>discodj-web</module>
