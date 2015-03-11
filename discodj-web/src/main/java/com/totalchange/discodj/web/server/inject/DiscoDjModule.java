@@ -48,14 +48,14 @@ public class DiscoDjModule extends AbstractModule implements AutoCloseable {
     }
 
     @Provides
-    Directory provideSolrServer(
-            @Named(DiscoDjConfigurationModule.SEARCH_INDEX_ROOT) String solrHome)
+    Directory provideLuceneDirectory(
+            @Named(DiscoDjConfigurationModule.SEARCH_INDEX_ROOT) String searchRoot)
             throws IOException {
         if (directory == null) {
             logger.trace("Creating Lucene Directory instance");
             synchronized (this) {
                 if (directory == null) {
-                    File home = new File(solrHome);
+                    File home = new File(searchRoot);
                     directory = FSDirectory.open(home.toPath());
                 }
             }
