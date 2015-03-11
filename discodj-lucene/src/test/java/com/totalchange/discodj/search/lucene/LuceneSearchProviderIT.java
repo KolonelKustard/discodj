@@ -18,7 +18,6 @@ import com.totalchange.discodj.catalogue.Catalogue.CatalogueEntity;
 import com.totalchange.discodj.media.GenericMediaBuilder;
 import com.totalchange.discodj.media.Media;
 import com.totalchange.discodj.search.SearchPopulator;
-import com.totalchange.discodj.search.SearchProvider;
 import com.totalchange.discodj.search.SearchQuery;
 import com.totalchange.discodj.search.SearchResults;
 import com.totalchange.discodj.search.lucene.LuceneSearchProvider;
