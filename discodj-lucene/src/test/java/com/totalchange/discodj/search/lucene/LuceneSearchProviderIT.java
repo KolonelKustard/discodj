@@ -18,6 +18,7 @@ import com.totalchange.discodj.catalogue.Catalogue.CatalogueEntity;
 import com.totalchange.discodj.media.GenericMediaBuilder;
 import com.totalchange.discodj.media.Media;
 import com.totalchange.discodj.search.SearchPopulator;
+import com.totalchange.discodj.search.SearchProvider;
 import com.totalchange.discodj.search.SearchQuery;
 import com.totalchange.discodj.search.SearchResults;
 import com.totalchange.discodj.search.lucene.LuceneSearchProvider;
@@ -61,6 +62,7 @@ public class LuceneSearchProviderIT {
         searchForTheStuffByArtist10();
         searchWithDifferentStartPoints();
         searchCantGoPastEnd();
+        searchOnACoupleOfFacets();
 
         searchPopulator = luceneSearchProvider.createPopulator();
         deleteTheStuff(searchPopulator);
@@ -182,6 +184,16 @@ public class LuceneSearchProviderIT {
 
         SearchResults res = luceneSearchProvider.search(query);
         assertEquals(25, res.getResults().size());
+    }
+
+    private void searchOnACoupleOfFacets() {
+        SearchQuery query = new SearchQuery();
+        query.setRows(1000);
+        query.addFacetId(LuceneSearchProvider.F_ARTIST + ":Test Artist 5");
+        query.addFacetId(LuceneSearchProvider.F_ALBUM + ":Test Album 7");
+
+        SearchResults res = luceneSearchProvider.search(query);
+        assertEquals(NUM_TRACKS_PER_ALBUM, res.getResults().size());
     }
 
     private void deleteTheStuff(SearchPopulator searchPopulator) {

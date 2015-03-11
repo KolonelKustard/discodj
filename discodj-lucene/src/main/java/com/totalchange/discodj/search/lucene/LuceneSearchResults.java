@@ -17,6 +17,8 @@ import com.totalchange.discodj.search.SearchFacet;
 import com.totalchange.discodj.search.SearchResults;
 
 class LuceneSearchResults implements SearchResults {
+    private static final int MAX_FACETS = 1000;
+
     private final long numFound;
     private final List<SearchFacet> artistFacets;
     private final List<SearchFacet> albumFacets;
@@ -36,13 +38,13 @@ class LuceneSearchResults implements SearchResults {
     LuceneSearchResults(IndexSearcher searcher, TopDocs docs, long start,
             long rows, Facets facets) throws IOException {
         numFound = docs.totalHits;
-        artistFacets = makeFacets(facets.getTopChildren(10,
+        artistFacets = makeFacets(facets.getTopChildren(MAX_FACETS,
                 LuceneSearchProvider.F_ARTIST));
-        albumFacets = makeFacets(facets.getTopChildren(10,
+        albumFacets = makeFacets(facets.getTopChildren(MAX_FACETS,
                 LuceneSearchProvider.F_ALBUM));
-        genreFacets = makeFacets(facets.getTopChildren(10,
+        genreFacets = makeFacets(facets.getTopChildren(MAX_FACETS,
                 LuceneSearchProvider.F_GENRE));
-        decadeFacets = makeFacets(facets.getTopChildren(10,
+        decadeFacets = makeFacets(facets.getTopChildren(MAX_FACETS,
                 LuceneSearchProvider.F_DECADE));
         results = makeResults(searcher, docs, start, rows);
     }

@@ -2,12 +2,15 @@ package com.totalchange.discodj.search.lucene;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.facet.DrillDownQuery;
 import org.apache.lucene.facet.Facets;
 import org.apache.lucene.facet.FacetsCollector;
+import org.apache.lucene.facet.FacetsConfig;
 import org.apache.lucene.facet.sortedset.DefaultSortedSetDocValuesReaderState;
 import org.apache.lucene.facet.sortedset.SortedSetDocValuesFacetCounts;
 import org.apache.lucene.facet.sortedset.SortedSetDocValuesReaderState;
@@ -104,6 +107,14 @@ public class LuceneSearchProvider implements SearchProvider {
     }
 
     private Query makeQuery(SearchQuery query) throws ParseException {
+        if (query.getFacetIds() == null || query.getFacetIds().isEmpty()) {
+            return makeBaseQuery(query);
+        } else {
+            return makeFacetQuery(query.getFacetIds(), makeBaseQuery(query));
+        }
+    }
+
+    private Query makeBaseQuery(SearchQuery query) throws ParseException {
         if (query.getKeywords() != null
                 && query.getKeywords().trim().length() > 0) {
             StandardAnalyzer analyser = new StandardAnalyzer();
@@ -113,5 +124,17 @@ public class LuceneSearchProvider implements SearchProvider {
         } else {
             return new MatchAllDocsQuery();
         }
+    }
+
+    private Query makeFacetQuery(List<String> facetIds, Query baseQuery) {
+        DrillDownQuery query = new DrillDownQuery(new FacetsConfig(), baseQuery);
+        for (String facetId : facetIds) {
+            int firstColon = facetId.indexOf(':');
+            String field = facetId.substring(0, firstColon);
+            String value = facetId.substring(firstColon + 1);
+            query.add(field, value);
+        }
+
+        return query;
     }
 }
