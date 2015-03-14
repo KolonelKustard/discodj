@@ -20,6 +20,11 @@
 /discodj-file-catalogue/.classpath
 /discodj-file-catalogue/.project
 
+/discodj-services/target
+/discodj-services/.settings
+/discodj-services/.classpath
+/discodj-services/.project
+
 /discodj-web/target
 /discodj-web/node
 /discodj-web/node_modules
