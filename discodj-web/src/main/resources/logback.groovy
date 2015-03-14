@@ -8,5 +8,5 @@ appender("STDOUT", ConsoleAppender) {
     pattern = "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
   }
 }
-//logger("com.totalchange", DEBUG)
+logger("com.totalchange", DEBUG)
 root(ERROR, ["STDOUT"])
