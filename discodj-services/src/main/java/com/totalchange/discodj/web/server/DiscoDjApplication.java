@@ -101,7 +101,7 @@ public class DiscoDjApplication implements ContainerLifecycleListener {
                 .packages("com.totalchange.discodj.ws");
         rc.register(new DiscoDjApplication());
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(
-                URI.create("http://0.0.0.0:58008/discodj"), rc);
+                URI.create("http://0.0.0.0:58008/discodj/resources"), rc);
         logger.info("Starting DiscoDJ on server {}", server);
         server.start();
         logger.info("Started");

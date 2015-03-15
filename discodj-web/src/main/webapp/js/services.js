@@ -2,12 +2,13 @@
 
 require("angular");
 require("angular-resource");
+var settings = require("./settings.js");
 
 var discoDjServices = angular.module("discoDjServices", ["ngResource"]);
 
 discoDjServices.factory("Search", ["$resource",
   function($resource) {
-    return $resource("resources/search", {}, {
+    return $resource(settings.serviceBaseUrl + "search", {}, {
       query: {
         method: "GET"
       }
@@ -17,25 +18,25 @@ discoDjServices.factory("Search", ["$resource",
 
 discoDjServices.factory("Playlist", ["$resource",
   function($resource) {
-    return $resource("resources/playlist", {}, {
+    return $resource(settings.serviceBaseUrl + "playlist", {}, {
       query: {
         method: "GET"
       },
       add: {
         method: "GET",
-        url: "resources/playlist/add"
+        url: settings.serviceBaseUrl + "playlist/add"
       },
       moveUp: {
         method: "GET",
-        url: "resources/playlist/moveUp"
+        url: settings.serviceBaseUrl + "playlist/moveUp"
       },
       moveDown: {
         method: "GET",
-        url: "resources/playlist/moveDown"
+        url: settings.serviceBaseUrl + "playlist/moveDown"
       },
       next: {
         method: "GET",
-        url: "resources/playlist/next"
+        url: settings.serviceBaseUrl + "playlist/next"
       }
     });
   }

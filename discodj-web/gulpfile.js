@@ -11,6 +11,7 @@ var uglify = require("gulp-uglify");
 var del = require("del");
 var less = require("gulp-less");
 var minifyCss = require("gulp-minify-css");
+var webserver = require("gulp-webserver");
 
 var options = minimist(process.argv.slice(2), {
   "string": ["target"],
@@ -41,6 +42,20 @@ gulp.task("less", function() {
 gulp.task("watch", function() {
   gulp.watch(["./src/main/webapp/js/**/*.js", "./src/main/webapp/stub/**/*.js"], ["scripts"]);
   gulp.watch("./src/main/webapp/less/**/*.less", ["less"]);
+});
+
+gulp.task("webserver", ["watch"], function() {
+  gulp.src("./src/main/webapp")
+    .pipe(webserver({
+      livereload: true,
+      open: true,
+      proxies: [
+                {
+                  source: "/discodj/resources",
+                  target: "http://localhost:58008/discodj/resources"
+                }
+              ]
+    }));
 });
 
 gulp.task("clean", function() {
