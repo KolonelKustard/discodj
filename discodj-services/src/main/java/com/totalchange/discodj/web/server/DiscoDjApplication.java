@@ -77,7 +77,7 @@ public class DiscoDjApplication extends ResourceConfig {
             }
         });
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(
-                URI.create("http://localhost:8765/discodj"), rc);
+                URI.create("http://0.0.0.0:58008/discodj"), rc);
         logger.info("Starting DiscoDJ on server {}", server);
         server.start();
         logger.info("Started");
