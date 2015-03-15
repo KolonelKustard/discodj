@@ -1,6 +1,7 @@
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.core.ConsoleAppender
 
+import static ch.qos.logback.classic.Level.TRACE
 import static ch.qos.logback.classic.Level.DEBUG
 
 appender("STDOUT", ConsoleAppender) {
@@ -8,5 +9,5 @@ appender("STDOUT", ConsoleAppender) {
     pattern = "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
   }
 }
-logger("com.totalchange", DEBUG)
+//logger("com.totalchange", TRACE)
 root(ERROR, ["STDOUT"])

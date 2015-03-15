@@ -31,51 +31,75 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.totalchange.discodj.populator.BackgroundSync;
 import com.totalchange.discodj.web.server.inject.DiscoDjConfigurationModule;
 import com.totalchange.discodj.web.server.inject.DiscoDjModule;
 
-public class DiscoDjApplication extends ResourceConfig {
+public class DiscoDjApplication implements ContainerLifecycleListener {
     private static final Logger logger = LoggerFactory
             .getLogger(DiscoDjApplication.class);
+
+    private DiscoDjModule discoDjModule;
+    private Injector injector;
+    private BackgroundSync backgroundSync;
+
+    @Override
+    public void onStartup(Container container) {
+        logger.trace("Creating Guice injector");
+        discoDjModule = new DiscoDjModule();
+        injector = Guice.createInjector(discoDjModule,
+                new DiscoDjConfigurationModule());
+        logger.trace("Created Guice injector");
+
+        logger.trace("Setting up Guice bridge {}", container);
+        ServiceLocator locator = container.getApplicationHandler()
+                .getServiceLocator();
+        GuiceBridge.getGuiceBridge().initializeGuiceBridge(locator);
+        GuiceIntoHK2Bridge guiceBridge = locator
+                .getService(GuiceIntoHK2Bridge.class);
+        guiceBridge.bridgeGuiceInjector(injector);
+        logger.trace("Finished setting up Guice bridge {}", container);
+
+        logger.trace("Starting up catalogue synchroniser");
+        backgroundSync = injector.getInstance(BackgroundSync.class);
+        backgroundSync.start();
+        logger.trace("Started up catalogue synchroniser");
+    }
+
+    @Override
+    public void onShutdown(Container container) {
+        if (backgroundSync != null) {
+            try {
+                logger.trace("Stopping catalogue synchroniser");
+                backgroundSync.stop();
+                backgroundSync = null;
+                logger.trace("Stopped catalogue synchroniser");
+            } catch (Exception ex) {
+                logger.warn("Failed to stop catalogue synchroniser", ex);
+            }
+        }
+
+        if (discoDjModule != null) {
+            try {
+                logger.trace("Closing disco dj module");
+                discoDjModule.close();
+                discoDjModule = null;
+                logger.trace("Closed disco dj module");
+            } catch (Exception ex) {
+                logger.warn("Failed to close DiscoDjModule", ex);
+            }
+        }
+    }
+
+    @Override
+    public void onReload(Container container) {
+    }
 
     public static void main(String[] args) throws IOException {
         logger.trace("Starting up DiscoDJ");
         ResourceConfig rc = new ResourceConfig()
                 .packages("com.totalchange.discodj.ws");
-        rc.register(new ContainerLifecycleListener() {
-            private DiscoDjModule discoDjModule;
-            private Injector injector;
-
-            @Override
-            public void onStartup(Container container) {
-                logger.trace("Creating Guice injector");
-                discoDjModule = new DiscoDjModule();
-                injector = Guice.createInjector(discoDjModule,
-                        new DiscoDjConfigurationModule());
-
-                logger.trace("Setting up Guice bridge {}", container);
-                ServiceLocator locator = container.getApplicationHandler()
-                        .getServiceLocator();
-                GuiceBridge.getGuiceBridge().initializeGuiceBridge(locator);
-                GuiceIntoHK2Bridge guiceBridge = locator
-                        .getService(GuiceIntoHK2Bridge.class);
-                guiceBridge.bridgeGuiceInjector(injector);
-                logger.trace("Finished setting up Guice bridge {}", container);
-            }
-
-            @Override
-            public void onShutdown(Container container) {
-                try {
-                    discoDjModule.close();
-                } catch (Exception ex) {
-                    logger.warn("Failed to close DiscoDjModule", ex);
-                }
-            }
-
-            @Override
-            public void onReload(Container container) {
-            }
-        });
+        rc.register(new DiscoDjApplication());
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(
                 URI.create("http://0.0.0.0:58008/discodj"), rc);
         logger.info("Starting DiscoDJ on server {}", server);
