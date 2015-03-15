@@ -47,7 +47,11 @@ public class LuceneSearchProvider implements SearchProvider {
     static final String F_REQUESTED_BY = "requestedBy";
     static final String F_TITLE = "title";
 
-    static final String F_DECADE = "decade";
+    static final String F_FACET_ARTIST = "artistFacet";
+    static final String F_FACET_ALBUM = "albumFacet";
+    static final String F_FACET_GENRE = "genreFacet";
+    static final String F_FACET_DECADE = "decadeFacet";
+
     static final String F_TEXT = "text";
 
     private Directory directory;

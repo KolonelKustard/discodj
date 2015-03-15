@@ -33,18 +33,31 @@
           <configuration>
             <dataSet>
               <data>
-                <src>${basedir}/../../discodj-web/target/discodj-web-${version}.war</src>
+                <src>${basedir}/../../discodj-services/target/discodj-services-${version}.jar</src>
+                <dst>/usr/share/discodj/discodj.jar</dst>
                 <type>file</type>
+              </data>
+              <data>
+                <src>${basedir}/../../discodj-services/target/lib</src>
+                <type>directory</type>
                 <mapper>
                   <type>perm</type>
-                  <prefix>/usr/share/discodj</prefix>
+                  <prefix>/usr/share/discodj/lib</prefix>
+                </mapper>
+              </data>
+              <data>
+                <src>${basedir}/../../discodj-web/target/discodj-web-${version}</src>
+                <type>directory</type>
+                <mapper>
+                  <type>perm</type>
+                  <prefix>/usr/share/discodj/www</prefix>
                 </mapper>
               </data>
               <data>
                 <type>link</type>
                 <symlink>true</symlink>
-                <linkName>/var/lib/tomcat7/webapps/discodj.war</linkName>
-                <linkTarget>/usr/share/discodj/discodj-web-${version}.war</linkTarget>
+                <linkName>/var/www/discodj</linkName>
+                <linkTarget>/usr/share/discodj/www</linkTarget>
               </data>
               <data>
                 <type>template</type>
@@ -53,8 +66,8 @@
                 </paths>
                 <mapper>
                   <type>perm</type>
-                  <user>tomcat7</user>
-                  <group>tomcat7</group>
+                  <user>discodj</user>
+                  <group>discodj</group>
                 </mapper>
               </data>
               <data>
