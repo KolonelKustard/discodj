@@ -21,12 +21,17 @@ import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.BytesRef;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.totalchange.discodj.media.Media;
 import com.totalchange.discodj.search.SearchException;
 import com.totalchange.discodj.search.SearchPopulator;
 
 class LuceneSearchPopulator implements SearchPopulator {
+    private static final Logger logger = LoggerFactory
+            .getLogger(LuceneSearchPopulator.class);
+
     private final IndexWriter indexWriter;
     private final FacetsConfig config = new FacetsConfig();
 
@@ -44,7 +49,9 @@ class LuceneSearchPopulator implements SearchPopulator {
     @Override
     public void addMedia(Media media) throws SearchException {
         try {
-            indexWriter.addDocument(config.build(makeDoc(media)));
+            Document doc = config.build(makeDoc(media));
+            logger.trace("Adding lucene doc {}", doc);
+            indexWriter.addDocument(doc);
         } catch (IOException ex) {
             throw new SearchException(ex);
         }
@@ -53,8 +60,10 @@ class LuceneSearchPopulator implements SearchPopulator {
     @Override
     public void updateMedia(Media media) throws SearchException {
         try {
+            Document doc = config.build(makeDoc(media));
+            logger.trace("Updating lucene doc {}", doc);
             indexWriter.updateDocument(new Term(LuceneSearchProvider.F_ID,
-                    media.getId()), config.build(makeDoc(media)));
+                    media.getId()), doc);
         } catch (IOException ex) {
             throw new SearchException(ex);
         }
@@ -63,6 +72,7 @@ class LuceneSearchPopulator implements SearchPopulator {
     @Override
     public void deleteMedia(String id) throws SearchException {
         try {
+            logger.trace("Deleting lucene doc {}", id);
             indexWriter
                     .deleteDocuments(new Term(LuceneSearchProvider.F_ID, id));
         } catch (IOException ex) {
@@ -96,20 +106,25 @@ class LuceneSearchPopulator implements SearchPopulator {
                 Store.YES));
         doc.add(new LongField(LuceneSearchProvider.F_LAST_MODIFIED, media
                 .getLastModified().getTime(), Store.YES));
-        doc.add(new SortedSetDocValuesFacetField(LuceneSearchProvider.F_ARTIST,
-                media.getArtist()));
-        doc.add(new SortedSetDocValuesFacetField(LuceneSearchProvider.F_ALBUM,
-                media.getAlbum()));
-        doc.add(new SortedSetDocValuesFacetField(LuceneSearchProvider.F_GENRE,
-                media.getGenre()));
+
+        doc.add(new StringField(LuceneSearchProvider.F_ARTIST, media
+                .getArtist(), Store.YES));
+        doc.add(new StringField(LuceneSearchProvider.F_ALBUM, media.getAlbum(),
+                Store.YES));
+        doc.add(new StringField(LuceneSearchProvider.F_GENRE, media.getGenre(),
+                Store.YES));
         doc.add(new IntField(LuceneSearchProvider.F_YEAR, media.getYear(),
                 Store.YES));
-        doc.add(new SortedSetDocValuesFacetField(LuceneSearchProvider.F_DECADE,
-                floorYearToDecade(media.getYear())));
         doc.add(new StringField(LuceneSearchProvider.F_REQUESTED_BY, media
                 .getRequestedBy(), Store.YES));
         doc.add(new StringField(LuceneSearchProvider.F_TITLE, media.getTitle(),
                 Store.YES));
+
+        addFacet(doc, LuceneSearchProvider.F_FACET_ARTIST, media.getArtist());
+        addFacet(doc, LuceneSearchProvider.F_FACET_ALBUM, media.getAlbum());
+        addFacet(doc, LuceneSearchProvider.F_FACET_GENRE, media.getGenre());
+        addFacet(doc, LuceneSearchProvider.F_FACET_DECADE,
+                floorYearToDecade(media.getYear()));
 
         doc.add(new TextField(LuceneSearchProvider.F_TEXT,
                 makeSearchText(media)));
@@ -118,7 +133,11 @@ class LuceneSearchPopulator implements SearchPopulator {
     }
 
     private String floorYearToDecade(int year) {
-        return String.valueOf((year / 10) * 10);
+        if (year > 0) {
+            return String.valueOf((year / 10) * 10);
+        } else {
+            return null;
+        }
     }
 
     private Reader makeSearchText(Media media) {
@@ -129,5 +148,11 @@ class LuceneSearchPopulator implements SearchPopulator {
         str.append(' ');
         str.append(media.getTitle());
         return new StringReader(str.toString());
+    }
+
+    private void addFacet(Document doc, String field, String value) {
+        if (value != null && value.trim().length() > 0) {
+            doc.add(new SortedSetDocValuesFacetField(field, value));
+        }
     }
 }

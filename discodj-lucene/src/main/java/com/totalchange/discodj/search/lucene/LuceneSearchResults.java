@@ -39,13 +39,13 @@ class LuceneSearchResults implements SearchResults {
             long rows, Facets facets) throws IOException {
         numFound = docs.totalHits;
         artistFacets = makeFacets(facets.getTopChildren(MAX_FACETS,
-                LuceneSearchProvider.F_ARTIST));
+                LuceneSearchProvider.F_FACET_ARTIST));
         albumFacets = makeFacets(facets.getTopChildren(MAX_FACETS,
-                LuceneSearchProvider.F_ALBUM));
+                LuceneSearchProvider.F_FACET_ALBUM));
         genreFacets = makeFacets(facets.getTopChildren(MAX_FACETS,
-                LuceneSearchProvider.F_GENRE));
+                LuceneSearchProvider.F_FACET_GENRE));
         decadeFacets = makeFacets(facets.getTopChildren(MAX_FACETS,
-                LuceneSearchProvider.F_DECADE));
+                LuceneSearchProvider.F_FACET_DECADE));
         results = makeResults(searcher, docs, start, rows);
     }
 

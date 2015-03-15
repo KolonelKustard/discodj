@@ -84,8 +84,10 @@ public final class FileTikaCatalogueImpl implements Catalogue {
         Tika tika = new Tika();
         Metadata metadata = new Metadata();
         try {
+            logger.trace("Reading metadata for {}", filename);
             InputStream in = TikaInputStream.get(file, metadata);
             Reader reader = tika.parse(in, metadata);
+            logger.trace("Metadata read to {}", metadata);
             in.close();
             reader.close();
             return new FileTikaMediaImpl(file, metadata);
