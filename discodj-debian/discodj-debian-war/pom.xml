@@ -54,12 +54,6 @@
                 </mapper>
               </data>
               <data>
-                <type>link</type>
-                <symlink>true</symlink>
-                <linkName>/var/www/discodj</linkName>
-                <linkTarget>/usr/share/discodj/www</linkTarget>
-              </data>
-              <data>
                 <type>template</type>
                 <paths>
                   <path>/var/discodj/search-index</path>
@@ -76,6 +70,14 @@
                 <mapper>
                   <type>perm</type>
                   <prefix>/etc</prefix>
+                </mapper>
+              </data>
+              <data>
+                <src>${basedir}/src/deb/etc/apache2/sites-available/discodj</src>
+                <type>file</type>
+                <mapper>
+                  <type>perm</type>
+                  <prefix>/etc/apache2/sites-available</prefix>
                 </mapper>
               </data>
             </dataSet>
