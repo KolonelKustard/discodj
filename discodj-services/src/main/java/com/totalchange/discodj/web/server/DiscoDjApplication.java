@@ -15,73 +15,60 @@
  */
 package com.totalchange.discodj.web.server;
 
+import java.io.IOException;
 import java.net.URI;
 
-import org.apache.commons.daemon.Daemon;
-import org.apache.commons.daemon.DaemonContext;
-import org.apache.commons.daemon.DaemonInitException;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DiscoDjApplication implements Daemon {
+public class DiscoDjApplication {
     private static final Logger logger = LoggerFactory
             .getLogger(DiscoDjApplication.class);
 
     private HttpServer server;
 
-    @Override
-    public void init(DaemonContext context) throws DaemonInitException,
-            Exception {
-    }
-
-    @Override
-    public void start() throws Exception {
-        logger.trace("Starting up DiscoDJ");
-
+    public void init(String[] context) {
+        logger.trace("Init-ing DiscoDJ");
         ResourceConfig rc = new ResourceConfig()
                 .packages("com.totalchange.discodj.ws");
         rc.register(new DiscoDjContainerLifecycleListener());
-
         server = GrizzlyHttpServerFactory.createHttpServer(
                 URI.create("http://0.0.0.0:58008/discodj/resources"), rc);
+    }
 
+    public void start() throws IOException {
         logger.info("Starting DiscoDJ on server {}", server);
         server.start();
         logger.info("Started");
     }
 
-    @Override
-    public void stop() throws Exception {
+    public void stop() {
         logger.info("Stopping DiscoDJ");
         if (server != null) {
-            logger.trace("Server is running so shutting it down");
+            logger.trace("Server exists so shutting it down");
             server.shutdown();
-            server = null;
         }
         logger.info("DiscoDJ Stopped");
     }
 
-    @Override
     public void destroy() {
+        server = null;
     }
 
     public static void main(String[] args) throws Exception {
         final DiscoDjApplication app = new DiscoDjApplication();
+        app.init(args);
         app.start();
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
                 logger.trace("Shutdown hook being executed");
-                try {
-                    app.stop();
-                } catch (Exception ex) {
-                    logger.error("Failed to shutdown cleanly in shutdown hook",
-                            ex);
-                }
+                app.stop();
+                app.destroy();
             }
         });
 
@@ -89,5 +76,6 @@ public class DiscoDjApplication implements Daemon {
         System.in.read();
 
         app.stop();
+        app.destroy();
     }
 }
