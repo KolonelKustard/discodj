@@ -15,100 +15,79 @@
  */
 package com.totalchange.discodj.web.server;
 
-import java.io.IOException;
 import java.net.URI;
 
+import org.apache.commons.daemon.Daemon;
+import org.apache.commons.daemon.DaemonContext;
+import org.apache.commons.daemon.DaemonInitException;
 import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.server.spi.Container;
-import org.glassfish.jersey.server.spi.ContainerLifecycleListener;
-import org.jvnet.hk2.guice.bridge.api.GuiceBridge;
-import org.jvnet.hk2.guice.bridge.api.GuiceIntoHK2Bridge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.totalchange.discodj.populator.BackgroundSync;
-import com.totalchange.discodj.web.server.inject.DiscoDjConfigurationModule;
-import com.totalchange.discodj.web.server.inject.DiscoDjModule;
-
-public class DiscoDjApplication implements ContainerLifecycleListener {
+public class DiscoDjApplication implements Daemon {
     private static final Logger logger = LoggerFactory
             .getLogger(DiscoDjApplication.class);
 
-    private DiscoDjModule discoDjModule;
-    private Injector injector;
-    private BackgroundSync backgroundSync;
+    private HttpServer server;
 
     @Override
-    public void onStartup(Container container) {
-        logger.trace("Creating Guice injector");
-        discoDjModule = new DiscoDjModule();
-        injector = Guice.createInjector(discoDjModule,
-                new DiscoDjConfigurationModule());
-        logger.trace("Created Guice injector");
-
-        logger.trace("Setting up Guice bridge {}", container);
-        ServiceLocator locator = container.getApplicationHandler()
-                .getServiceLocator();
-        GuiceBridge.getGuiceBridge().initializeGuiceBridge(locator);
-        GuiceIntoHK2Bridge guiceBridge = locator
-                .getService(GuiceIntoHK2Bridge.class);
-        guiceBridge.bridgeGuiceInjector(injector);
-        logger.trace("Finished setting up Guice bridge {}", container);
-
-        logger.trace("Starting up catalogue synchroniser");
-        backgroundSync = injector.getInstance(BackgroundSync.class);
-        backgroundSync.start();
-        logger.trace("Started up catalogue synchroniser");
+    public void init(DaemonContext context) throws DaemonInitException,
+            Exception {
     }
 
     @Override
-    public void onShutdown(Container container) {
-        if (backgroundSync != null) {
-            try {
-                logger.trace("Stopping catalogue synchroniser");
-                backgroundSync.stop();
-                backgroundSync = null;
-                logger.trace("Stopped catalogue synchroniser");
-            } catch (Exception ex) {
-                logger.warn("Failed to stop catalogue synchroniser", ex);
-            }
-        }
-
-        if (discoDjModule != null) {
-            try {
-                logger.trace("Closing disco dj module");
-                discoDjModule.close();
-                discoDjModule = null;
-                logger.trace("Closed disco dj module");
-            } catch (Exception ex) {
-                logger.warn("Failed to close DiscoDjModule", ex);
-            }
-        }
-    }
-
-    @Override
-    public void onReload(Container container) {
-    }
-
-    public static void main(String[] args) throws IOException {
+    public void start() throws Exception {
         logger.trace("Starting up DiscoDJ");
+
         ResourceConfig rc = new ResourceConfig()
                 .packages("com.totalchange.discodj.ws");
-        rc.register(new DiscoDjApplication());
-        HttpServer server = GrizzlyHttpServerFactory.createHttpServer(
+        rc.register(new DiscoDjContainerLifecycleListener());
+
+        server = GrizzlyHttpServerFactory.createHttpServer(
                 URI.create("http://0.0.0.0:58008/discodj/resources"), rc);
+
         logger.info("Starting DiscoDJ on server {}", server);
         server.start();
         logger.info("Started");
-        System.out.println("Press any key to stop DiscoDJ");
+    }
+
+    @Override
+    public void stop() throws Exception {
+        logger.info("Stopping DiscoDJ");
+        if (server != null) {
+            logger.trace("Server is running so shutting it down");
+            server.shutdown();
+            server = null;
+        }
+        logger.info("DiscoDJ Stopped");
+    }
+
+    @Override
+    public void destroy() {
+    }
+
+    public static void main(String[] args) throws Exception {
+        final DiscoDjApplication app = new DiscoDjApplication();
+        app.start();
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                logger.trace("Shutdown hook being executed");
+                try {
+                    app.stop();
+                } catch (Exception ex) {
+                    logger.error("Failed to shutdown cleanly in shutdown hook",
+                            ex);
+                }
+            }
+        });
+
+        System.out.println("Press return key to stop DiscoDJ");
         System.in.read();
-        logger.info("Shutting down");
-        server.shutdown();
-        logger.info("Ended");
+
+        app.stop();
     }
 }
