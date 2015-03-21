@@ -11,12 +11,19 @@
 #                    suited for wedding DJ type scenarios.
 ### END INIT INFO
 
+CLASS_PATH=/usr/share/discodj/discodj.jar
+for jar in `ls /usr/share/discodj/lib`
+do
+  CLASS_PATH=$CLASS_PATH:/usr/share/discodj/lib/$jar
+done
+
+JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="DiscoDJ server"
 NAME=discodj
-DAEMON=/usr/bin/java
-DAEMON_ARGS="-jar /usr/share/discodj/discodj.jar"
 PIDFILE=/var/run/$NAME.pid
+DAEMON=/usr/bin/jsvc
+DAEMON_ARGS="-outfile /var/log/discodj/jsvc.out.log -errfile /var/log/discodj/jsvc.err.log -user discodj -pidfile $PIDFILE -procname $NAME -home $JAVA_HOME -cp $CLASS_PATH com.totalchange.discodj.web.server.DiscoDjApplication"
 SCRIPTNAME=/etc/init.d/$NAME
 
 # Exit if the package is not installed
@@ -42,9 +49,9 @@ do_start()
 	#   0 if daemon has been started
 	#   1 if daemon was already running
 	#   2 if daemon could not be started
-	start-stop-daemon --start --chuid discodj --background --quiet --make-pidfile --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
 		|| return 1
-	start-stop-daemon --start --chuid discodj --background --quiet --make-pidfile --pidfile $PIDFILE --exec $DAEMON -- \
+	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -- \
 		$DAEMON_ARGS \
 		|| return 2
 }

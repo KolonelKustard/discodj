@@ -61,7 +61,16 @@
                 <mapper>
                   <type>perm</type>
                   <user>discodj</user>
-                  <group>discodj</group>
+                </mapper>
+              </data>
+              <data>
+                <type>template</type>
+                <paths>
+                  <path>/var/log/discodj</path>
+                </paths>
+                <mapper>
+                  <type>perm</type>
+                  <user>discodj</user>
                 </mapper>
               </data>
               <data>
@@ -78,6 +87,15 @@
                 <mapper>
                   <type>perm</type>
                   <prefix>/etc/apache2/sites-available</prefix>
+                </mapper>
+              </data>
+              <data>
+                <src>${basedir}/src/deb/etc/init.d/discodj</src>
+                <type>file</type>
+                <mapper>
+                  <type>perm</type>
+                  <prefix>/etc/init.d</prefix>
+                  <filemode>755</filemode>
                 </mapper>
               </data>
             </dataSet>
