@@ -32,8 +32,9 @@ public class DiscoDjApplication {
 
     public void init(String[] context) {
         logger.trace("Init-ing DiscoDJ");
-        ResourceConfig rc = new ResourceConfig()
-                .packages("com.totalchange.discodj.ws");
+        ResourceConfig rc = new ResourceConfig();
+        rc.packages("com.totalchange.discodj.ws");
+        rc.register(DiscoDjMediaHttpHandler.class);
         rc.register(new DiscoDjContainerLifecycleListener());
         server = GrizzlyHttpServerFactory.createHttpServer(
                 URI.create("http://0.0.0.0:58008/discodj/resources"), rc);
