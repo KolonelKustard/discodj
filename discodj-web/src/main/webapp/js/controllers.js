@@ -67,7 +67,8 @@ discoDjControllers.controller("PlaylistCtrl", ["$scope", "$location", "$routePar
     var refreshPlaylist = function() {
       if (!inProgress && lastRefresh < new Date().getTime() - 1000) {
         inProgress = true;
-        $scope.playlist = Playlist.query(function() {
+        Playlist.query(function(playlist) {
+          $scope.playlist = playlist;
           lastRefresh = new Date().getTime();
           inProgress = false;
         });
