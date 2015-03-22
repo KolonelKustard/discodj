@@ -49,12 +49,10 @@ gulp.task("webserver", ["watch"], function() {
     .pipe(webserver({
       livereload: true,
       open: true,
-      proxies: [
-                {
-                  source: "/discodj/resources",
-                  target: "http://localhost:58008/discodj/resources"
-                }
-              ]
+      proxies: [{
+        source: "/discodj/resources",
+        target: "http://localhost:58008/discodj/resources"
+      }]
     }));
 });
 
