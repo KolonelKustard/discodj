@@ -4,3 +4,5 @@ a2enmod proxy_http
 a2dissite default
 a2ensite discodj
 service apache2 restart
+
+echo You must now reboot to start up the DiscoDJ player (sudo shutdown -r now)

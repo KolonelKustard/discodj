@@ -40,6 +40,28 @@
                   <prefix>/etc</prefix>
                 </mapper>
               </data>
+              <data>
+                <src>${basedir}/src/deb/home/discodj-kiosk/.profile</src>
+                <type>file</type>
+                <mapper>
+                  <type>perm</type>
+                  <prefix>/home/discodj-kiosk</prefix>
+                  <filemode>755</filemode>
+                  <user>discodj-kiosk</user>
+                  <group>discodj-kiosk</group>
+                </mapper>
+              </data>
+              <data>
+                <src>${basedir}/src/deb/home/discodj-kiosk/discodj-kiosk.sh</src>
+                <type>file</type>
+                <mapper>
+                  <type>perm</type>
+                  <prefix>/home/discodj-kiosk</prefix>
+                  <filemode>755</filemode>
+                  <user>discodj-kiosk</user>
+                  <group>discodj-kiosk</group>
+                </mapper>
+              </data>
             </dataSet>
           </configuration>
         </plugin>
