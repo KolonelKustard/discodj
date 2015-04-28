@@ -1,7 +1,7 @@
 var spawn = require('child_process').spawn;
 
 module.exports.play = function(mediaUrl, finished) {
-  var mplayer = spawn("mplayer", [mediaUrl]);
+  var mplayer = spawn("mplayer", ["-fs", mediaUrl]);
 
   mplayer.stdout.on("data", function (data) {
     console.log('stdout: ' + data);
