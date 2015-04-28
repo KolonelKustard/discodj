@@ -32,7 +32,6 @@ public class DiscoDjMediaHttpHandler extends StaticHttpHandlerBase {
         if (media != null && media.getFile() != null) {
             logger.trace("Serving up media {}", media);
             pickupContentType(response, media.getFile().getPath());
-            addToFileCache(request, response, media.getFile());
             sendFile(response, media.getFile());
             logger.trace("Served up media {}", media);
             return true;
