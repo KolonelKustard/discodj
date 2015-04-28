@@ -35,6 +35,10 @@
 /discodj-web/.project
 /discodj-web/.gwt
 
+/discodj-player/node
+/discodj-player/node_modules
+/discodj-player/.settings
+
 /discodj-acceptance/target
 /discodj-acceptance/.settings
 /discodj-acceptance/.classpath

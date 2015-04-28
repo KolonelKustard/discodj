@@ -17,6 +17,7 @@
     <module>discodj-file-catalogue</module>
     <module>discodj-services</module>
     <module>discodj-web</module>
+    <module>discodj-player</module>
     <module>discodj-debian</module>
   </modules>
 
