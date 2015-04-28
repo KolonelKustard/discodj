@@ -37,14 +37,16 @@ class DiscoDjContainerLifecycleListener implements ContainerLifecycleListener {
     private Injector injector;
     private BackgroundSync backgroundSync;
 
-    @Override
-    public void onStartup(Container container) {
+    public DiscoDjContainerLifecycleListener() {
         logger.trace("Creating Guice injector");
         discoDjModule = new DiscoDjModule();
         injector = Guice.createInjector(discoDjModule,
                 new DiscoDjConfigurationModule());
         logger.trace("Created Guice injector");
+    }
 
+    @Override
+    public void onStartup(Container container) {
         logger.trace("Setting up Guice bridge {}", container);
         ServiceLocator locator = container.getApplicationHandler()
                 .getServiceLocator();
@@ -87,5 +89,9 @@ class DiscoDjContainerLifecycleListener implements ContainerLifecycleListener {
 
     @Override
     public void onReload(Container container) {
+    }
+
+    Injector getInjector() {
+        return injector;
     }
 }

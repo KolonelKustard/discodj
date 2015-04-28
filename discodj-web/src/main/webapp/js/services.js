@@ -8,7 +8,7 @@ var discoDjServices = angular.module("discoDjServices", ["ngResource"]);
 
 discoDjServices.factory("Search", ["$resource",
   function($resource) {
-    return $resource(settings.serviceBaseUrl + "search", {}, {
+    return $resource(settings.serviceBaseUrl + "api/search", {}, {
       query: {
         method: "GET"
       }
@@ -18,25 +18,25 @@ discoDjServices.factory("Search", ["$resource",
 
 discoDjServices.factory("Playlist", ["$resource",
   function($resource) {
-    return $resource(settings.serviceBaseUrl + "playlist", {}, {
+    return $resource(settings.serviceBaseUrl + "api/playlist", {}, {
       query: {
         method: "GET"
       },
       add: {
         method: "GET",
-        url: settings.serviceBaseUrl + "playlist/add"
+        url: settings.serviceBaseUrl + "api/playlist/add"
       },
       moveUp: {
         method: "GET",
-        url: settings.serviceBaseUrl + "playlist/moveUp"
+        url: settings.serviceBaseUrl + "api/playlist/moveUp"
       },
       moveDown: {
         method: "GET",
-        url: settings.serviceBaseUrl + "playlist/moveDown"
+        url: settings.serviceBaseUrl + "api/playlist/moveDown"
       },
       next: {
         method: "GET",
-        url: settings.serviceBaseUrl + "playlist/next"
+        url: settings.serviceBaseUrl + "api/playlist/next"
       }
     });
   }

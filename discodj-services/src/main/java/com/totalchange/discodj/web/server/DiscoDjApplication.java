@@ -18,6 +18,7 @@ package com.totalchange.discodj.web.server;
 import java.io.IOException;
 import java.net.URI;
 
+import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -32,12 +33,17 @@ public class DiscoDjApplication {
 
     public void init(String[] context) {
         logger.trace("Init-ing DiscoDJ");
+        DiscoDjContainerLifecycleListener lifecycleListener = new DiscoDjContainerLifecycleListener();
         ResourceConfig rc = new ResourceConfig();
         rc.packages("com.totalchange.discodj.ws");
-        rc.register(DiscoDjMediaHttpHandler.class);
-        rc.register(new DiscoDjContainerLifecycleListener());
+        rc.register(lifecycleListener);
         server = GrizzlyHttpServerFactory.createHttpServer(
-                URI.create("http://0.0.0.0:58008/discodj/resources"), rc);
+                URI.create("http://0.0.0.0:58008/discodj/resources/api"), rc);
+
+        HttpHandler mediaHandler = lifecycleListener.getInjector().getInstance(
+                DiscoDjMediaHttpHandler.class);
+        server.getServerConfiguration().addHttpHandler(mediaHandler,
+                "/discodj/resources/media");
     }
 
     public void start() throws IOException {
