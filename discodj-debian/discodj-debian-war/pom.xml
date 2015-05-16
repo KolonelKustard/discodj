@@ -54,6 +54,30 @@
                 </mapper>
               </data>
               <data>
+                <src>${basedir}/../../discodj-player/node_modules</src>
+                <type>directory</type>
+                <mapper>
+                  <type>perm</type>
+                  <prefix>/usr/share/discodj/player/node_modules</prefix>
+                </mapper>
+              </data>
+              <data>
+                <src>${basedir}/../../discodj-player/src/main/js</src>
+                <type>directory</type>
+                <mapper>
+                  <type>perm</type>
+                  <prefix>/usr/share/discodj/player/src/main/js</prefix>
+                </mapper>
+              </data>
+              <data>
+                <src>${basedir}/../../discodj-player/index.js</src>
+                <type>file</type>
+                <mapper>
+                  <type>perm</type>
+                  <prefix>/usr/share/discodj/player</prefix>
+                </mapper>
+              </data>
+              <data>
                 <type>template</type>
                 <paths>
                   <path>/var/discodj/search-index</path>

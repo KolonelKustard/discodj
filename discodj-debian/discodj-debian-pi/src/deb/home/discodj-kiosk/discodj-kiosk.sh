@@ -2,19 +2,9 @@
 
 echo Starting DiscoDJ Player
 
-echo Switching screensaver off
-xset -dpms
-xset s off
-
-echo Hiding cursor
-unclutter &
-
-echo Starting window manager
-matchbox-window-manager &
-
 while true; do
-  echo Starting browser
-  chromium --kiosk http://localhost
+  echo Starting node player
+  node /usr/share/discodj/player/index.js
 done
 
 echo DiscoDJ Player stopped

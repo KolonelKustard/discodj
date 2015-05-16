@@ -5,4 +5,4 @@ Priority: low
 Architecture: all
 Description: A simple application for a requests based playlist suited for wedding DJ type scenarios
 Maintainer: Ralph Jones <ralph@totalchange.com>
-Depends: java-runtime-headless (>= 1.7) | default-jre-headless (>=1.7) | java7-runtime-headless | java-7-runtime, jsvc, apache2, libapache2-mod-proxy-html
+Depends: java-runtime-headless (>= 1.7) | default-jre-headless (>=1.7) | java7-runtime-headless | java-7-runtime, jsvc, apache2, libapache2-mod-proxy-html, nodejs, mplayer
