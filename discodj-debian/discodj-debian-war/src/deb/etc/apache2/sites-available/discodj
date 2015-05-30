@@ -1,26 +1,23 @@
 <VirtualHost *:80>
-	ServerAdmin webmaster@localhost
+  ServerAdmin webmaster@localhost
 
-	DocumentRoot /usr/share/discodj/www
-	<Directory />
-		Options FollowSymLinks
-		AllowOverride None
-	</Directory>
-	<Directory /var/www/>
-		Options Indexes FollowSymLinks MultiViews
-		AllowOverride None
-		Order allow,deny
-		allow from all
-	</Directory>
+  DocumentRoot /usr/share/discodj/www
 
-	ProxyPass /discodj/resources http://localhost:58008/discodj/resources
-	ProxyPassReverse /discodj/resources http://localhost:58008/discodj/resources
+  <Directory />
+    Options None
+    AllowOverride None
+  </Directory>
 
-	ErrorLog ${APACHE_LOG_DIR}/error.log
+  ProxyPass /discodj/resources http://localhost:58008/discodj/resources
+  ProxyPassReverse /discodj/resources http://localhost:58008/discodj/resources
 
-	# Possible values include: debug, info, notice, warn, error, crit,
-	# alert, emerg.
-	LogLevel warn
+  <IfModule mod_rewrite.c>
+    # Allows kiosk mode to force redirects
+    RewriteEngine on
+    RewriteOptions Inherit
+  </IfModule>
 
-	CustomLog ${APACHE_LOG_DIR}/access.log combined
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  LogLevel warn
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
 </VirtualHost>

@@ -1,0 +1,4 @@
+# Forces redirects to http://discodj/ for all other domains
+RewriteEngine on
+Rewritecond %{HTTP_HOST} !^discodj
+RewriteRule .* http://discodj/ [R=302,L]
