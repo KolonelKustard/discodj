@@ -3,7 +3,7 @@
 set UNAME=discodj-kiosk
 set BACKUP=/home/$UNAME/backup
 
-adduser --system --shell /bin/sh $UNAME
+adduser --disabled-password --quiet $UNAME
 
 # Backup the bits that will be overwritten
 mkdir $BACKUP

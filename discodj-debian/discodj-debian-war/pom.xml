@@ -84,7 +84,6 @@
                 </paths>
                 <mapper>
                   <type>perm</type>
-                  <user>discodj</user>
                 </mapper>
               </data>
               <data>
@@ -94,7 +93,6 @@
                 </paths>
                 <mapper>
                   <type>perm</type>
-                  <user>discodj</user>
                 </mapper>
               </data>
               <data>

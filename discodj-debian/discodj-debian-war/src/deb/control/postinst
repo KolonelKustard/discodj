@@ -1,4 +1,12 @@
 #!/bin/sh
 
-update-rc.d discodj defaults
-service discodj start
+if [ "$1" = "configure" ]; then
+  addgroup --system --quiet discodj
+  adduser --system --quiet --ingroup discodj --no-create-home dicsodj
+  chown -R discodj:discodj /var/discodj/search-index /var/log/discodj
+fi
+
+if [ -x "/etc/init.d/ntp" ]; then
+  update-rc.d discodj defaults
+  invoke-rc.d discodj start || installinit_error
+fi
