@@ -8,8 +8,6 @@ adduser --disabled-password --quiet $UNAME
 # Backup the bits that will be overwritten
 mkdir $BACKUP
 cp /etc/default/hostapd $BACKUP
-cp /etc/default/isc-dhcp-server $BACKUP
-cp /etc/dhcp/dhcpd.conf $BACKUP
 cp /etc/hostapd/hostapd.conf $BACKUP
 cp /etc/network/interfaces $BACKUP
 cp /etc/inittab $BACKUP

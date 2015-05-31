@@ -7,6 +7,6 @@ a2ensite discodj
 a2ensite discodj-kiosk
 service apache2 restart
 
-sed -i 's/1:.+:respawn:\/sbin\/getty.*/1:2345:respawn:\/bin\/login -f discodj-kiosk tty1 <\/dev\/tty1 >\/dev\/tty1 2>&1/g' /etc/inittab
+sed -i -e 's/1:.*:respawn:\/sbin\/getty.*/1:2345:respawn:\/bin\/login -f discodj-kiosk tty1 <\/dev\/tty1 >\/dev\/tty1 2>\&1/g' /etc/inittab
 
 echo You must now reboot to start up the DiscoDJ player (sudo shutdown -r now)
