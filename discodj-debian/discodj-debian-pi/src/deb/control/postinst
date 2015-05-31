@@ -1,8 +1,10 @@
 #!/bin/sh
 
 a2enmod proxy_http
+a2enmod rewrite
 a2dissite default
 a2ensite discodj
+a2ensite discodj-kiosk
 service apache2 restart
 
 sed -i 's/1:.+:respawn:\/sbin\/getty.*/1:2345:respawn:\/bin\/login -f discodj-kiosk tty1 <\/dev\/tty1 >\/dev\/tty1 2>&1/g' /etc/inittab
