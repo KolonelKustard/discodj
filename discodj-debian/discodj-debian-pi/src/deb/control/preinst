@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set BACKUP=/usr/share/discodj-kiosk/backup
+BACKUP=/usr/share/discodj-kiosk/backup
 
 # Backup the bits that will be overwritten
 mkdir -p $BACKUP
