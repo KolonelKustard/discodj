@@ -17,8 +17,8 @@ fi
 #wget --output-document=$DEBS_LOCAL/$WAR_DEB https://oss.sonatype.org/content/repositories/releases/com/totalchange/discodj/discodj-debian-war/$VERSION/$WAR_DEB
 #wget --output-document=$DEBS_LOCAL/$PI_DEB https://oss.sonatype.org/content/repositories/releases/com/totalchange/discodj/discodj-debian-war/$VERSION/$PI_DEB
 
-wget --output-document=$DEBS_LOCAL/$WAR_DEB https://oss.sonatype.org/content/repositories/snapshots/com/totalchange/discodj/discodj-debian-war/1.0.0-SNAPSHOT/discodj-debian-war-1.0.0-20150613.135638-1.deb
-wget --output-document=$DEBS_LOCAL/$PI_DEB https://oss.sonatype.org/content/repositories/snapshots/com/totalchange/discodj/discodj-debian-pi/1.0.0-SNAPSHOT/discodj-debian-pi-1.0.0-20150613.140400-1.deb
+wget --output-document=$DEBS_LOCAL/$WAR_DEB https://oss.sonatype.org/content/repositories/snapshots/com/totalchange/discodj/discodj-debian-war/1.0.0-SNAPSHOT/discodj-debian-war-1.0.0-20150613.155943-2.deb
+wget --output-document=$DEBS_LOCAL/$PI_DEB https://oss.sonatype.org/content/repositories/snapshots/com/totalchange/discodj/discodj-debian-pi/1.0.0-SNAPSHOT/discodj-debian-pi-1.0.0-20150613.160625-2.deb
 
 if [ -d "$GHPAGES_LOCAL" ]; then
   (cd $GHPAGES_LOCAL && git pull origin gh-pages)
