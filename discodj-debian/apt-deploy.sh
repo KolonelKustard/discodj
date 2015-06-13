@@ -25,3 +25,10 @@ if [ -d "$GHPAGES_LOCAL" ]; then
 else
   git clone -b gh-pages --single-branch https://github.com/KolonelKustard/discodj $GHPAGES_LOCAL
 fi
+
+reprepro -b $GHPAGES_LOCAL/apt-repo includedeb discodj $DEBS_LOCAL/$WAR_DEB
+reprepro -b $GHPAGES_LOCAL/apt-repo includedeb discodj $DEBS_LOCAL/$PI_DEB
+
+(cd $GHPAGES_LOCAL/apt-repo && git add .)
+(cd $GHPAGES_LOCAL && git commit -m "Deploying APT deb's for version $VERSION")
+(cd $GHPAGES_LOCAL && git push origin gh-pages)
