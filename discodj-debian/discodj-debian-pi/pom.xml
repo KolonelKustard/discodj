@@ -47,8 +47,6 @@
                   <type>perm</type>
                   <prefix>/home/discodj-kiosk</prefix>
                   <filemode>755</filemode>
-                  <user>discodj-kiosk</user>
-                  <group>discodj-kiosk</group>
                 </mapper>
               </data>
               <data>
@@ -56,10 +54,8 @@
                 <type>file</type>
                 <mapper>
                   <type>perm</type>
-                  <prefix>/home/discodj-kiosk</prefix>
+                  <prefix>/usr/share/discodj-kiosk</prefix>
                   <filemode>755</filemode>
-                  <user>discodj-kiosk</user>
-                  <group>discodj-kiosk</group>
                 </mapper>
               </data>
             </dataSet>

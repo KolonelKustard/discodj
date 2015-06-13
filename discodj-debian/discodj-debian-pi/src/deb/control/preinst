@@ -1,12 +1,9 @@
 #!/bin/sh
 
-set UNAME=discodj-kiosk
-set BACKUP=/home/$UNAME/backup
-
-adduser --disabled-password --quiet $UNAME
+set BACKUP=/usr/share/discodj-kiosk/backup
 
 # Backup the bits that will be overwritten
-mkdir $BACKUP
+mkdir -p $BACKUP
 cp /etc/default/hostapd $BACKUP
 cp /etc/hostapd/hostapd.conf $BACKUP
 cp /etc/network/interfaces $BACKUP
