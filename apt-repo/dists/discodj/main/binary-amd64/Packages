@@ -7,10 +7,10 @@ Maintainer: Ralph Jones <ralph@totalchange.com>
 Priority: low
 Section: misc
 Filename: pool/main/d/discodj/discodj_1.0.0~SNAPSHOT_all.deb
-Size: 27343768
-SHA256: ba8e660d6e47477960a0474c9e08ac012a276140f1d4afef42e7bbb2839d1973
-SHA1: 9b9768e0e9fb02bbb5b8219cf7f6569cf8b2a02f
-MD5sum: 2c05596a95a1ed478c47c186bf696a5f
+Size: 27343724
+SHA256: c60e1bad6b596946b757a78980b53233b084ac29b99932ee7b39bd35f6bd2b98
+SHA1: e4c8fe569077b069d7f1b4c3970ef58f5f2c5459
+MD5sum: 2e759d5d0af49b649550748183e8459a
 Description: A simple application for a requests based playlist suited for wedding DJ type scenarios
 Homepage: http://kolonelkustard.github.io/discodj/discodj-debian/discodj-debian-war/
 
@@ -23,10 +23,10 @@ Maintainer: Ralph Jones <ralph@totalchange.com>
 Priority: low
 Section: misc
 Filename: pool/main/d/discodjpi/discodjpi_1.0.0~SNAPSHOT_all.deb
-Size: 2188
-SHA256: ae1ef645962c4ab26c9ff038f2719fd4fb3ab82519b208b46a67099b75050534
-SHA1: 34ed6ce60a7e19d26d9eb430a642e55f494d8377
-MD5sum: cb0430a868933db2b8a5e705fa7c9427
+Size: 2278
+SHA256: bb4c84f7d2b9f7deb03ab49c4c9e116b43220ddb537ab6ecf7fc0f0d61ef9bd3
+SHA1: c9f9b68af9578604b29ec500cd565565b6513809
+MD5sum: b4acc43f03b480ea5c3ec9ad83e4f787
 Description: A simple application for a requests based playlist suited for wedding DJ type scenarios
 Homepage: http://kolonelkustard.github.io/discodj/discodj-debian/discodj-debian-pi/
 
