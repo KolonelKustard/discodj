@@ -43,6 +43,7 @@ cp /etc/inittab $BACKUP
 
 echo "#!/bin/sh" > /home/$UNAME/.profile
 echo "xinit /usr/share/discodj/player/discodj-kiosk.sh" >> /home/$UNAME/.profile
+chmod +x /home/$UNAME/.profile
 
 chown -R $UNAME:$UNAME /home/$UNAME
 

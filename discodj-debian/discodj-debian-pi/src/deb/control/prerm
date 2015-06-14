@@ -1,5 +1,0 @@
-#!/bin/sh
-
-a2dissite discodj
-a2ensite default
-service apache restart
