@@ -19,9 +19,10 @@ JAVA7=`update-alternatives --list java | grep java.*7`
 if [ -z "$JAVA7" ]; then
   echo "Couldn't find Java 7"
   exit 1
-else
-  echo "Choosing $JAVA7"
 fi
+
+echo
+echo "Choosing $JAVA7"
 update-alternatives --set java $JAVA7
 
 echo "deb http://kolonelkustard.github.io/discodj/apt-repo discodj main" > /etc/apt/sources.list.d/discodj.list
