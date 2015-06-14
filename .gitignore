@@ -48,13 +48,3 @@
 /discodj-debian/.settings
 /discodj-debian/.classpath
 /discodj-debian/.project
-
-/discodj-debian/discodj-debian-war/target
-/discodj-debian/discodj-debian-war/.settings
-/discodj-debian/discodj-debian-war/.classpath
-/discodj-debian/discodj-debian-war/.project
-
-/discodj-debian/discodj-debian-pi/target
-/discodj-debian/discodj-debian-pi/.settings
-/discodj-debian/discodj-debian-pi/.classpath
-/discodj-debian/discodj-debian-pi/.project
