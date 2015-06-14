@@ -48,3 +48,13 @@ chmod +x /home/$UNAME/.profile
 chown -R $UNAME:$UNAME /home/$UNAME
 
 sed -i -e 's/1:.*:respawn:\/sbin\/getty.*/1:2345:respawn:\/bin\/login -f discodj-kiosk tty1 <\/dev\/tty1 >\/dev\/tty1 2>\&1/g' /etc/inittab
+
+echo "interface=wlan0" > /etc/hostapd/hostapd.conf
+echo "driver=nl80211" >> /etc/hostapd/hostapd.conf
+echo "ssid=DiscoDJ" >> /etc/hostapd/hostapd.conf
+echo "channel=1" >> /etc/hostapd/hostapd.conf
+
+echo 'DAEMON_CONF="/etc/hostapd/hostapd.conf"' > /etc/default/hostapd
+
+echo "address=/#/10.69.69.1" > /etc/dnsmasq.d
+echo "dhcp-range=10.69.69.2,10.69.69.254,12h" >> /etc/dnsmasq.d
