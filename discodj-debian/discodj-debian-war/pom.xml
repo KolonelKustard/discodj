@@ -78,6 +78,14 @@
                 </mapper>
               </data>
               <data>
+                <src>${basedir}/../../discodj-player/src/main/sh/discodj-kiosk.sh</src>
+                <type>file</type>
+                <mapper>
+                  <type>perm</type>
+                  <prefix>/usr/share/discodj/player</prefix>
+                </mapper>
+              </data>
+              <data>
                 <type>template</type>
                 <paths>
                   <path>/var/discodj/search-index</path>
