@@ -16,6 +16,5 @@
 
   <modules>
     <module>discodj-debian-war</module>
-    <module>discodj-debian-pi</module>
   </modules>
 </project>

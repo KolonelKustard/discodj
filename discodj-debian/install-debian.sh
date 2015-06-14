@@ -58,3 +58,5 @@ echo 'DAEMON_CONF="/etc/hostapd/hostapd.conf"' > /etc/default/hostapd
 
 echo "address=/#/10.69.69.1" > /etc/dnsmasq.d
 echo "dhcp-range=10.69.69.2,10.69.69.254,12h" >> /etc/dnsmasq.d
+
+sed -i -e 's/iface wlan0 inet dhcp/iface wlan0 inet static\n  address 10.69.69.1\n  netmask 255.255.255.0/g' /etc/network/interfaces
