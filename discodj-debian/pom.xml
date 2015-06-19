@@ -112,8 +112,8 @@
                 </mapper>
               </data>
               <data>
-                <src>${basedir}/src/deb/etc/apache2/sites-available/discodj</src>
-                <type>file</type>
+                <src>${basedir}/src/deb/etc/apache2/sites-available</src>
+                <type>directory</type>
                 <mapper>
                   <type>perm</type>
                   <prefix>/etc/apache2/sites-available</prefix>
