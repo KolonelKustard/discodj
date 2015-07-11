@@ -1,8 +1,0 @@
-Package: discodjpi
-Version: [[version]]
-Section: misc
-Priority: low
-Architecture: all
-Description: A simple application for a requests based playlist suited for wedding DJ type scenarios
-Maintainer: Ralph Jones <ralph@totalchange.com>
-Depends: discodj, usbmount, hostapd, dnsmasq, xinit
