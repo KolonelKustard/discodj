@@ -10,22 +10,13 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-apt-get update
-apt-get install -y hostapd dnsmasq xinit
-
-JAVA7=`update-alternatives --list java | grep java.*7`
-if [ -z "$JAVA7" ]; then
-  echo "Couldn't find Java 7"
-  exit 1
-fi
-
-echo
-echo "Choosing $JAVA7"
-update-alternatives --set java $JAVA7
+wget http://node-arm.herokuapp.com/node_latest_armhf.deb
+dpkg -i node_latest_armhf.deb
 
 echo "deb http://kolonelkustard.github.io/discodj/apt-repo discodj main" > /etc/apt/sources.list.d/discodj.list
 
 apt-get update
+apt-get install -y hostapd dnsmasq xinit usbmount
 apt-get install --assume-yes --allow-unauthenticated discodj
 
 a2enmod proxy_http
@@ -41,6 +32,7 @@ adduser --system --quiet --ingroup $UNAME --shell /bin/bash --disabled-password 
 mkdir -p $BACKUP
 cp /etc/network/interfaces $BACKUP
 cp /etc/inittab $BACKUP
+cp /etc/default/ifplugd $BACKUP
 
 echo "#!/bin/sh" > /home/$UNAME/.profile
 echo "xinit /usr/share/discodj/player/discodj-kiosk.sh" >> /home/$UNAME/.profile
@@ -62,3 +54,6 @@ echo "address=/#/10.69.69.1" >> /etc/dnsmasq.d/discodj
 echo "dhcp-range=10.69.69.2,10.69.69.254,12h" >> /etc/dnsmasq.d/discodj
 
 sed -i -e 's/iface wlan0 inet.*/iface wlan0 inet static\n  address 10.69.69.1\n  netmask 255.255.255.0/g' /etc/network/interfaces
+
+sed -i -e 's/INTERFACES="auto"/INTERFACES="eth0"/g' /etc/default/ifplugd
+sed -i -e 's/HOTPLUG_INTERFACES="auto"/HOTPLUG_INTERFACES="eth0"/g' /etc/default/ifplugd
