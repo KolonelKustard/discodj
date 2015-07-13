@@ -47,7 +47,11 @@ public class BackgroundSync {
         @Override
         public void run() {
             logger.trace("Beginning scheduled sync task");
-            syncSearchFromCatalogue.sync();
+            try {
+                syncSearchFromCatalogue.sync();
+            } catch (Exception ex) {
+                logger.error("Unexpected failure sync-ing catalogue", ex);
+            }
             logger.trace("Ending scheduled sync task, next will run in {}ms",
                     DELAY_BETWEEN_EXECUTIONS_IN_MS);
         }

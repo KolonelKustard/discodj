@@ -107,18 +107,18 @@ class LuceneSearchPopulator implements SearchPopulator {
         doc.add(new LongField(LuceneSearchProvider.F_LAST_MODIFIED, media
                 .getLastModified().getTime(), Store.YES));
 
-        doc.add(new StringField(LuceneSearchProvider.F_ARTIST, media
-                .getArtist(), Store.YES));
-        doc.add(new StringField(LuceneSearchProvider.F_ALBUM, media.getAlbum(),
-                Store.YES));
-        doc.add(new StringField(LuceneSearchProvider.F_GENRE, media.getGenre(),
-                Store.YES));
+        doc.add(new StringField(LuceneSearchProvider.F_ARTIST,
+                blankNotNull(media.getArtist()), Store.YES));
+        doc.add(new StringField(LuceneSearchProvider.F_ALBUM,
+                blankNotNull(media.getAlbum()), Store.YES));
+        doc.add(new StringField(LuceneSearchProvider.F_GENRE,
+                blankNotNull(media.getGenre()), Store.YES));
         doc.add(new IntField(LuceneSearchProvider.F_YEAR, media.getYear(),
                 Store.YES));
-        doc.add(new StringField(LuceneSearchProvider.F_REQUESTED_BY, media
-                .getRequestedBy(), Store.YES));
-        doc.add(new StringField(LuceneSearchProvider.F_TITLE, media.getTitle(),
-                Store.YES));
+        doc.add(new StringField(LuceneSearchProvider.F_REQUESTED_BY,
+                blankNotNull(media.getRequestedBy()), Store.YES));
+        doc.add(new StringField(LuceneSearchProvider.F_TITLE,
+                blankNotNull(media.getTitle()), Store.YES));
 
         addFacet(doc, LuceneSearchProvider.F_FACET_ARTIST, media.getArtist());
         addFacet(doc, LuceneSearchProvider.F_FACET_ALBUM, media.getAlbum());
@@ -130,6 +130,14 @@ class LuceneSearchPopulator implements SearchPopulator {
                 makeSearchText(media)));
 
         return doc;
+    }
+
+    private String blankNotNull(String str) {
+        if (str == null) {
+            return "";
+        } else {
+            return str.trim();
+        }
     }
 
     private String floorYearToDecade(int year) {
