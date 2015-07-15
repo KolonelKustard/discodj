@@ -127,8 +127,13 @@ public class SyncSearchFromCatalogue {
             searchPopulator.commit();
         }
 
-        logger.info("Completed synchronising {} items in {}ms", currentItem,
-                System.currentTimeMillis() - startTime);
+        if (currentItem > 0) {
+            logger.info("Completed synchronising {} items in {}ms",
+                    currentItem, System.currentTimeMillis() - startTime);
+        } else {
+            logger.trace("Completed synchronising {} items in {}ms",
+                    currentItem, System.currentTimeMillis() - startTime);
+        }
 
         setStatus(Messages.getStatusIdle());
         currentItem = 0;
