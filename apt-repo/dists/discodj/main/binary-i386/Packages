@@ -1,0 +1,16 @@
+Package: discodj
+Version: 1.0.0~SNAPSHOT
+Architecture: all
+Depends: java-runtime-headless (>= 1.7) | default-jre-headless (>=1.7) | java7-runtime-headless | java-7-runtime, jsvc, apache2, libapache2-mod-proxy-html, nodejs, mplayer
+Installed-Size: 32599
+Maintainer: Ralph Jones <ralph@totalchange.com>
+Priority: low
+Section: misc
+Filename: pool/main/d/discodj/discodj_1.0.0~SNAPSHOT_all.deb
+Size: 27344608
+SHA256: ec248b226519f42498c2b4ff7cbdfc941bc0062420ba7c77c0ec51483885a328
+SHA1: 717a81ba13ceb6cbe6671b0a338348d7fabbb952
+MD5sum: 5f2d7a408a1d7e7f51fe5ddf408e5997
+Description: A simple application for a requests based playlist suited for wedding DJ type scenarios
+Homepage: http://kolonelkustard.github.io/discodj/discodj-debian/
+
