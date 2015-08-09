@@ -1,30 +1,31 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
-VERSION=$1
+VERSION=${1/-/\~}
 WORKING_DIR=.
-DEBS_LOCAL=$WORKING_DIR/debs
 GHPAGES_LOCAL=$WORKING_DIR/discodj-gh-pages
+DEB=/vagrant/target/discodj-debian\_$VERSION\_all.deb
 
-DEB=discodj-debian-$VERSION.deb
-
-if [ ! -d "$DEBS_LOCAL" ]; then
-  mkdir $DEBS_LOCAL
+if [[ -f $DEB ]] ; then
+  echo Starting deploy of $DEB to apt repo
+else
+  echo $DEB not found - aborting deploy to apt repo
+  exit 1
 fi
 
-#wget --output-document=$DEBS_LOCAL/$DEB https://oss.sonatype.org/content/repositories/releases/com/totalchange/discodj/discodj-debian/$VERSION/$DEB
-
-wget --output-document=$DEBS_LOCAL/$DEB https://oss.sonatype.org/content/repositories/snapshots/com/totalchange/discodj/discodj-debian/1.0.0-SNAPSHOT/discodj-debian-1.0.0-20150614.111751-3.deb
-
 if [ -d "$GHPAGES_LOCAL" ]; then
+  echo Updating $GHPAGES_LOCAL
   (cd $GHPAGES_LOCAL && git pull origin gh-pages)
 else
+  echo Cloning gh-pages to $GHPAGES_LOCAL
   git clone -b gh-pages --single-branch https://github.com/KolonelKustard/discodj $GHPAGES_LOCAL
 fi
 
-reprepro -b $GHPAGES_LOCAL/apt-repo includedeb discodj $DEBS_LOCAL/$DEB
+echo Adding $DEB to apt repo
+reprepro -b $GHPAGES_LOCAL/apt-repo includedeb discodj $DEB
 
+echo Pushing changes to gh-pages
 (cd $GHPAGES_LOCAL/apt-repo && git add .)
 (cd $GHPAGES_LOCAL && git commit -m "Deploying APT deb for version $VERSION")
 (cd $GHPAGES_LOCAL && git push origin gh-pages)
