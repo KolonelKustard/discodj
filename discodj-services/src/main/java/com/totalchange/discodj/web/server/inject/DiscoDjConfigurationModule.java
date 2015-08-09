@@ -54,7 +54,7 @@ public class DiscoDjConfigurationModule extends AbstractModule {
     }
 
     private File findConfigFile() {
-        return findFirstFile("/etc/discodj.properties");
+        return findFirstFile("/etc/discodj/discodj.properties");
     }
 
     private String defaultCatalogueLocation() throws IOException {

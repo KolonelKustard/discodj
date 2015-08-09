@@ -11,7 +11,7 @@
 #                    suited for wedding DJ type scenarios.
 ### END INIT INFO
 
-CLASS_PATH=/usr/share/discodj/discodj.jar
+CLASS_PATH=/usr/share/discodj/discodj.jar:/etc/discodj
 for jar in `ls /usr/share/discodj/lib`
 do
   CLASS_PATH=$CLASS_PATH:/usr/share/discodj/lib/$jar
