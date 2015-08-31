@@ -1,0 +1,11 @@
+{
+  "appenders": [
+    {
+      "type": "file",
+      "absolute": true,
+      "filename": "/var/log/discodj/discodj-kiosk.log",
+      "maxLogSize": 1024,
+      "backups": 3
+    }
+  ]
+}

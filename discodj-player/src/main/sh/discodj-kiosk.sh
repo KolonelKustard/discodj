@@ -1,5 +1,7 @@
 #!/bin/sh
 
+export LOG4JS_CONFIG=/etc/discodj/discodj-kiosk-log4js.json
+
 echo Starting DiscoDJ Player
 
 while true; do

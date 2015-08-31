@@ -28,6 +28,7 @@ service apache2 restart
 
 addgroup --system --quiet $UNAME
 adduser --system --quiet --ingroup $UNAME --shell /bin/bash --disabled-password $UNAME
+usermod -a -G discodj $UNAME
 
 mkdir -p $BACKUP
 cp /etc/network/interfaces $BACKUP
