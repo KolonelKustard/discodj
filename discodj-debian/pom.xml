@@ -33,7 +33,7 @@
           <configuration>
             <dataSet>
               <data>
-                <src>${basedir}/../discodj-services/target/discodj-services-${version}.jar</src>
+                <src>${basedir}/../discodj-services/target/discodj-services-${project.version}.jar</src>
                 <dst>/usr/share/discodj/discodj.jar</dst>
                 <type>file</type>
               </data>
@@ -46,7 +46,7 @@
                 </mapper>
               </data>
               <data>
-                <src>${basedir}/../discodj-web/target/discodj-web-${version}</src>
+                <src>${basedir}/../discodj-web/target/discodj-web-${project.version}</src>
                 <type>directory</type>
                 <mapper>
                   <type>perm</type>
@@ -131,14 +131,66 @@
             </dataSet>
           </configuration>
         </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+          <configuration>
+            <skip>true</skip>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
+
+    <plugins>
+      <!-- Would like to swap to this plugin but currently failing because of
+          https://cwiki.apache.org/confluence/display/MAVEN/AetherClassNotFound
+      <plugin>
+        <groupId>net.ju-n.maven.plugins</groupId>
+        <artifactId>vagrant-maven-plugin</artifactId>
+        <version>1.0.1</version>
+        <executions>
+          <execution>
+            <phase>deploy</phase>
+            <goals>
+              <goal>up</goal>
+              <goal>ssh</goal>
+              <goal>halt</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <command>/vagrant/apt-deploy.sh ${project.version}</command>
+        </configuration>
+      </plugin> -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.4.0</version>
+        <executions>
+          <execution>
+            <phase>deploy</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <executable>apt-deploy-vagrant.sh</executable>
+          <arguments>
+            <argument>${project.version}</argument>
+          </arguments>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 
   <dependencies>
     <dependency>
       <groupId>com.totalchange.discodj</groupId>
       <artifactId>discodj-web</artifactId>
+      <type>war</type>
     </dependency>
   </dependencies>
 </project>
