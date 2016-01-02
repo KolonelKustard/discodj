@@ -188,8 +188,8 @@ public class LuceneSearchProviderIT {
     private void searchOnACoupleOfFacets() {
         SearchQuery query = new SearchQuery();
         query.setRows(1000);
-        query.addFacetId(LuceneSearchProvider.F_ARTIST + ":Test Artist 5");
-        query.addFacetId(LuceneSearchProvider.F_ALBUM + ":Test Album 7");
+        query.addFacetId(LuceneSearchProvider.F_FACET_ARTIST + ":Test Artist 5");
+        query.addFacetId(LuceneSearchProvider.F_FACET_ALBUM + ":Test Album 7");
 
         SearchResults res = luceneSearchProvider.search(query);
         assertEquals(NUM_TRACKS_PER_ALBUM, res.getResults().size());
