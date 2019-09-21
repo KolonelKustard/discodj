@@ -12,6 +12,9 @@
   <url>http://kolonelkustard.github.io/discodj/</url>
 
   <modules>
+    <module>api</module>
+    <module>catalogue</module>
+
     <module>discodj-core</module>
     <module>discodj-lucene</module>
     <module>discodj-file-catalogue</module>
@@ -125,8 +128,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
 
@@ -193,6 +196,17 @@
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>com.totalchange.discodj</groupId>
+        <artifactId>discodj-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.totalchange.discodj</groupId>
+        <artifactId>discodj-catalogue</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>com.totalchange.discodj</groupId>
         <artifactId>discodj-core</artifactId>

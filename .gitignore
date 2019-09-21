@@ -1,9 +1,11 @@
 .DS_Store
+*.iml
 
 /target
 /.settings
 /.classpath
 /.project
+/.idea
 
 /discodj-core/target
 /discodj-core/.settings
