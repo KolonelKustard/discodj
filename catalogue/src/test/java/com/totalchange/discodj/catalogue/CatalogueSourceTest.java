@@ -1,5 +1,6 @@
 package com.totalchange.discodj.catalogue;
 
+import com.totalchange.discodj.server.media.Media;
 import com.totalchange.discodj.server.media.MediaEntity;
 import com.totalchange.discodj.server.media.MediaSource;
 import com.totalchange.discodj.server.search.SearchPopulator;
@@ -37,11 +38,11 @@ public class CatalogueSourceTest {
     public void addsSomeThingsToTheSearchProvider() throws ExecutionException, InterruptedException {
         when(mediaSource.getId()).thenReturn("test");
         when(mediaSource.getAllMediaEntities()).thenReturn(mockMediaEntities());
-        when(mediaSource.getMedia("0")).thenReturn(new TestMedia(0));
-        when(mediaSource.getMedia("1")).thenReturn(new TestMedia(1));
-        when(mediaSource.getMedia("2")).thenReturn(new TestMedia(2));
-        when(mediaSource.getMedia("3")).thenReturn(new TestMedia(3));
-        when(mediaSource.getMedia("4")).thenReturn(new TestMedia(4));
+        when(mediaSource.getMedia("0")).thenReturn(mockMedia(0));
+        when(mediaSource.getMedia("1")).thenReturn(mockMedia(1));
+        when(mediaSource.getMedia("2")).thenReturn(mockMedia(2));
+        when(mediaSource.getMedia("3")).thenReturn(mockMedia(3));
+        when(mediaSource.getMedia("4")).thenReturn(mockMedia(4));
 
         when(searchProvider.getAllMediaEntities("test")).thenReturn(CompletableFuture.completedFuture(new ArrayList<>()));
 
@@ -64,7 +65,7 @@ public class CatalogueSourceTest {
             }
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
             }
             completableFuture.complete(media);
@@ -85,5 +86,19 @@ public class CatalogueSourceTest {
                 return id;
             }
         };
+    }
+
+    private CompletableFuture<Media> mockMedia(int id) {
+        final CompletableFuture<Media> completableFuture = new CompletableFuture<>();
+
+        Executors.newCachedThreadPool().submit(() -> {
+            try {
+                Thread.sleep(150);
+            } catch (InterruptedException e) {
+            }
+            completableFuture.complete(new TestMedia(id));
+        });
+
+        return completableFuture;
     }
 }

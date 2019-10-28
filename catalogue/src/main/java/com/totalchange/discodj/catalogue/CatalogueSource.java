@@ -15,8 +15,10 @@
  */
 package com.totalchange.discodj.catalogue;
 
+import com.sun.xml.internal.ws.util.CompletedFuture;
 import com.totalchange.discodj.catalogue.sync.MediaEntitySync;
 import com.totalchange.discodj.catalogue.sync.MediaEntitySyncHandler;
+import com.totalchange.discodj.server.media.Media;
 import com.totalchange.discodj.server.media.MediaEntity;
 import com.totalchange.discodj.server.media.MediaSource;
 import com.totalchange.discodj.server.search.SearchPopulator;
@@ -24,8 +26,12 @@ import com.totalchange.discodj.server.search.SearchProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 
 public class CatalogueSource {
@@ -59,17 +65,29 @@ public class CatalogueSource {
 
                 sourceMedia.thenAcceptBothAsync(destinationMedia, (s, d) -> {
                     try {
+                        final List<CompletableFuture<Media>> mediaFutures = new ArrayList<>();
+
                         MediaEntitySync.sync(s, d, new MediaEntitySyncHandler() {
                             @Override
                             public void add(String id) {
                                 logger.debug("Adding {}", id);
-                                lazyLoadSearchPopulator().addMedia(mediaSource.getMedia(id));
+                                final CompletableFuture<Media> f = mediaSource.getMedia(id);
+                                mediaFutures.add(f);
+                                f.thenAcceptAsync((m) -> {
+                                    logger.debug("Got media to add {}", m);
+                                    lazyLoadSearchPopulator().addMedia(m);
+                                }, executor);
                             }
 
                             @Override
                             public void update(String id) {
                                 logger.debug("Updating {}", id);
-                                lazyLoadSearchPopulator().updateMedia(mediaSource.getMedia(id));
+                                final CompletableFuture<Media> f = mediaSource.getMedia(id);
+                                mediaFutures.add(f);
+                                f.thenAcceptAsync((m) -> {
+                                    logger.debug("Got media to update {}", m);
+                                    lazyLoadSearchPopulator().updateMedia(m);
+                                }, executor);
                             }
 
                             @Override
@@ -79,12 +97,18 @@ public class CatalogueSource {
                             }
                         });
 
-                        if (searchPopulator != null) {
-                            searchPopulator.commit();
-                        }
+                        logger.debug("Fired off {} futures, waiting for them all to complete", mediaFutures.size());
+                        final CompletableFuture<Media>[] arr = new CompletableFuture[mediaFutures.size()];
+                        CompletableFuture.allOf(mediaFutures.toArray(arr)).thenAcceptAsync((m) -> {
+                            logger.debug("Completed all {} futures, committing and completing", mediaFutures.size());
 
-                        logger.info("Sync for media source '{}' complete", mediaSource.getId());
-                        syncer.complete(null);
+                            if (searchPopulator != null) {
+                                searchPopulator.commit();
+                            }
+
+                            logger.info("Sync for media source '{}' complete", mediaSource.getId());
+                            syncer.complete(null);
+                        }, executor);
                     } catch (Exception ex) {
                         syncer.completeExceptionally(ex);
                     }
