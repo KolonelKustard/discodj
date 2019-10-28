@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface SearchProvider {
-    CompletableFuture<List<MediaEntity>> getAllMediaEntities();
+    CompletableFuture<List<MediaEntity>> getAllMediaEntities(String mediaSourceId);
     SearchPopulator createPopulator();
     SearchResults search(SearchQuery query);
 }

@@ -19,5 +19,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface MediaSource {
+    String getId();
     CompletableFuture<List<MediaEntity>> getAllMediaEntities();
+    Media getMedia(String id);
 }

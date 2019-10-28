@@ -20,7 +20,7 @@ import java.util.Date;
 
 public interface Media {
     String getId();
-    Date getLastModified();
+    long getLastModifiedMs();
     String getArtist();
     String getAlbum();
     String getGenre();
