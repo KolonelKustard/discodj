@@ -93,7 +93,7 @@ public class CatalogueSourceTest {
 
         Executors.newCachedThreadPool().submit(() -> {
             try {
-                Thread.sleep(150);
+                Thread.sleep(250);
             } catch (InterruptedException e) {
             }
             completableFuture.complete(new TestMedia(id));
