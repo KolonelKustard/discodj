@@ -61,28 +61,30 @@ public class CatalogueSource {
 
                 sourceMedia.thenAcceptBothAsync(destinationMedia, (s, d) -> {
                     try {
-                        final List<CompletableFuture<Media>> mediaFutures = new ArrayList<>();
+                        final List<CompletableFuture<Void>> populatedFutures = new ArrayList<>();
 
                         MediaEntitySync.sync(s, d, new MediaEntitySyncHandler() {
                             @Override
                             public void add(String id) {
                                 logger.debug("Adding '{}' from '{}'", id, mediaSource.getId());
-                                final CompletableFuture<Media> f = mediaSource.getMedia(id);
-                                mediaFutures.add(f);
-                                f.thenAcceptAsync((m) -> {
+                                final CompletableFuture<Void> f = new CompletableFuture<>();
+                                populatedFutures.add(f);
+                                mediaSource.getMedia(id).thenAcceptAsync((m) -> {
                                     logger.debug("Got media to add {} from '{}'", m, mediaSource.getId());
                                     lazyLoadSearchPopulator().addMedia(m);
+                                    f.complete(null);
                                 }, executor);
                             }
 
                             @Override
                             public void update(String id) {
                                 logger.debug("Updating '{}' from '{}'", id, mediaSource.getId());
-                                final CompletableFuture<Media> f = mediaSource.getMedia(id);
-                                mediaFutures.add(f);
-                                f.thenAcceptAsync((m) -> {
+                                final CompletableFuture<Void> f = new CompletableFuture<>();
+                                populatedFutures.add(f);
+                                mediaSource.getMedia(id).thenAcceptAsync((m) -> {
                                     logger.debug("Got media to update {} from '{}'", m, mediaSource.getId());
                                     lazyLoadSearchPopulator().updateMedia(m);
+                                    f.complete(null);
                                 }, executor);
                             }
 
@@ -94,15 +96,17 @@ public class CatalogueSource {
                         });
 
                         logger.debug("Fired off {} futures from '{}', waiting for them all to complete",
-                                mediaFutures.size(), mediaSource.getId());
-                        final CompletableFuture<Media>[] arr = new CompletableFuture[mediaFutures.size()];
-                        CompletableFuture.allOf(mediaFutures.toArray(arr)).thenAcceptAsync((m) -> {
+                                populatedFutures.size(), mediaSource.getId());
+                        final CompletableFuture<Media>[] arr = new CompletableFuture[populatedFutures.size()];
+                        CompletableFuture.allOf(populatedFutures.toArray(arr)).thenAcceptAsync((m) -> {
                             logger.debug("Completed all {} futures from '{}', committing and completing",
-                                    mediaFutures.size(), mediaSource.getId());
+                                    populatedFutures.size(), mediaSource.getId());
 
                             if (searchPopulator != null) {
                                 logger.debug("Looks like there were some changes from '{}', committing them", mediaSource.getId());
                                 searchPopulator.commit();
+                            } else {
+                                logger.debug("No changes");
                             }
 
                             logger.info("Sync for media source '{}' complete", mediaSource.getId());
