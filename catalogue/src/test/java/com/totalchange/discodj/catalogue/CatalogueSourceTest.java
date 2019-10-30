@@ -37,7 +37,13 @@ public class CatalogueSourceTest {
     @Test
     public void addsSomeThingsToTheSearchProvider() throws ExecutionException, InterruptedException {
         when(mediaSource.getId()).thenReturn("test");
-        when(mediaSource.getAllMediaEntities()).thenReturn(mockMediaEntities());
+        when(mediaSource.getAllMediaEntities()).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0)
+                .withMediaEntity(1)
+                .withMediaEntity(2)
+                .withMediaEntity(3)
+                .withMediaEntity(4)
+                .build());
         when(mediaSource.getMedia("0")).thenReturn(mockMedia(0));
         when(mediaSource.getMedia("1")).thenReturn(mockMedia(1));
         when(mediaSource.getMedia("2")).thenReturn(mockMedia(2));
@@ -47,6 +53,7 @@ public class CatalogueSourceTest {
         when(searchProvider.getAllMediaEntities("test")).thenReturn(CompletableFuture.completedFuture(new ArrayList<>()));
 
         catalogueSource.refresh().get();
+
         verify(searchPopulator).addMedia(new TestMedia(0));
         verify(searchPopulator).addMedia(new TestMedia(1));
         verify(searchPopulator).addMedia(new TestMedia(2));
@@ -55,50 +62,73 @@ public class CatalogueSourceTest {
         verify(searchPopulator).commit();
     }
 
-    private CompletableFuture<List<MediaEntity>> mockMediaEntities() {
-        final CompletableFuture<List<MediaEntity>> completableFuture = new CompletableFuture<>();
+    @Test
+    public void updatesSomeThingsInTheSearchProvider() throws ExecutionException, InterruptedException {
+        when(mediaSource.getId()).thenReturn("test");
 
-        Executors.newCachedThreadPool().submit(() -> {
-            final List<MediaEntity> media = new ArrayList<>();
-            for (int num = 0; num < 5; num++) {
-                media.add(mockMediaEntity(num));
-            }
+        when(mediaSource.getAllMediaEntities()).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0)
+                .withMediaEntity(1)
+                .withMediaEntity(2)
+                .withMediaEntity(3)
+                .withMediaEntity(4)
+                .build());
 
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-            }
-            completableFuture.complete(media);
-        });
+        when(mediaSource.getMedia("0")).thenReturn(mockMedia(0));
+        when(mediaSource.getMedia("1")).thenReturn(mockMedia(1));
+        when(mediaSource.getMedia("2")).thenReturn(mockMedia(2));
+        when(mediaSource.getMedia("3")).thenReturn(mockMedia(3));
+        when(mediaSource.getMedia("4")).thenReturn(mockMedia(4));
 
-        return completableFuture;
+        when(searchProvider.getAllMediaEntities("test")).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0, 1)
+                .withMediaEntity(1, 2)
+                .withMediaEntity(2, 3)
+                .withMediaEntity(3, 4)
+                .withMediaEntity(4, 5)
+                .build());
+
+        catalogueSource.refresh().get();
+
+        verify(searchPopulator).updateMedia(new TestMedia(0));
+        verify(searchPopulator).updateMedia(new TestMedia(1));
+        verify(searchPopulator).updateMedia(new TestMedia(2));
+        verify(searchPopulator).updateMedia(new TestMedia(3));
+        verify(searchPopulator).updateMedia(new TestMedia(4));
+        verify(searchPopulator).commit();
     }
 
-    private MediaEntity mockMediaEntity(final int id) {
-        return new MediaEntity() {
-            @Override
-            public String getId() {
-                return String.valueOf(id);
-            }
+    @Test
+    public void deletesSomeThingsInTheSearchProvider() throws ExecutionException, InterruptedException {
+        when(mediaSource.getId()).thenReturn("test");
 
-            @Override
-            public long getLastModified() {
-                return id;
-            }
-        };
+        when(mediaSource.getAllMediaEntities()).thenReturn(new TestMediaEntityListBuilder().build());
+
+        when(mediaSource.getMedia("0")).thenReturn(mockMedia(0));
+        when(mediaSource.getMedia("1")).thenReturn(mockMedia(1));
+        when(mediaSource.getMedia("2")).thenReturn(mockMedia(2));
+        when(mediaSource.getMedia("3")).thenReturn(mockMedia(3));
+        when(mediaSource.getMedia("4")).thenReturn(mockMedia(4));
+
+        when(searchProvider.getAllMediaEntities("test")).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0)
+                .withMediaEntity(1)
+                .withMediaEntity(2)
+                .withMediaEntity(3)
+                .withMediaEntity(4)
+                .build());
+
+        catalogueSource.refresh().get();
+
+        verify(searchPopulator).deleteMedia("0");
+        verify(searchPopulator).deleteMedia("1");
+        verify(searchPopulator).deleteMedia("2");
+        verify(searchPopulator).deleteMedia("3");
+        verify(searchPopulator).deleteMedia("4");
+        verify(searchPopulator).commit();
     }
 
     private CompletableFuture<Media> mockMedia(int id) {
-        final CompletableFuture<Media> completableFuture = new CompletableFuture<>();
-
-        Executors.newCachedThreadPool().submit(() -> {
-            try {
-                Thread.sleep(250);
-            } catch (InterruptedException e) {
-            }
-            completableFuture.complete(new TestMedia(id));
-        });
-
-        return completableFuture;
+        return CompletableFutureWithRandomDelay.completeInABitWithThing(200, 500, new TestMedia(id));
     }
 }
