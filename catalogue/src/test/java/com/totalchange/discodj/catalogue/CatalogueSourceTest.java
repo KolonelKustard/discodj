@@ -1,7 +1,6 @@
 package com.totalchange.discodj.catalogue;
 
 import com.totalchange.discodj.server.media.Media;
-import com.totalchange.discodj.server.media.MediaEntity;
 import com.totalchange.discodj.server.media.MediaSource;
 import com.totalchange.discodj.server.search.SearchPopulator;
 import com.totalchange.discodj.server.search.SearchProvider;
@@ -59,6 +58,8 @@ public class CatalogueSourceTest {
         verify(searchPopulator).addMedia(new TestMedia(2));
         verify(searchPopulator).addMedia(new TestMedia(3));
         verify(searchPopulator).addMedia(new TestMedia(4));
+        verify(searchPopulator, never()).updateMedia(any());
+        verify(searchPopulator, never()).deleteMedia(anyString());
         verify(searchPopulator).commit();
     }
 
@@ -95,6 +96,8 @@ public class CatalogueSourceTest {
         verify(searchPopulator).updateMedia(new TestMedia(2));
         verify(searchPopulator).updateMedia(new TestMedia(3));
         verify(searchPopulator).updateMedia(new TestMedia(4));
+        verify(searchPopulator, never()).addMedia(any());
+        verify(searchPopulator, never()).deleteMedia(anyString());
         verify(searchPopulator).commit();
     }
 
@@ -103,12 +106,6 @@ public class CatalogueSourceTest {
         when(mediaSource.getId()).thenReturn("test");
 
         when(mediaSource.getAllMediaEntities()).thenReturn(new TestMediaEntityListBuilder().build());
-
-        when(mediaSource.getMedia("0")).thenReturn(mockMedia(0));
-        when(mediaSource.getMedia("1")).thenReturn(mockMedia(1));
-        when(mediaSource.getMedia("2")).thenReturn(mockMedia(2));
-        when(mediaSource.getMedia("3")).thenReturn(mockMedia(3));
-        when(mediaSource.getMedia("4")).thenReturn(mockMedia(4));
 
         when(searchProvider.getAllMediaEntities("test")).thenReturn(new TestMediaEntityListBuilder()
                 .withMediaEntity(0)
@@ -125,7 +122,70 @@ public class CatalogueSourceTest {
         verify(searchPopulator).deleteMedia("2");
         verify(searchPopulator).deleteMedia("3");
         verify(searchPopulator).deleteMedia("4");
+        verify(searchPopulator, never()).addMedia(any());
+        verify(searchPopulator, never()).updateMedia(any());
         verify(searchPopulator).commit();
+    }
+
+    @Test
+    public void addsUpdatesAndDeletesSomeThingsInTheSearchProvider() throws ExecutionException, InterruptedException {
+        when(mediaSource.getId()).thenReturn("test");
+
+        when(mediaSource.getAllMediaEntities()).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(1)
+                .withMediaEntity(2)
+                .withMediaEntity(4)
+                .withMediaEntity(5)
+                .build());
+
+        when(mediaSource.getMedia("1")).thenReturn(mockMedia(1));
+        when(mediaSource.getMedia("2")).thenReturn(mockMedia(2));
+        when(mediaSource.getMedia("4")).thenReturn(mockMedia(4));
+        when(mediaSource.getMedia("5")).thenReturn(mockMedia(5));
+
+        when(searchProvider.getAllMediaEntities("test")).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0)
+                .withMediaEntity(1, 2)
+                .withMediaEntity(3)
+                .withMediaEntity(5)
+                .build());
+
+        catalogueSource.refresh().get();
+
+        verify(searchPopulator).deleteMedia("0");
+        verify(searchPopulator).updateMedia(new TestMedia(1));
+        verify(searchPopulator).addMedia(new TestMedia(2));
+        verify(searchPopulator).deleteMedia("3");
+        verify(searchPopulator).addMedia(new TestMedia(4));
+        verify(searchPopulator).commit();
+    }
+
+    @Test
+    public void doesNothingIfNothingHasChanged() throws ExecutionException, InterruptedException {
+        when(mediaSource.getId()).thenReturn("test");
+        when(mediaSource.getAllMediaEntities()).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0)
+                .withMediaEntity(1)
+                .withMediaEntity(2)
+                .withMediaEntity(3)
+                .withMediaEntity(4)
+                .build());
+
+        when(searchProvider.getAllMediaEntities("test")).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0)
+                .withMediaEntity(1)
+                .withMediaEntity(2)
+                .withMediaEntity(3)
+                .withMediaEntity(4)
+                .build());
+
+        catalogueSource.refresh().get();
+
+        verify(searchPopulator, never()).addMedia(any());
+        verify(searchPopulator, never()).updateMedia(any());
+        verify(searchPopulator, never()).deleteMedia(anyString());
+        verify(searchProvider, never()).createPopulator();
+        verify(searchPopulator, never()).commit();
     }
 
     private CompletableFuture<Media> mockMedia(int id) {
