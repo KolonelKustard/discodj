@@ -115,7 +115,10 @@ public class CatalogueSource {
                     } catch (Exception ex) {
                         syncer.completeExceptionally(ex);
                     }
-                }, executor);
+                }, executor).exceptionally((ex) -> {
+                    syncer.completeExceptionally(ex);
+                    return null;
+                });
             } catch (Exception ex) {
                 syncer.completeExceptionally(ex);
             }

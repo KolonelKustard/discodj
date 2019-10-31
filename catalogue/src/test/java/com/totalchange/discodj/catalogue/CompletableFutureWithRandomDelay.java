@@ -23,8 +23,26 @@ public final class CompletableFutureWithRandomDelay {
                 completableFuture.completeExceptionally(e);
             }
 
-            logger.debug("Completing after {} with thing '{}'", delay, thing);
+            logger.debug("Completing after {}ms with thing '{}'", delay, thing);
             completableFuture.complete(thing);
+        });
+        return completableFuture;
+    }
+
+    public static CompletableFuture completeWithErrorInABit(final int minMs, final int maxMs, final String msg) {
+        final int delay = randomNumberBetween(minMs, maxMs);
+
+        final CompletableFuture completableFuture = new CompletableFuture();
+        Executors.newSingleThreadExecutor(new NamedThreadFactory("randomly-delayed")).submit(() -> {
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                logger.error("Errrr interrupted", e);
+                completableFuture.completeExceptionally(e);
+            }
+
+            logger.debug("Completing after {}ms with exception", delay);
+            completableFuture.completeExceptionally(new TestException(msg));
         });
         return completableFuture;
     }

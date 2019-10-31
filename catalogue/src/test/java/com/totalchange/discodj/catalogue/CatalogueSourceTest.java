@@ -8,12 +8,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 
 import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
 
 public class CatalogueSourceTest {
     private MediaSource mediaSource;
@@ -188,7 +188,33 @@ public class CatalogueSourceTest {
         verify(searchPopulator, never()).commit();
     }
 
-    private CompletableFuture<Media> mockMedia(int id) {
+    @Test
+    public void handlesFailureFromMediaSourceToGetAllMedia() throws ExecutionException, InterruptedException {
+        when(mediaSource.getAllMediaEntities()).thenThrow(new TestException("Media source get all"));
+        assertExceptional(catalogueSource.refresh(), "Media source get all");
+    }
+
+    @Test
+    public void handlesFailureFromMediaSourceToGetAllMediaAsync() throws ExecutionException, InterruptedException {
+        when(mediaSource.getId()).thenReturn("test");
+        when(mediaSource.getAllMediaEntities()).thenReturn(
+                CompletableFutureWithRandomDelay.completeWithErrorInABit(100, 200, "Media source get all future"));
+        when(searchProvider.getAllMediaEntities("test")).thenReturn(new TestMediaEntityListBuilder().build());
+        assertExceptional(catalogueSource.refresh(), "Media source get all future");
+    }
+
+    private CompletableFuture<Media> mockMedia(final int id) {
         return CompletableFutureWithRandomDelay.completeInABitWithThing(200, 500, new TestMedia(id));
+    }
+
+    private void assertExceptional(final CompletableFuture<?> f, final String msg) throws InterruptedException {
+        try {
+            f.get();
+        } catch (ExecutionException ex) {
+            assertNotNull("Expected there to be a cause for the completable future failure", ex.getCause());
+            assertEquals("Expected cause of completable future failure to be a TestException",
+                    TestException.class, ex.getCause().getClass());
+            assertEquals("Expected an error message in the cause of " + msg, ex.getCause().getMessage(), msg);
+        }
     }
 }
