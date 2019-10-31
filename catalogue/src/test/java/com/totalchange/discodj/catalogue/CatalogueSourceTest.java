@@ -189,18 +189,34 @@ public class CatalogueSourceTest {
     }
 
     @Test
-    public void handlesFailureFromMediaSourceToGetAllMedia() throws ExecutionException, InterruptedException {
+    public void handlesFailureFromMediaSourceToGetAllMedia() throws InterruptedException {
         when(mediaSource.getAllMediaEntities()).thenThrow(new TestException("Media source get all"));
         assertExceptional(catalogueSource.refresh(), "Media source get all");
     }
 
     @Test
-    public void handlesFailureFromMediaSourceToGetAllMediaAsync() throws ExecutionException, InterruptedException {
+    public void handlesFailureFromMediaSourceToGetAllMediaAsync() throws InterruptedException {
         when(mediaSource.getId()).thenReturn("test");
         when(mediaSource.getAllMediaEntities()).thenReturn(
                 CompletableFutureWithRandomDelay.completeWithErrorInABit(100, 200, "Media source get all future"));
         when(searchProvider.getAllMediaEntities("test")).thenReturn(new TestMediaEntityListBuilder().build());
         assertExceptional(catalogueSource.refresh(), "Media source get all future");
+    }
+
+    @Test
+    public void handlesFailureFromSearchProviderToGetAllMedia() throws InterruptedException {
+        when(mediaSource.getId()).thenReturn("test");
+        when(searchProvider.getAllMediaEntities("test")).thenThrow(new TestException("Search provider get all"));
+        assertExceptional(catalogueSource.refresh(), "Search provider get all");
+    }
+
+    @Test
+    public void handlesFailureFromSearchProviderToGetAllMediaAsync() throws InterruptedException {
+        when(mediaSource.getId()).thenReturn("test");
+        when(mediaSource.getAllMediaEntities()).thenReturn(new TestMediaEntityListBuilder().build());
+        when(searchProvider.getAllMediaEntities("test")).thenReturn(
+                CompletableFutureWithRandomDelay.completeWithErrorInABit(100, 200, "Search provider get all future"));
+        assertExceptional(catalogueSource.refresh(), "Search provider get all future");
     }
 
     private CompletableFuture<Media> mockMedia(final int id) {
