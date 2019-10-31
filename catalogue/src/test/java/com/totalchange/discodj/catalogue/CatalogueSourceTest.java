@@ -219,6 +219,102 @@ public class CatalogueSourceTest {
         assertExceptional(catalogueSource.refresh(), "Search provider get all future");
     }
 
+    @Test
+    public void handlesFailureToAddMedia() throws ExecutionException, InterruptedException {
+        when(mediaSource.getId()).thenReturn("test");
+        when(mediaSource.getAllMediaEntities()).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0)
+                .withMediaEntity(1)
+                .withMediaEntity(2)
+                .build());
+        when(mediaSource.getMedia("0")).thenReturn(mockMedia(0));
+        when(mediaSource.getMedia("1")).thenThrow(new TestException("Failed to get media 1"));
+        when(mediaSource.getMedia("2")).thenReturn(mockMedia(2));
+
+        when(searchProvider.getAllMediaEntities("test")).thenReturn(CompletableFuture.completedFuture(new ArrayList<>()));
+
+        catalogueSource.refresh().get();
+
+        verify(searchPopulator).addMedia(new TestMedia(0));
+        verify(searchPopulator, never()).addMedia(new TestMedia(1));
+        verify(searchPopulator).addMedia(new TestMedia(2));
+        verify(searchPopulator).commit();
+    }
+
+    @Test
+    public void handlesFailureToAddMediaAsync() throws ExecutionException, InterruptedException {
+        when(mediaSource.getId()).thenReturn("test");
+        when(mediaSource.getAllMediaEntities()).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0)
+                .withMediaEntity(1)
+                .withMediaEntity(2)
+                .build());
+        when(mediaSource.getMedia("0")).thenReturn(mockMedia(0));
+        when(mediaSource.getMedia("1")).thenReturn(CompletableFutureWithRandomDelay.completeWithErrorInABit(100, 200, "Media 1 failed async"));
+        when(mediaSource.getMedia("2")).thenReturn(mockMedia(2));
+
+        when(searchProvider.getAllMediaEntities("test")).thenReturn(CompletableFuture.completedFuture(new ArrayList<>()));
+
+        catalogueSource.refresh().get();
+
+        verify(searchPopulator).addMedia(new TestMedia(0));
+        verify(searchPopulator, never()).addMedia(new TestMedia(1));
+        verify(searchPopulator).addMedia(new TestMedia(2));
+        verify(searchPopulator).commit();
+    }
+
+    @Test
+    public void handlesFailureToUpdateMedia() throws ExecutionException, InterruptedException {
+        when(mediaSource.getId()).thenReturn("test");
+        when(mediaSource.getAllMediaEntities()).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0)
+                .withMediaEntity(1)
+                .withMediaEntity(2)
+                .build());
+        when(mediaSource.getMedia("0")).thenReturn(mockMedia(0));
+        when(mediaSource.getMedia("1")).thenThrow(new TestException("Failed to get media 1"));
+        when(mediaSource.getMedia("2")).thenReturn(mockMedia(2));
+
+        when(searchProvider.getAllMediaEntities("test")).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0, 1)
+                .withMediaEntity(1, 2)
+                .withMediaEntity(2, 3)
+                .build());
+
+        catalogueSource.refresh().get();
+
+        verify(searchPopulator).updateMedia(new TestMedia(0));
+        verify(searchPopulator, never()).updateMedia(new TestMedia(1));
+        verify(searchPopulator).updateMedia(new TestMedia(2));
+        verify(searchPopulator).commit();
+    }
+
+    @Test
+    public void handlesFailureToUpdateMediaAsync() throws ExecutionException, InterruptedException {
+        when(mediaSource.getId()).thenReturn("test");
+        when(mediaSource.getAllMediaEntities()).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0)
+                .withMediaEntity(1)
+                .withMediaEntity(2)
+                .build());
+        when(mediaSource.getMedia("0")).thenReturn(mockMedia(0));
+        when(mediaSource.getMedia("1")).thenReturn(CompletableFutureWithRandomDelay.completeWithErrorInABit(100, 200, "Media 1 failed async"));
+        when(mediaSource.getMedia("2")).thenReturn(mockMedia(2));
+
+        when(searchProvider.getAllMediaEntities("test")).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0, 1)
+                .withMediaEntity(1, 2)
+                .withMediaEntity(2, 3)
+                .build());
+
+        catalogueSource.refresh().get();
+
+        verify(searchPopulator).updateMedia(new TestMedia(0));
+        verify(searchPopulator, never()).updateMedia(new TestMedia(1));
+        verify(searchPopulator).updateMedia(new TestMedia(2));
+        verify(searchPopulator).commit();
+    }
+
     private CompletableFuture<Media> mockMedia(final int id) {
         return CompletableFutureWithRandomDelay.completeInABitWithThing(200, 500, new TestMedia(id));
     }

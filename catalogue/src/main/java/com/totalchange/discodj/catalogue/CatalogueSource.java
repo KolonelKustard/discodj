@@ -69,11 +69,20 @@ public class CatalogueSource {
                                 logger.debug("Adding '{}' from '{}'", id, mediaSource.getId());
                                 final CompletableFuture<Void> f = new CompletableFuture<>();
                                 populatedFutures.add(f);
-                                mediaSource.getMedia(id).thenAcceptAsync((m) -> {
-                                    logger.debug("Got media to add {} from '{}'", m, mediaSource.getId());
-                                    lazyLoadSearchPopulator().addMedia(m);
+                                try {
+                                    mediaSource.getMedia(id).thenAcceptAsync((m) -> {
+                                        logger.debug("Got media to add '{}' from '{}'", m, mediaSource.getId());
+                                        lazyLoadSearchPopulator().addMedia(m);
+                                        f.complete(null);
+                                    }, executor).exceptionally((ex) -> {
+                                        logger.error("Failed in callback to add media with id '{}' from '{}', skipping it", id, mediaSource.getId(), ex);
+                                        f.complete(null);
+                                        return null;
+                                    });
+                                } catch (Exception ex) {
+                                    logger.error("Failed to add media with id '{}' from '{}', skipping it", id, mediaSource.getId(), ex);
                                     f.complete(null);
-                                }, executor);
+                                }
                             }
 
                             @Override
@@ -81,11 +90,20 @@ public class CatalogueSource {
                                 logger.debug("Updating '{}' from '{}'", id, mediaSource.getId());
                                 final CompletableFuture<Void> f = new CompletableFuture<>();
                                 populatedFutures.add(f);
-                                mediaSource.getMedia(id).thenAcceptAsync((m) -> {
-                                    logger.debug("Got media to update {} from '{}'", m, mediaSource.getId());
-                                    lazyLoadSearchPopulator().updateMedia(m);
+                                try {
+                                    mediaSource.getMedia(id).thenAcceptAsync((m) -> {
+                                        logger.debug("Got media to update '{}' from '{}'", m, mediaSource.getId());
+                                        lazyLoadSearchPopulator().updateMedia(m);
+                                        f.complete(null);
+                                    }, executor).exceptionally((ex) -> {
+                                        logger.error("Failed in callback to update media with id '{}' from '{}', skipping it", id, mediaSource.getId(), ex);
+                                        f.complete(null);
+                                        return null;
+                                    });
+                                } catch (Exception ex) {
+                                    logger.error("Failed to update media with id '{}' from '{}', skipping it", id, mediaSource.getId(), ex);
                                     f.complete(null);
-                                }, executor);
+                                }
                             }
 
                             @Override
