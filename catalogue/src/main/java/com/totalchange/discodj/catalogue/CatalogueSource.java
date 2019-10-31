@@ -70,15 +70,23 @@ public class CatalogueSource {
                                 final CompletableFuture<Void> f = new CompletableFuture<>();
                                 populatedFutures.add(f);
                                 try {
-                                    mediaSource.getMedia(id).thenAcceptAsync((m) -> {
-                                        logger.debug("Got media to add '{}' from '{}'", m, mediaSource.getId());
-                                        lazyLoadSearchPopulator().addMedia(m);
-                                        f.complete(null);
-                                    }, executor).exceptionally((ex) -> {
-                                        logger.error("Failed in callback to add media with id '{}' from '{}', skipping it", id, mediaSource.getId(), ex);
-                                        f.complete(null);
-                                        return null;
-                                    });
+                                    mediaSource.getMedia(id).handleAsync((m, ex) -> {
+                                        if (ex == null) {
+                                            logger.debug("Got media to add '{}' from '{}'", m, mediaSource.getId());
+                                            try {
+                                                lazyLoadSearchPopulator().addMedia(m);
+                                                f.complete(null);
+                                            } catch(Exception searchEx) {
+                                                logger.error("Search populator failed when adding media {}", m, searchEx);
+                                                f.completeExceptionally(searchEx);
+                                            }
+                                            return null;
+                                        } else {
+                                            logger.error("Failed in callback to add media with id '{}' from '{}', skipping it", id, mediaSource.getId(), ex);
+                                            f.complete(null);
+                                            return null;
+                                        }
+                                    }, executor);
                                 } catch (Exception ex) {
                                     logger.error("Failed to add media with id '{}' from '{}', skipping it", id, mediaSource.getId(), ex);
                                     f.complete(null);
@@ -91,10 +99,23 @@ public class CatalogueSource {
                                 final CompletableFuture<Void> f = new CompletableFuture<>();
                                 populatedFutures.add(f);
                                 try {
-                                    mediaSource.getMedia(id).thenAcceptAsync((m) -> {
-                                        logger.debug("Got media to update '{}' from '{}'", m, mediaSource.getId());
-                                        lazyLoadSearchPopulator().updateMedia(m);
-                                        f.complete(null);
+                                    mediaSource.getMedia(id).handleAsync((m, ex) -> {
+                                        if (ex == null) {
+                                            logger.debug("Got media to update '{}' from '{}'", m, mediaSource.getId());
+                                            try {
+                                                lazyLoadSearchPopulator().updateMedia(m);
+                                                f.complete(null);
+                                                return null;
+                                            } catch (Exception searchEx) {
+                                                logger.error("Search populator failed when updating media {}", m, searchEx);
+                                                f.completeExceptionally(searchEx);
+                                                return null;
+                                            }
+                                        } else {
+                                            logger.error("Failed in callback to update media with id '{}' from '{}', skipping it", id, mediaSource.getId(), ex);
+                                            f.complete(null);
+                                            return null;
+                                        }
                                     }, executor).exceptionally((ex) -> {
                                         logger.error("Failed in callback to update media with id '{}' from '{}', skipping it", id, mediaSource.getId(), ex);
                                         f.complete(null);
@@ -129,7 +150,10 @@ public class CatalogueSource {
 
                             logger.info("Sync for media source '{}' complete", mediaSource.getId());
                             syncer.complete(null);
-                        }, executor);
+                        }, executor).exceptionally((ex) -> {
+                            syncer.completeExceptionally(ex);
+                            return null;
+                        });
                     } catch (Exception ex) {
                         syncer.completeExceptionally(ex);
                     }

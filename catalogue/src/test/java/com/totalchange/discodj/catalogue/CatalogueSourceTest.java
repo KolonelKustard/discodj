@@ -315,6 +315,52 @@ public class CatalogueSourceTest {
         verify(searchPopulator).commit();
     }
 
+    @Test
+    public void handlesErrorFromSearchPopulatorWhenAddingMedia() throws InterruptedException {
+        when(mediaSource.getId()).thenReturn("test");
+        when(mediaSource.getAllMediaEntities()).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0)
+                .build());
+        when(mediaSource.getMedia("0")).thenReturn(mockMedia(0));
+
+        when(searchProvider.getAllMediaEntities("test")).thenReturn(CompletableFuture.completedFuture(new ArrayList<>()));
+
+        doThrow(new TestException("Failed to add media")).when(searchPopulator).addMedia(any());
+
+        assertExceptional(catalogueSource.refresh(), "Failed to add media");
+    }
+
+    @Test
+    public void handlesErrorFromSearchPopulatorWhenUpdatingMedia() throws InterruptedException {
+        when(mediaSource.getId()).thenReturn("test");
+        when(mediaSource.getAllMediaEntities()).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0)
+                .build());
+        when(mediaSource.getMedia("0")).thenReturn(mockMedia(0));
+
+        when(searchProvider.getAllMediaEntities("test")).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0, 1)
+                .build());
+
+        doThrow(new TestException("Failed to update media")).when(searchPopulator).updateMedia(any());
+
+        assertExceptional(catalogueSource.refresh(), "Failed to update media");
+    }
+
+    @Test
+    public void handlesErrorFromSearchPopulatorWhenDeletingMedia() throws InterruptedException {
+        when(mediaSource.getId()).thenReturn("test");
+        when(mediaSource.getAllMediaEntities()).thenReturn(new TestMediaEntityListBuilder().build());
+
+        when(searchProvider.getAllMediaEntities("test")).thenReturn(new TestMediaEntityListBuilder()
+                .withMediaEntity(0, 1)
+                .build());
+
+        doThrow(new TestException("Failed to delete media")).when(searchPopulator).deleteMedia(anyString());
+
+        assertExceptional(catalogueSource.refresh(), "Failed to delete media");
+    }
+
     private CompletableFuture<Media> mockMedia(final int id) {
         return CompletableFutureWithRandomDelay.completeInABitWithThing(200, 500, new TestMedia(id));
     }
@@ -322,6 +368,7 @@ public class CatalogueSourceTest {
     private void assertExceptional(final CompletableFuture<?> f, final String msg) throws InterruptedException {
         try {
             f.get();
+            fail("Expected to get an ExecutionException from this CompletableFuture");
         } catch (ExecutionException ex) {
             assertNotNull("Expected there to be a cause for the completable future failure", ex.getCause());
             assertEquals("Expected cause of completable future failure to be a TestException",
