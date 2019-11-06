@@ -16,7 +16,6 @@
 package com.totalchange.discodj.server.media;
 
 import java.net.URI;
-import java.util.Date;
 
 public interface Media {
     String getId();

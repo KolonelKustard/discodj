@@ -17,7 +17,7 @@ public class TestMediaEntity implements MediaEntity {
     }
 
     @Override
-    public long getLastModified() {
+    public long getLastModifiedMs() {
         return lastModified;
     }
 

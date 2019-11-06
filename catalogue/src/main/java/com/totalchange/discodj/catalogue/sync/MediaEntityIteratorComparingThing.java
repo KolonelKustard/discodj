@@ -72,7 +72,7 @@ class MediaEntityIteratorComparingThing {
     private void compareTheCurrentTwoMediaItems() {
         final int compared = comparator.compare(currentSourceItem, currentDestinationItem);
         if (compared == 0) {
-            if (currentSourceItem.getLastModified() != currentDestinationItem.getLastModified()) {
+            if (currentSourceItem.getLastModifiedMs() != currentDestinationItem.getLastModifiedMs()) {
                 handler.update(currentSourceItem.getId());
             }
             currentSourceItem = null;

@@ -130,7 +130,7 @@ public class MediaEntitySyncTest {
         }
 
         @Override
-        public long getLastModified() {
+        public long getLastModifiedMs() {
             return lastModified;
         }
     }
