@@ -11,8 +11,8 @@
 
   <artifactId>discodj-catalogue</artifactId>
   <packaging>jar</packaging>
-  <name>Disco DJ Core Stuff</name>
-  <description>Stuff shared around like interfaces</description>
+  <name>Disco DJ Catalogue</name>
+  <description>Manages the provided media sources and synchronises them with the provided search index</description>
 
   <dependencies>
     <dependency>
