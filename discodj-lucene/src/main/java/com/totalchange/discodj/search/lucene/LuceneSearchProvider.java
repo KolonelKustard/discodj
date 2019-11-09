@@ -1,11 +1,18 @@
 package com.totalchange.discodj.search.lucene;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
+import com.totalchange.discodj.server.media.MediaEntity;
+import com.totalchange.discodj.server.search.SearchPopulator;
+import com.totalchange.discodj.server.search.SearchProvider;
+import com.totalchange.discodj.server.search.SearchQuery;
+import com.totalchange.discodj.server.search.SearchResults;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.facet.DrillDownQuery;
 import org.apache.lucene.facet.Facets;
@@ -23,22 +30,16 @@ import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.util.NamedThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.totalchange.discodj.catalogue.Catalogue.CatalogueEntity;
-import com.totalchange.discodj.search.SearchException;
-import com.totalchange.discodj.search.SearchPopulator;
-import com.totalchange.discodj.search.SearchProvider;
-import com.totalchange.discodj.search.SearchQuery;
-import com.totalchange.discodj.search.SearchResults;
-
 public class LuceneSearchProvider implements SearchProvider {
-    private static final Logger logger = LoggerFactory
-            .getLogger(LuceneSearchProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(LuceneSearchProvider.class);
 
     static final String F_ID = "id";
-    static final String F_ID_FOR_SORTING = "idForSorting";
+    static final String F_SOURCE_ID = "sourceId";
+    static final String F_URI = "uri";
     static final String F_LAST_MODIFIED = "lastModified";
     static final String F_ARTIST = "artist";
     static final String F_ALBUM = "album";
@@ -54,7 +55,8 @@ public class LuceneSearchProvider implements SearchProvider {
 
     static final String F_TEXT = "text";
 
-    private Directory directory;
+    private final Executor executor = Executors.newSingleThreadExecutor(new NamedThreadFactory("lucene"));
+    private final Directory directory;
 
     @Inject
     public LuceneSearchProvider(Directory directory) {
@@ -62,20 +64,19 @@ public class LuceneSearchProvider implements SearchProvider {
     }
 
     @Override
-    public Iterator<CatalogueEntity> listAllAlphabeticallyById()
-            throws SearchException {
-        return new LuceneCatalogueEntityIterator(directory);
+    public CompletableFuture<List<MediaEntity>> getAllMediaEntities(String mediaSourceId) {
+        return LuceneAllMediaForSourceLister.getAllMediaEntities(executor, directory, mediaSourceId);
     }
 
     @Override
-    public SearchPopulator createPopulator() throws SearchException {
+    public SearchPopulator createPopulator() {
         logger.trace("Creating new Lucene populator for directory {}",
                 directory);
         return new LuceneSearchPopulator(directory);
     }
 
     @Override
-    public SearchResults search(SearchQuery query) throws SearchException {
+    public SearchResults search(SearchQuery query) {
         try {
             DirectoryReader reader = DirectoryReader.open(directory);
             if (query.getRows() > 0 && reader.numDocs() > 0) {
@@ -86,9 +87,9 @@ public class LuceneSearchProvider implements SearchProvider {
         } catch (IndexNotFoundException ex) {
             return new LuceneSearchResults();
         } catch (ParseException ex) {
-            throw new SearchException(ex);
+            throw new LuceneSearchException(ex);
         } catch (IOException ex) {
-            throw new SearchException(ex);
+            throw new LuceneSearchException(ex);
         }
     }
 

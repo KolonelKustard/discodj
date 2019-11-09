@@ -5,16 +5,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.totalchange.discodj.server.media.Media;
+import com.totalchange.discodj.server.search.SearchFacet;
+import com.totalchange.discodj.server.search.SearchResults;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.facet.FacetResult;
 import org.apache.lucene.facet.Facets;
 import org.apache.lucene.facet.LabelAndValue;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.TopDocs;
-
-import com.totalchange.discodj.media.Media;
-import com.totalchange.discodj.search.SearchFacet;
-import com.totalchange.discodj.search.SearchResults;
 
 class LuceneSearchResults implements SearchResults {
     private static final int MAX_FACETS = 1000;

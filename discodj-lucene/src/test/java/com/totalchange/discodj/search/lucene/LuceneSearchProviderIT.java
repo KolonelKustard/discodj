@@ -4,23 +4,20 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
-import java.util.Iterator;
+import java.net.URI;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
+import com.totalchange.discodj.server.media.Media;
+import com.totalchange.discodj.server.media.MediaEntity;
+import com.totalchange.discodj.server.search.SearchPopulator;
+import com.totalchange.discodj.server.search.SearchQuery;
+import com.totalchange.discodj.server.search.SearchResults;
 import org.apache.commons.io.FileUtils;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.totalchange.discodj.catalogue.Catalogue;
-import com.totalchange.discodj.catalogue.Catalogue.CatalogueEntity;
-import com.totalchange.discodj.media.GenericMediaBuilder;
-import com.totalchange.discodj.media.Media;
-import com.totalchange.discodj.search.SearchPopulator;
-import com.totalchange.discodj.search.SearchQuery;
-import com.totalchange.discodj.search.SearchResults;
-import com.totalchange.discodj.search.lucene.LuceneSearchProvider;
 
 import static org.junit.Assert.*;
 
@@ -45,7 +42,7 @@ public class LuceneSearchProviderIT {
     }
 
     @Test
-    public void addALoadOfStuffSearchForItAndDeleteIt() {
+    public void addALoadOfStuffSearchForItAndDeleteIt() throws ExecutionException, InterruptedException {
         checkIndexIsEmpty();
         checkSearchReturnsNothing();
 
@@ -110,11 +107,9 @@ public class LuceneSearchProviderIT {
         });
     }
 
-    private void checkIndexIsEmpty() {
-        Iterator<CatalogueEntity> it = luceneSearchProvider
-                .listAllAlphabeticallyById();
-        assertFalse("Search index is expected to be empty but has content",
-                it.hasNext());
+    private void checkIndexIsEmpty() throws ExecutionException, InterruptedException {
+        List<MediaEntity> all = luceneSearchProvider.getAllMediaEntities("test").get();
+        assertEquals("Search index is expected to be empty but has content", 0, all.size());
     }
 
     private void checkSearchReturnsNothing() {
@@ -122,12 +117,10 @@ public class LuceneSearchProviderIT {
         assertEquals(0, res.getNumFound());
     }
 
-    private void iterateOverAllThatStuff() {
-        Iterator<CatalogueEntity> it = luceneSearchProvider
-                .listAllAlphabeticallyById();
-        iterateOverAndAssertMedia(it, 0, 600);
-        iterateOverAndAssertMedia(it, 700, 1000);
-        assertFalse("Should have got to the end", it.hasNext());
+    private void iterateOverAllThatStuff() throws ExecutionException, InterruptedException {
+        List<MediaEntity> all = luceneSearchProvider.getAllMediaEntities("test").get();
+        iterateOverAndAssertMedia(all, 0, 600);
+        iterateOverAndAssertMedia(all, 700, 1000);
     }
 
     private void searchForAllThatStuff() {
@@ -212,32 +205,31 @@ public class LuceneSearchProviderIT {
         int titleNum = (id % 10) + 1;
         int genreNum = artistNum % NUM_GENRES_TO_CYCLE_ARTISTS_THROUGH;
 
-        return new GenericMediaBuilder()
+        return new GenericMedia.Builder()
                 .withId(String.format("%10d", id))
-                .withLastModified(
-                        new Date(id + artistNum + albumNum + decade + titleNum
-                                + genreNum))
+                .withSourceId("test")
+                .withLastModifiedMs(id + artistNum + albumNum + decade + titleNum + genreNum)
                 .withArtist("Test Artist " + artistNum)
                 .withAlbum("Test Album " + albumNum)
                 .withTitle("Test Title " + titleNum)
                 .withGenre("Test Genre " + genreNum).withYear(decade)
-                .withRequestedBy("Request By Someone").build();
+                .withRequestedBy("Request By Someone")
+                .withUri(URI.create("http://dicsodj/" + id))
+                .build();
     }
 
     private interface TakeMyMedia {
         void takeIt(Media media);
     }
 
-    private void iterateOverAndAssertMedia(Iterator<CatalogueEntity> it,
+    private void iterateOverAndAssertMedia(List<MediaEntity> allMedia,
             int start, int end) {
         for (int num = start; num < end; num++) {
-            assertTrue("List all alphabetically has ended prematurely on "
-                    + "iteration " + num, it.hasNext());
-            Catalogue.CatalogueEntity entity = it.next();
+            MediaEntity entity = allMedia.get(num);
             Media media = makeTestMedia(num);
 
             assertEquals(media.getId(), entity.getId());
-            assertEquals(media.getLastModified(), entity.getLastModified());
+            assertEquals(media.getLastModifiedMs(), entity.getLastModifiedMs());
         }
     }
 }

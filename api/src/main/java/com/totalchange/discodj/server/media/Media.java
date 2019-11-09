@@ -19,6 +19,7 @@ import java.net.URI;
 
 public interface Media {
     String getId();
+    String getSourceId();
     long getLastModifiedMs();
     String getArtist();
     String getAlbum();

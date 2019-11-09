@@ -1,8 +1,7 @@
 package com.totalchange.discodj.search.lucene;
 
+import com.totalchange.discodj.server.search.SearchFacet;
 import org.apache.lucene.facet.LabelAndValue;
-
-import com.totalchange.discodj.search.SearchFacet;
 
 class LuceneSearchFacet implements SearchFacet {
     private final String id;

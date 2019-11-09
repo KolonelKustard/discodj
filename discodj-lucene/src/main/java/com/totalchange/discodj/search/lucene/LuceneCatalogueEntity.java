@@ -2,18 +2,16 @@ package com.totalchange.discodj.search.lucene;
 
 import java.util.Date;
 
+import com.totalchange.discodj.server.media.MediaEntity;
 import org.apache.lucene.document.Document;
 
-import com.totalchange.discodj.catalogue.Catalogue.CatalogueEntity;
-
-class LuceneCatalogueEntity implements CatalogueEntity {
+class LuceneCatalogueEntity implements MediaEntity {
     private final String id;
-    private final Date lastModified;
+    private final long lastModified;
 
     LuceneCatalogueEntity(Document doc) {
         this.id = doc.get(LuceneSearchProvider.F_ID);
-        this.lastModified = new Date(Long.parseLong(doc
-                .get(LuceneSearchProvider.F_LAST_MODIFIED)));
+        this.lastModified = Long.parseLong(doc.get(LuceneSearchProvider.F_LAST_MODIFIED));
     }
 
     @Override
@@ -22,8 +20,7 @@ class LuceneCatalogueEntity implements CatalogueEntity {
     }
 
     @Override
-    public Date getLastModified() {
+    public long getLastModifiedMs() {
         return lastModified;
     }
-
 }
