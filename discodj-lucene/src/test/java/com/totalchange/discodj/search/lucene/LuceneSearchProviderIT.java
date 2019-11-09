@@ -211,7 +211,7 @@ public class LuceneSearchProviderIT {
         int genreNum = artistNum % NUM_GENRES_TO_CYCLE_ARTISTS_THROUGH;
 
         return new GenericMedia.Builder()
-                .withId(String.format("%10d", id))
+                .withId(String.format("%010d", id))
                 .withSourceId("test")
                 .withLastModifiedMs(id + artistNum + albumNum + decade + titleNum + genreNum)
                 .withArtist("Test Artist " + artistNum)
@@ -219,7 +219,7 @@ public class LuceneSearchProviderIT {
                 .withTitle("Test Title " + titleNum)
                 .withGenre("Test Genre " + genreNum).withYear(decade)
                 .withRequestedBy("Request By Someone")
-                .withUri(URI.create("http://dicsodj/" + id))
+                .withUri(URI.create("http://dicsodj/" + String.format("%010d", id)))
                 .build();
     }
 
