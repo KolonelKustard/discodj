@@ -1,8 +1,6 @@
 package com.totalchange.discodj.search.lucene;
 
-import java.io.File;
 import java.net.URI;
-import java.util.Date;
 
 import com.totalchange.discodj.server.media.Media;
 import org.apache.lucene.document.Document;

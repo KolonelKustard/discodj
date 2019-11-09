@@ -1,7 +1,5 @@
 package com.totalchange.discodj.search.lucene;
 
-import java.util.Date;
-
 import com.totalchange.discodj.server.media.MediaEntity;
 import org.apache.lucene.document.Document;
 
