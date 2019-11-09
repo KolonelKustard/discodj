@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class LuceneSearchProviderIT {
+public class LuceneSearchProviderTest {
     private static final int NUM_ALBUMS_PER_ARTIST = 10;
     private static final int NUM_TRACKS_PER_ALBUM = 10;
     private static final int START_DECADE = 1900;
