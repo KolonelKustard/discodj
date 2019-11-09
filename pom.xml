@@ -13,15 +13,8 @@
 
   <modules>
     <module>api</module>
+    <module>lucene</module>
     <module>catalogue</module>
-
-    <module>discodj-core</module>
-    <module>discodj-lucene</module>
-    <module>discodj-file-catalogue</module>
-    <module>discodj-services</module>
-    <module>discodj-web</module>
-    <module>discodj-player</module>
-    <module>discodj-debian</module>
   </modules>
 
   <properties>
@@ -135,6 +128,20 @@
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>3.12.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+              <goal>cpd-check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <version>3.4</version>
         <dependencies>
@@ -206,32 +213,10 @@
         <artifactId>discodj-catalogue</artifactId>
         <version>${project.version}</version>
       </dependency>
-
-      <dependency>
-        <groupId>com.totalchange.discodj</groupId>
-        <artifactId>discodj-core</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.totalchange.discodj</groupId>
-        <artifactId>discodj-solr</artifactId>
-        <version>${project.version}</version>
-      </dependency>
       <dependency>
         <groupId>com.totalchange.discodj</groupId>
         <artifactId>discodj-lucene</artifactId>
         <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.totalchange.discodj</groupId>
-        <artifactId>discodj-file-catalogue</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.totalchange.discodj</groupId>
-        <artifactId>discodj-web</artifactId>
-        <version>${project.version}</version>
-        <type>war</type>
       </dependency>
 
       <dependency>
