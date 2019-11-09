@@ -37,7 +37,7 @@ public class CatalogueSource {
     private final MediaSource mediaSource;
     private final SearchProvider searchProvider;
 
-    private SearchPopulator searchPopulator;
+    private volatile SearchPopulator searchPopulator;
 
     public CatalogueSource(Executor executor, MediaSource mediaSource, SearchProvider searchProvider) {
         this.executor = executor;

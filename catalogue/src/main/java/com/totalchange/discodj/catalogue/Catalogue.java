@@ -33,4 +33,8 @@ public class Catalogue {
             this.catalogueSources[i] = new CatalogueSource(executor, mediaSources[i], searchProvider);
         }
     }
+
+    public CatalogueSource[] getCatalogueSources() {
+        return this.catalogueSources;
+    }
 }

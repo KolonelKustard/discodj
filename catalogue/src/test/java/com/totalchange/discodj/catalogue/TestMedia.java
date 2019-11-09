@@ -19,6 +19,11 @@ public class TestMedia implements Media {
     }
 
     @Override
+    public String getSourceId() {
+        return String.valueOf(id);
+    }
+
+    @Override
     public long getLastModifiedMs() {
         return id;
     }
