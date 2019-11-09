@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -118,9 +120,12 @@ public class LuceneSearchProviderIT {
     }
 
     private void iterateOverAllThatStuff() throws ExecutionException, InterruptedException {
-        List<MediaEntity> all = luceneSearchProvider.getAllMediaEntities("test").get();
-        iterateOverAndAssertMedia(all, 0, 600);
-        iterateOverAndAssertMedia(all, 700, 1000);
+        final List<MediaEntity> all = luceneSearchProvider.getAllMediaEntities("test").get();
+        all.sort(Comparator.comparing(MediaEntity::getId));
+        final Iterator<MediaEntity> it = all.iterator();
+
+        iterateOverAndAssertMedia(it, 0, 600);
+        iterateOverAndAssertMedia(it, 700, 1000);
     }
 
     private void searchForAllThatStuff() {
@@ -222,10 +227,11 @@ public class LuceneSearchProviderIT {
         void takeIt(Media media);
     }
 
-    private void iterateOverAndAssertMedia(List<MediaEntity> allMedia,
+    private void iterateOverAndAssertMedia(Iterator<MediaEntity> it,
             int start, int end) {
         for (int num = start; num < end; num++) {
-            MediaEntity entity = allMedia.get(num);
+            assertTrue("List all alphabetically has ended prematurely on iteration " + num, it.hasNext());
+            MediaEntity entity = it.next();
             Media media = makeTestMedia(num);
 
             assertEquals(media.getId(), entity.getId());
