@@ -13,6 +13,7 @@
 
   <modules>
     <module>api</module>
+    <module>file-source</module>
     <module>lucene</module>
     <module>catalogue</module>
   </modules>
