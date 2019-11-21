@@ -38,6 +38,7 @@ public class FileMediaSource implements MediaSource {
             try {
                 cf.complete(Files
                         .walk(root)
+                        .filter(this::filterOutJustSupportedMediaFiles)
                         .flatMap(this::convertToMediaEntityWherePossible)
                         .collect(Collectors.toList()));
             } catch (IOException ex) {
@@ -64,6 +65,12 @@ public class FileMediaSource implements MediaSource {
     @Override
     public int hashCode() {
         return Objects.hash(root);
+    }
+
+    private boolean filterOutJustSupportedMediaFiles(final Path path) {
+        return Files.isRegularFile(path) &&
+                Files.isReadable(path) &&
+                path.toString().endsWith(".mp3");
     }
 
     private Stream<MediaEntity> convertToMediaEntityWherePossible(final Path path) {

@@ -24,4 +24,9 @@ class FileMediaEntity implements MediaEntity {
     public long getLastModifiedMs() {
         return lastModifiedMs;
     }
+
+    @Override
+    public String toString() {
+        return "FileMediaEntity{id='" + id + "', lastModifiedMs=" + lastModifiedMs + '}';
+    }
 }
