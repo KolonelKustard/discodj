@@ -33,15 +33,15 @@ class FileMedia implements Media {
         this.uri = realMediaPath.toUri();
 
         final Mp3File mp3File = new Mp3File(mediaPath);
-        if (mp3File.hasId3v1Tag()) {
-            final ID3v1 tag = mp3File.getId3v1Tag();
+        if (mp3File.hasId3v2Tag()) {
+            final ID3v2 tag = mp3File.getId3v2Tag();
             this.artist = tag.getArtist();
             this.album = tag.getAlbum();
             this.genre = tag.getGenreDescription();
             this.year = parseYear(tag.getYear());
             this.title = tag.getTitle();
-        } else if (mp3File.hasId3v2Tag()) {
-            final ID3v2 tag = mp3File.getId3v2Tag();
+        } else if (mp3File.hasId3v1Tag()) {
+            final ID3v1 tag = mp3File.getId3v1Tag();
             this.artist = tag.getArtist();
             this.album = tag.getAlbum();
             this.genre = tag.getGenreDescription();
