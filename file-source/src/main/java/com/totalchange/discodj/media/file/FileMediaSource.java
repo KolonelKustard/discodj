@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.*;
@@ -50,8 +51,18 @@ public class FileMediaSource implements MediaSource {
     }
 
     @Override
-    public CompletableFuture<Media> getMedia(String id) {
-        return null;
+    public CompletableFuture<Media> getMedia(final String id) {
+        final CompletableFuture<Media> cf = new CompletableFuture<>();
+        executor.execute(() -> {
+            try {
+                final Path pathToMedia = Paths.get(id).toRealPath();
+                cf.complete(new FileMedia(root.toString(), pathToMedia));
+            } catch (Exception ex) {
+                logger.error("Failed trying to fetch media with id {}", id, ex);
+                cf.completeExceptionally(ex);
+            }
+        });
+        return cf;
     }
 
     @Override

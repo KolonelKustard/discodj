@@ -72,17 +72,12 @@ public class FileMediaSourceAllMediaTest {
 
                 for (int trackNum = 0; trackNum < NUM_TEST_TRACKS; trackNum++) {
                     final Path trackPath = albumPath.resolve(String.format("Test-Track-%02d.mp3", trackNum));
-                    testMediaFiles.add(createTestTrack(trackPath, artistNum, albumNum, trackNum));
+                    testMediaFiles.add(Files.createFile(trackPath));
                 }
 
                 Files.createFile(albumPath.resolve("red-herring.wav"));
             }
         }
-    }
-
-    private static Path createTestTrack(final Path trackPath, final int artistNum, final int albumNum,
-            final int trackNum) throws IOException {
-        return Files.createFile(trackPath);
     }
 
     private static void deleteTemporaryFiles() throws IOException {
