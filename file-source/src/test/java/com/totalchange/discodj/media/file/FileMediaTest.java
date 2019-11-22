@@ -1,6 +1,5 @@
 package com.totalchange.discodj.media.file;
 
-import com.mpatric.mp3agic.*;
 import com.totalchange.discodj.server.media.Media;
 import org.junit.Test;
 
