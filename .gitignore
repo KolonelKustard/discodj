@@ -1,6 +1,11 @@
 .DS_Store
 *.iml
 
+/api/target
+/catalogue/target
+/file-source/target
+/lucene/target
+
 /target
 /.settings
 /.classpath
