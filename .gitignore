@@ -8,12 +8,13 @@
 /lucene/target
 /requests-web/target
 
-/requests-ui/target
+/requests-ui/node
 /requests-ui/node_modules
+/requests-ui/build
+/requests-ui/target
 /requests-ui/.pnp
 /requests-ui.pnp.js
 /requests-ui/coverage
-/requests-ui/build
 /requests-ui/.env.local
 /requests-ui/.env.development.local
 /requests-ui/.env.test.local
