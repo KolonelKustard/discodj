@@ -2,9 +2,13 @@
 *.iml
 
 /api/target
+/application/target
 /catalogue/target
 /file-source/target
 /lucene/target
+/requests-ui/target
+/requests-ui/node_modules
+/requests-web/target
 
 /target
 /.settings
