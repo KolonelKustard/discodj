@@ -6,10 +6,24 @@
 /catalogue/target
 /file-source/target
 /lucene/target
-/requests-ui/target
-/requests-ui/node_modules
 /requests-web/target
 
+/requests-ui/target
+/requests-ui/node_modules
+/requests-ui/.pnp
+/requests-ui.pnp.js
+/requests-ui/coverage
+/requests-ui/build
+/requests-ui/.env.local
+/requests-ui/.env.development.local
+/requests-ui/.env.test.local
+/requests-ui/.env.production.local
+/requests-ui/npm-debug.log*
+/requests-ui/yarn-debug.log*
+/requests-ui/yarn-error.log*
+
+
+## Old defunct ignores
 /target
 /.settings
 /.classpath
