@@ -13,4 +13,16 @@
   <packaging>jar</packaging>
   <name>Disco DJ Requests Web Server</name>
   <description>Serves DiscoDJ UI and resources over HTTP for people to add requests to up next</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.totalchange.discodj</groupId>
+      <artifactId>discodj-requests-ui</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.takes</groupId>
+      <artifactId>takes</artifactId>
+      <version>1.18</version>
+    </dependency>
+  </dependencies>
 </project>
