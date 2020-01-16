@@ -18,7 +18,6 @@ package com.totalchange.discodj.catalogue;
 import com.totalchange.discodj.server.media.MediaSource;
 import com.totalchange.discodj.server.search.SearchProvider;
 
-import javax.inject.Inject;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -26,7 +25,6 @@ public class Catalogue {
     private final Executor executor = Executors.newSingleThreadExecutor(new NamedThreadFactory("catalogue"));
     private final CatalogueSource[] catalogueSources;
 
-    @Inject
     public Catalogue(MediaSource[] mediaSources, SearchProvider searchProvider) {
         this.catalogueSources = new CatalogueSource[mediaSources.length];
         for (int i = 0; i < mediaSources.length; i++) {

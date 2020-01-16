@@ -13,6 +13,7 @@
 
   <modules>
     <module>api</module>
+    <module>test-utils</module>
     <module>file-source</module>
     <module>lucene</module>
     <module>catalogue</module>
@@ -214,7 +215,17 @@
       </dependency>
       <dependency>
         <groupId>com.totalchange.discodj</groupId>
+        <artifactId>discodj-test-utils</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.totalchange.discodj</groupId>
         <artifactId>discodj-catalogue</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.totalchange.discodj</groupId>
+        <artifactId>discodj-file-source</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

@@ -17,12 +17,22 @@
   <dependencies>
     <dependency>
       <groupId>com.totalchange.discodj</groupId>
+      <artifactId>discodj-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.totalchange.discodj</groupId>
       <artifactId>discodj-requests-ui</artifactId>
     </dependency>
     <dependency>
       <groupId>org.takes</groupId>
       <artifactId>takes</artifactId>
       <version>1.18</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.totalchange.discodj</groupId>
+      <artifactId>discodj-test-utils</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

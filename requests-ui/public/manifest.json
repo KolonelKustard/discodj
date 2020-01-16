@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "DiscoDJ",
+  "name": "Request your favourite songs",
   "icons": [
     {
       "src": "favicon.ico",
