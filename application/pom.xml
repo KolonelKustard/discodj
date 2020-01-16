@@ -14,4 +14,23 @@
   <name>Disco DJ Application</name>
   <description>Brings together the DiscoDJ components within a configurable application space that can then be run
     in a variety of contexts such as within a web server, within an Android app, etc.</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.totalchange.discodj</groupId>
+      <artifactId>discodj-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.totalchange.discodj</groupId>
+      <artifactId>discodj-lucene</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.totalchange.discodj</groupId>
+      <artifactId>discodj-catalogue</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.totalchange.discodj</groupId>
+      <artifactId>discodj-file-source</artifactId>
+    </dependency>
+  </dependencies>
 </project>
