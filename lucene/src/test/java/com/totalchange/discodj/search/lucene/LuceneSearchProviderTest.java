@@ -39,8 +39,7 @@ public class LuceneSearchProviderTest {
         }
         luceneDir.mkdirs();
 
-        Directory directory = FSDirectory.open(luceneDir.toPath());
-        luceneSearchProvider = new LuceneSearchProvider(directory);
+        luceneSearchProvider = new LuceneSearchProvider(luceneDir.toPath());
     }
 
     @Test
@@ -219,7 +218,7 @@ public class LuceneSearchProviderTest {
                 .withTitle("Test Title " + titleNum)
                 .withGenre("Test Genre " + genreNum).withYear(decade)
                 .withRequestedBy("Request By Someone")
-                .withUri(URI.create("http://dicsodj/" + String.format("%010d", id)))
+                .withUri(URI.create("http://discodj/" + String.format("%010d", id)))
                 .build();
     }
 

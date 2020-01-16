@@ -1,12 +1,11 @@
 package com.totalchange.discodj.search.lucene;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import javax.inject.Inject;
 
 import com.totalchange.discodj.server.media.MediaEntity;
 import com.totalchange.discodj.server.search.SearchPopulator;
@@ -30,6 +29,7 @@ import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.util.NamedThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,9 +58,8 @@ public class LuceneSearchProvider implements SearchProvider {
     private final Executor executor = Executors.newSingleThreadExecutor(new NamedThreadFactory("lucene"));
     private final Directory directory;
 
-    @Inject
-    public LuceneSearchProvider(Directory directory) {
-        this.directory = directory;
+    public LuceneSearchProvider(final Path searchIndexPath) throws IOException {
+        this.directory = new NIOFSDirectory(searchIndexPath);
     }
 
     @Override
