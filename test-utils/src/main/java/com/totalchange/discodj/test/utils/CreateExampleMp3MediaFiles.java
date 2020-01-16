@@ -60,10 +60,12 @@ public class CreateExampleMp3MediaFiles {
     private static void createTestTrack(final Path pathToCreateIn, final byte[] emptyMp3File, final int artistNum,
             final int albumNum, final int trackNum) throws IOException {
         final Path trackPath = makePathForThisTrack(pathToCreateIn, artistNum, albumNum, trackNum);
+        final Path tmpEmptyTrackWithoutId3 = Paths.get(trackPath.toString() + ".tmp");
         if (!Files.exists(trackPath)) {
             makeParentPathIfItDoesntExist(trackPath);
-            Files.write(trackPath, emptyMp3File);
-            writeId3Tag(trackPath, artistNum, albumNum, trackNum);
+            Files.write(tmpEmptyTrackWithoutId3, emptyMp3File);
+            writeId3Tag(tmpEmptyTrackWithoutId3, trackPath, artistNum, albumNum, trackNum);
+            Files.delete(tmpEmptyTrackWithoutId3);
         }
     }
 
@@ -79,9 +81,10 @@ public class CreateExampleMp3MediaFiles {
         return pathToCreateIn.resolve(relativePath);
     }
 
-    private static void writeId3Tag(final Path trackPath, final int artistNum, final int albumNum, final int trackNum) {
+    private static void writeId3Tag(final Path tmpEmptyTrackWithoutId3, final Path trackPath, final int artistNum,
+            final int albumNum, final int trackNum) {
         try {
-            final Mp3File mp3File = new Mp3File(trackPath);
+            final Mp3File mp3File = new Mp3File(tmpEmptyTrackWithoutId3);
             mp3File.removeCustomTag();
             mp3File.removeId3v1Tag();
             mp3File.removeId3v2Tag();
@@ -98,9 +101,5 @@ public class CreateExampleMp3MediaFiles {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-    }
-
-    public static void main(String[] args) {
-        createExampleMedia(Paths.get("./test-media"));
     }
 }
