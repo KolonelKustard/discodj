@@ -1,9 +1,7 @@
 package com.totalchange.discodj.test.utils;
 
 import com.mpatric.mp3agic.ID3v24Tag;
-import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
-import com.mpatric.mp3agic.UnsupportedTagException;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
