@@ -1,0 +1,28 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>discodj-parent</artifactId>
+    <groupId>com.totalchange.discodj</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>discodj-test-utils</artifactId>
+  <packaging>jar</packaging>
+  <name>Disco DJ Test Utilities</name>
+  <description>Re-usable test utilities for mocking out services, etc.</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.totalchange.discodj</groupId>
+      <artifactId>discodj-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.mpatric</groupId>
+      <artifactId>mp3agic</artifactId>
+      <version>0.9.1</version>
+    </dependency>
+  </dependencies>
+</project>
