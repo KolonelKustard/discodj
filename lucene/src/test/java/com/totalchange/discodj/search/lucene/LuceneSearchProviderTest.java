@@ -16,8 +16,6 @@ import com.totalchange.discodj.server.search.SearchPopulator;
 import com.totalchange.discodj.server.search.SearchQuery;
 import com.totalchange.discodj.server.search.SearchResults;
 import org.apache.commons.io.FileUtils;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
 import org.junit.Before;
 import org.junit.Test;
 
