@@ -65,6 +65,8 @@ public class LuceneSearchProviderTest {
 
         checkIndexIsEmpty();
         checkSearchReturnsNothing();
+
+        luceneSearchProvider.close();
     }
 
     private void addLoadsOfStuff(final SearchPopulator searchPopulator) {

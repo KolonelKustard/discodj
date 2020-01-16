@@ -24,4 +24,5 @@ public interface SearchProvider {
     CompletableFuture<List<MediaEntity>> getAllMediaEntities(String mediaSourceId);
     SearchPopulator createPopulator();
     SearchResults search(SearchQuery query);
+    void close();
 }

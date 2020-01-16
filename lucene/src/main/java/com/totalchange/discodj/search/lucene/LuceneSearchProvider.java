@@ -92,6 +92,15 @@ public class LuceneSearchProvider implements SearchProvider {
         }
     }
 
+    @Override
+    public void close() {
+        try {
+            directory.close();
+        } catch (IOException ex) {
+            throw new LuceneSearchException(ex);
+        }
+    }
+
     private SearchResults doSearch(SearchQuery query, DirectoryReader reader)
             throws IOException, ParseException {
         try {
