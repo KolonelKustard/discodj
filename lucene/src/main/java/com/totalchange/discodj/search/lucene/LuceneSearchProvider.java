@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import com.totalchange.discodj.server.media.MediaEntity;
 import com.totalchange.discodj.server.search.SearchPopulator;
@@ -55,7 +56,7 @@ public class LuceneSearchProvider implements SearchProvider {
 
     static final String F_TEXT = "text";
 
-    private final Executor executor = Executors.newSingleThreadExecutor(new NamedThreadFactory("lucene"));
+    private final ExecutorService executor = Executors.newSingleThreadExecutor(new NamedThreadFactory("lucene"));
     private final Directory directory;
 
     public LuceneSearchProvider(final Path searchIndexPath) throws IOException {
@@ -94,11 +95,24 @@ public class LuceneSearchProvider implements SearchProvider {
 
     @Override
     public void close() {
+        logger.info("Shutting down Lucene search provider");
         try {
-            directory.close();
-        } catch (IOException ex) {
-            throw new LuceneSearchException(ex);
+            logger.debug("Shutting down executor");
+            executor.shutdown();
+            executor.awaitTermination(5, TimeUnit.SECONDS);
+            logger.debug("Executor stopped cleanly");
+        } catch (InterruptedException ex) {
+            logger.warn("Some tasks didn't complete", ex);
         }
+
+        try {
+            logger.debug("Closing Lucene directory");
+            directory.close();
+            logger.debug("Directory closed cleanly");
+        } catch (IOException ex) {
+            logger.warn("Lucene directory didn't close cleanly", ex);
+        }
+        logger.info("Lucene search provider shut down");
     }
 
     private SearchResults doSearch(SearchQuery query, DirectoryReader reader)

@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 public class FileMediaSource implements MediaSource {
     private static final Logger logger = LoggerFactory.getLogger(FileMediaSource.class);
 
-    private final Executor executor = new ThreadPoolExecutor(0, Runtime.getRuntime().availableProcessors(),
+    private final ExecutorService executor = new ThreadPoolExecutor(0, Runtime.getRuntime().availableProcessors(),
             20L, TimeUnit.SECONDS, new SynchronousQueue<>(), new NamedThreadFactory("file-media"));
     private final Path root;
 

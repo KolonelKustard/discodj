@@ -17,12 +17,17 @@ package com.totalchange.discodj.catalogue;
 
 import com.totalchange.discodj.server.media.MediaSource;
 import com.totalchange.discodj.server.search.SearchProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Catalogue {
-    private final Executor executor = Executors.newSingleThreadExecutor(new NamedThreadFactory("catalogue"));
+    private static final Logger logger = LoggerFactory.getLogger(Catalogue.class);
+
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final CatalogueSource[] catalogueSources;
 
     public Catalogue(MediaSource[] mediaSources, SearchProvider searchProvider) {
@@ -34,5 +39,16 @@ public class Catalogue {
 
     public CatalogueSource[] getCatalogueSources() {
         return this.catalogueSources;
+    }
+
+    public void close() {
+        try {
+            logger.info("Shutting down");
+            executor.shutdown();
+            executor.awaitTermination(5, TimeUnit.SECONDS);
+            logger.info("Shutdown complete cleanly");
+        } catch (InterruptedException ex) {
+            logger.info("Shutdown didn't complete cleanly", ex);
+        }
     }
 }
