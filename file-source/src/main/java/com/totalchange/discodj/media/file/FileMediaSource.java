@@ -20,7 +20,7 @@ public class FileMediaSource implements MediaSource {
     private static final Logger logger = LoggerFactory.getLogger(FileMediaSource.class);
 
     private final ExecutorService executor = new ThreadPoolExecutor(0, Runtime.getRuntime().availableProcessors(),
-            20L, TimeUnit.SECONDS, new SynchronousQueue<>(), new NamedThreadFactory("file-media"));
+            20L, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), new NamedThreadFactory("file-media"));
     private final Path root;
 
     public FileMediaSource(final Path root) throws IOException {
