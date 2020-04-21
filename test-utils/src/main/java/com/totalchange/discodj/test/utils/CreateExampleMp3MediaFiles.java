@@ -21,7 +21,17 @@ public class CreateExampleMp3MediaFiles {
         // Utility class
     }
 
-    public static void createExampleMedia(final Path pathToCreateIn) {
+    public static Path createExampleMediaInTarget() {
+        try {
+            final Path path = Paths.get("./target/generated-test-media").toRealPath();
+            createExampleMedia(path);
+            return path;
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private static void createExampleMedia(final Path pathToCreateIn) {
         try {
             final byte[] emptyMp3File = readEmptyMp3File();
 

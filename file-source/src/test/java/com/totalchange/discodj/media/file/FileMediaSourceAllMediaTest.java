@@ -1,6 +1,7 @@
 package com.totalchange.discodj.media.file;
 
 import com.totalchange.discodj.server.media.MediaEntity;
+import com.totalchange.discodj.test.utils.CreateExampleMp3MediaFiles;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,25 +14,24 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
 public class FileMediaSourceAllMediaTest {
-    private static final int NUM_TEST_ARTISTS = 10;
-    private static final int NUM_TEST_ALBUMS = 10;
-    private static final int NUM_TEST_TRACKS = 10;
+    private static final Path root;
+    private static final List<Path> testMediaFiles;
 
-    private static Path root;
-    private static List<Path> testMediaFiles;
-
-    @BeforeClass
-    public static void setUp() throws IOException {
-        createTemporaryFiles();
-    }
-
-    @AfterClass
-    public static void tearDown() throws IOException {
-        deleteTemporaryFiles();
+    static {
+        try {
+            root = CreateExampleMp3MediaFiles.createExampleMediaInTarget();
+            testMediaFiles = Files
+                    .walk(root)
+                    .filter(path -> Files.isRegularFile(path))
+                    .collect(Collectors.toList());
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     @Test
@@ -56,37 +56,5 @@ public class FileMediaSourceAllMediaTest {
         } else {
             throw new RuntimeException("Couldn't find MediaEntity with id " + id + " in " + all);
         }
-    }
-
-    private static void createTemporaryFiles() throws IOException {
-        root = Files.createTempDirectory("discodj-file-media-source-tests").toRealPath();
-        testMediaFiles = new ArrayList<>();
-
-        for (int artistNum = 0; artistNum < NUM_TEST_ARTISTS; artistNum++) {
-            final Path artistPath = Files.createDirectory(
-                    root.resolve(String.format("Test-Artist-%02d", artistNum)));
-
-            for (int albumNum = 0; albumNum < NUM_TEST_ALBUMS; albumNum++) {
-                final Path albumPath = Files.createDirectory(
-                        artistPath.resolve(String.format("Test-Album-%02d", albumNum)));
-
-                for (int trackNum = 0; trackNum < NUM_TEST_TRACKS; trackNum++) {
-                    final Path trackPath = albumPath.resolve(String.format("Test-Track-%02d.mp3", trackNum));
-                    testMediaFiles.add(Files.createFile(trackPath));
-                }
-
-                Files.createFile(albumPath.resolve("red-herring.wav"));
-            }
-        }
-    }
-
-    private static void deleteTemporaryFiles() throws IOException {
-        Files.walk(root).sorted(Comparator.reverseOrder()).forEach((path) -> {
-            try {
-                Files.delete(path);
-            } catch (IOException ex) {
-                throw new RuntimeException("Failed to delete file " + path + " from temporary location " + root, ex);
-            }
-        });
     }
 }
