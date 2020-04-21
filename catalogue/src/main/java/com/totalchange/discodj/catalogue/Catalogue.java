@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class Catalogue {
     private static final Logger logger = LoggerFactory.getLogger(Catalogue.class);
 
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor(new NamedThreadFactory("catalogue"));
     private final CatalogueSource[] catalogueSources;
 
     public Catalogue(MediaSource[] mediaSources, SearchProvider searchProvider) {
