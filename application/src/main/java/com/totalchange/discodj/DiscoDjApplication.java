@@ -16,7 +16,7 @@ public class DiscoDjApplication {
                 Paths.get("/Users/raljones/tdev/discodj-search-index"));
 
         final Catalogue catalogue = new Catalogue(
-                new MediaSource[] { new FileMediaSource(Paths.get("/Users/raljones/tdev/discodj-sample-media")) }, searchProvider);
+                new MediaSource[] { new FileMediaSource(Paths.get("/Users/raljones/tdev/discodj/file-source/target/generated-test-media")) }, searchProvider);
 
         for (CatalogueSource src : catalogue.getCatalogueSources()) {
             System.out.println("Refreshing");
