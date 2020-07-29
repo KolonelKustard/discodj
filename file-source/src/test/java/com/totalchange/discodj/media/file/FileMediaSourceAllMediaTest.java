@@ -2,15 +2,12 @@ package com.totalchange.discodj.media.file;
 
 import com.totalchange.discodj.server.media.MediaEntity;
 import com.totalchange.discodj.test.utils.CreateExampleMp3MediaFiles;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -19,19 +16,16 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.*;
 
 public class FileMediaSourceAllMediaTest {
-    private static final Path root;
-    private static final List<Path> testMediaFiles;
+    private static Path root;
+    private static List<Path> testMediaFiles;
 
-    static {
-        try {
-            root = CreateExampleMp3MediaFiles.createExampleMediaInTarget();
-            testMediaFiles = Files
-                    .walk(root)
-                    .filter(path -> Files.isRegularFile(path))
-                    .collect(Collectors.toList());
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+    @BeforeClass
+    public static void beforeClass() throws IOException {
+        root = CreateExampleMp3MediaFiles.createExampleMediaInTarget();
+        testMediaFiles = Files
+                .walk(root)
+                .filter(path -> Files.isRegularFile(path))
+                .collect(Collectors.toList());
     }
 
     @Test

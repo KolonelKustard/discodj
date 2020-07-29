@@ -23,9 +23,14 @@ public class CreateExampleMp3MediaFiles {
 
     public static Path createExampleMediaInTarget() {
         try {
-            final Path path = Paths.get("./target/generated-test-media").toRealPath();
-            createExampleMedia(path);
-            return path;
+            final Path path = Paths.get("").resolve("target").resolve("generated-test-media");
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+
+            final Path realPath = path.toRealPath();
+            createExampleMedia(realPath);
+            return realPath;
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
