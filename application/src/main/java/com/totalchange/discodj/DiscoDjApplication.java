@@ -13,10 +13,11 @@ public class DiscoDjApplication {
     public static void main(String[] args) throws Exception {
         System.out.println("Starting");
         final SearchProvider searchProvider = new LuceneSearchProvider(
-                Paths.get("/Users/raljones/tdev/discodj-search-index"));
+                Paths.get("/home/kolonelkustard/discodj-search-index"));
 
         final Catalogue catalogue = new Catalogue(
-                new MediaSource[] { new FileMediaSource(Paths.get("/Users/raljones/tdev/discodj/file-source/target/generated-test-media")) }, searchProvider);
+                new MediaSource[] { new FileMediaSource(Paths.get("/home/kolonelkustard/discodj-sample-media")) },
+                searchProvider);
 
         for (CatalogueSource src : catalogue.getCatalogueSources()) {
             System.out.println("Refreshing");
