@@ -25,6 +25,8 @@ public class DiscoDjApplication {
             System.out.println("Refreshed");
         }
 
+        System.in.read();
+
         System.out.println("Closing");
         catalogue.close();
         searchProvider.close();

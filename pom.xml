@@ -17,9 +17,9 @@
     <module>file-source</module>
     <module>lucene</module>
     <module>catalogue</module>
-    <module>application</module>
-    <module>requests-ui</module>
     <module>requests-web</module>
+    <module>requests-ui</module>
+    <module>application</module>
   </modules>
 
   <properties>

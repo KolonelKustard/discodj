@@ -15,6 +15,7 @@
  */
 package com.totalchange.discodj.server.media;
 
+import java.io.Closeable;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -22,4 +23,5 @@ public interface MediaSource {
     String getId();
     CompletableFuture<List<MediaEntity>> getAllMediaEntities();
     CompletableFuture<Media> getMedia(String id);
+    void close();
 }

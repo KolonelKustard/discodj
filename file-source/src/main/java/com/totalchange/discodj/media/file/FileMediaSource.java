@@ -66,6 +66,18 @@ public class FileMediaSource implements MediaSource {
     }
 
     @Override
+    public void close() {
+        try {
+            logger.info("Shutting down");
+            executor.shutdown();
+            executor.awaitTermination(20, TimeUnit.SECONDS);
+            logger.info("Shutdown complete cleanly");
+        } catch (InterruptedException ex) {
+            logger.info("Shutdown didn't complete cleanly", ex);
+        }
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
