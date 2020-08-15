@@ -34,7 +34,7 @@
     </dependency>
     <dependency>
       <groupId>com.totalchange.discodj</groupId>
-      <artifactId>discodj-requests-ui</artifactId>
+      <artifactId>discodj-requests-web</artifactId>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>

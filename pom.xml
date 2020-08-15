@@ -17,8 +17,8 @@
     <module>file-source</module>
     <module>lucene</module>
     <module>catalogue</module>
-    <module>requests-web</module>
     <module>requests-ui</module>
+    <module>requests-web</module>
     <module>application</module>
   </modules>
 
@@ -236,6 +236,11 @@
       <dependency>
         <groupId>com.totalchange.discodj</groupId>
         <artifactId>discodj-requests-ui</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.totalchange.discodj</groupId>
+        <artifactId>discodj-requests-web</artifactId>
         <version>${project.version}</version>
       </dependency>
 
