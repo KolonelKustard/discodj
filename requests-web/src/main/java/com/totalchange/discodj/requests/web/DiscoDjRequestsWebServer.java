@@ -1,5 +1,6 @@
 package com.totalchange.discodj.requests.web;
 
+import com.totalchange.discodj.server.search.SearchProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.takes.facets.fork.FkRegex;
@@ -19,8 +20,8 @@ public class DiscoDjRequestsWebServer {
     private final FtBasic ftBasic;
     private boolean exit;
 
-    public DiscoDjRequestsWebServer() throws IOException {
-        this.ftBasic = new FtBasic(makeTkFork(), 8080);
+    public DiscoDjRequestsWebServer(final SearchProvider searchProvider) throws IOException {
+        this.ftBasic = new FtBasic(makeTkFork(searchProvider), 8080);
     }
 
     public void start() throws IOException {
@@ -47,8 +48,10 @@ public class DiscoDjRequestsWebServer {
         }
     }
 
-    private static TkFork makeTkFork() {
-        return new TkFork(new FkRegex("/.*",
-                new TkResources("/META-INF/com.totalchange.discodj.requests.ui")));
+    private static TkFork makeTkFork(final SearchProvider searchProvider) {
+        return new TkFork(
+                new FkRegex("/search", new TkSearch(searchProvider)),
+                new FkRegex("/.*", new TkResources("/META-INF/com.totalchange.discodj.requests.ui"))
+        );
     }
 }

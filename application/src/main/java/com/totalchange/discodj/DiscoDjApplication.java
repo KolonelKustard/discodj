@@ -26,7 +26,7 @@ public class DiscoDjApplication {
             System.out.println("Refreshed");
         }
 
-        DiscoDjRequestsWebServer server = new DiscoDjRequestsWebServer();
+        DiscoDjRequestsWebServer server = new DiscoDjRequestsWebServer(searchProvider);
         server.start();
 
         System.in.read();
