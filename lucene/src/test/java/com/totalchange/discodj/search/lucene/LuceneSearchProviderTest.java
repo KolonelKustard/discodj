@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -114,7 +115,8 @@ public class LuceneSearchProviderTest {
     }
 
     private void checkSearchReturnsNothing() {
-        SearchResults res = luceneSearchProvider.search(new SearchQuery());
+        SearchResults res = luceneSearchProvider.search(new SearchQuery.Builder()
+                .build());
         assertEquals(0, res.getNumFound());
     }
 
@@ -130,9 +132,10 @@ public class LuceneSearchProviderTest {
     private void searchForAllThatStuff() {
         int totalResultsExpected = 900;
 
-        SearchQuery query = new SearchQuery();
-        query.setStart(15);
-        query.setRows(15);
+        SearchQuery query = new SearchQuery.Builder()
+                .withStart(15)
+                .withRows(15)
+                .build();
 
         SearchResults res = luceneSearchProvider.search(query);
         assertEquals(totalResultsExpected, res.getNumFound());
@@ -144,9 +147,10 @@ public class LuceneSearchProviderTest {
     }
 
     private void searchForTheStuffByArtist10() {
-        SearchQuery query = new SearchQuery();
-        query.setRows(10);
-        query.setKeywords("\"Test Artist 10\"");
+        SearchQuery query = new SearchQuery.Builder()
+                .withRows(10)
+                .withKeywords("\"Test Artist 10\"")
+                .build();
 
         SearchResults res = luceneSearchProvider.search(query);
         assertEquals(NUM_ALBUMS_PER_ARTIST * NUM_TRACKS_PER_ALBUM,
@@ -161,9 +165,10 @@ public class LuceneSearchProviderTest {
     private void searchWithDifferentStartPoints() {
         String lastId = "";
         for (int start = 0; start < 10; start++) {
-            SearchQuery query = new SearchQuery();
-            query.setStart(start);
-            query.setRows(1);
+            SearchQuery query = new SearchQuery.Builder()
+                    .withStart(start)
+                    .withRows(1)
+                    .build();
 
             SearchResults res = luceneSearchProvider.search(query);
             assertEquals(1, res.getResults().size());
@@ -174,19 +179,21 @@ public class LuceneSearchProviderTest {
     }
 
     private void searchCantGoPastEnd() {
-        SearchQuery query = new SearchQuery();
-        query.setStart(875);
-        query.setRows(50);
+        SearchQuery query = new SearchQuery.Builder()
+                .withStart(875)
+                .withRows(50)
+                .build();
 
         SearchResults res = luceneSearchProvider.search(query);
         assertEquals(25, res.getResults().size());
     }
 
     private void searchOnACoupleOfFacets() {
-        SearchQuery query = new SearchQuery();
-        query.setRows(1000);
-        query.addFacetId(LuceneSearchProvider.F_FACET_ARTIST + ":Test Artist 5");
-        query.addFacetId(LuceneSearchProvider.F_FACET_ALBUM + ":Test Album 7");
+        SearchQuery query = new SearchQuery.Builder()
+                .withRows(1000)
+                .withFacetIds(Arrays.asList(LuceneSearchProvider.F_FACET_ARTIST + ":Test Artist 5",
+                        LuceneSearchProvider.F_FACET_ALBUM + ":Test Album 7"))
+                .build();
 
         SearchResults res = luceneSearchProvider.search(query);
         assertEquals(NUM_TRACKS_PER_ALBUM, res.getResults().size());

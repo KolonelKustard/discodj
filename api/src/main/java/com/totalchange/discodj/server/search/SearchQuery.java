@@ -15,44 +15,70 @@
  */
 package com.totalchange.discodj.server.search;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchQuery {
-    private long start = 0;
-    private long rows = 10;
-    private String keywords = null;
-    private List<String> facetIds = new ArrayList<>();
+    private final long start;
+    private final long rows;
+    private final String keywords;
+    private final List<String> facetIds;
+
+    private SearchQuery(long start, long rows, String keywords, List<String> facetIds) {
+        this.start = start;
+        this.rows = rows;
+        this.keywords = keywords;
+        this.facetIds = facetIds;
+    }
 
     public long getStart() {
         return start;
-    }
-
-    public void setStart(int start) {
-        this.start = start;
     }
 
     public long getRows() {
         return rows;
     }
 
-    public void setRows(int rows) {
-        this.rows = rows;
-    }
-
     public String getKeywords() {
         return keywords;
     }
 
-    public void setKeywords(String keywords) {
-        this.keywords = keywords;
-    }
-
-    public void addFacetId(String facetId) {
-        this.facetIds.add(facetId);
-    }
-
     public List<String> getFacetIds() {
         return facetIds;
+    }
+
+    public static final class Builder {
+        private long start = 0;
+        private long rows = 10;
+        private String keywords = null;
+        private List<String> facetIds = Collections.emptyList();
+
+        public static Builder aSearchQuery() {
+            return new Builder();
+        }
+
+        public Builder withStart(long start) {
+            this.start = start;
+            return this;
+        }
+
+        public Builder withRows(long rows) {
+            this.rows = rows;
+            return this;
+        }
+
+        public Builder withKeywords(String keywords) {
+            this.keywords = keywords;
+            return this;
+        }
+
+        public Builder withFacetIds(List<String> facetIds) {
+            this.facetIds = facetIds;
+            return this;
+        }
+
+        public SearchQuery build() {
+            return new SearchQuery(start, rows, keywords, facetIds);
+        }
     }
 }
