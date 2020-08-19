@@ -53,10 +53,6 @@ public class SearchQuery {
         private String keywords = null;
         private List<String> facetIds = Collections.emptyList();
 
-        public static Builder aSearchQuery() {
-            return new Builder();
-        }
-
         public Builder withStart(long start) {
             this.start = start;
             return this;
