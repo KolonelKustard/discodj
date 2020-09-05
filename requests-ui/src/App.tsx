@@ -3,29 +3,77 @@ import Grid from '@material-ui/core/Grid';
 import SearchIcon from '@material-ui/icons/Search';
 import TextField from '@material-ui/core/TextField';
 
+interface Facet {
+  id: string,
+  name: string,
+  numMatches: number
+}
+
 interface Result {
+  id: string,
+  artist: string,
   title: string
 }
 
+interface Results {
+  page: number,
+  numPages: number,
+  artistFacets: Facet[],
+  albumFacets: Facet[],
+  genreFacets: Facet[],
+  decadeFacets: Facet[],
+  results: Result[]
+}
+
 export default function BasicTextFields() {
+  const [searchQuery, setSearchQuery] = useState('');
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [results, setResults] = useState<Result[]>([]);
+  const [results, setResults] = useState<Results>({
+    page: 1,
+    numPages: 1,
+    artistFacets: [],
+    albumFacets: [],
+    genreFacets: [],
+    decadeFacets: [],
+    results: []
+  });
 
-  useEffect(() => { fetch("/search")
-    .then(res => res.json())
-    .then((result) => {
-        setIsLoaded(true);
-        setResults(result.results);
-      },
-      // Note: it's important to handle errors here
-      // instead of a catch() block so that we don't swallow
-      // exceptions from actual bugs in components.
-      (error) => {
-        setIsLoaded(true);
-        setError(error);
-      }
-    )}, []);
+  const ShowSearchResults = function() {
+    return (
+      <ul>
+        {results.results.map(item => (
+          <li key={item.title}>
+            {item.title}
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  const search = (query: string) => {
+    setSearchQuery(query);
+  }
+
+
+  useEffect(() => {
+    const url = `/search?q=${searchQuery}`;
+    fetch(url)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setIsLoaded(true);
+          setResults(result);
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        }
+      );
+    }, [searchQuery]);
 
   return (
   <div>
@@ -34,16 +82,10 @@ export default function BasicTextFields() {
         <SearchIcon />
       </Grid>
       <Grid item>
-        <TextField id="search" label="Search tracks" />
+        <TextField id="search" label="Search tracks" value={searchQuery} onChange={(e) => search(e.target.value)} />
       </Grid>
     </Grid>
-    <ul>
-      {results.map(item => (
-        <li key={item.title}>
-          {item.title}
-        </li>
-      ))}
-    </ul>
-</div>
+    <ShowSearchResults />
+  </div>
   );
 }
