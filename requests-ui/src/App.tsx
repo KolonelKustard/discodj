@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import SearchIcon from '@material-ui/icons/Search';
 import TextField from '@material-ui/core/TextField';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
 
 interface Facet {
   id: string,
@@ -27,6 +32,7 @@ interface Results {
 
 export default function BasicTextFields() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [artistFacets, setArtistFacets] = React.useState([]);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [results, setResults] = useState<Results>({
@@ -55,7 +61,6 @@ export default function BasicTextFields() {
     setSearchQuery(query);
   }
 
-
   useEffect(() => {
     const url = `/search?q=${searchQuery}`;
     fetch(url)
@@ -76,16 +81,30 @@ export default function BasicTextFields() {
     }, [searchQuery]);
 
   return (
-  <div>
-    <Grid container spacing={1} alignItems="flex-end">
-      <Grid item>
-        <SearchIcon />
+    <div>
+      <Grid container spacing={1} alignItems="flex-end">
+        <Grid item>
+          <SearchIcon />
+        </Grid>
+        <Grid item>
+          <TextField id="search" label="Search tracks" value={searchQuery} onChange={(e) => search(e.target.value)} />
+        </Grid>
+        <Grid item>
+          <Select
+            multiple
+            value={artistFacets}
+            input={<Input />}
+          >
+            {results.artistFacets.map((artistFacet) => (
+              <MenuItem key={artistFacet.name} value={artistFacet.id}>
+                <Checkbox checked={false} />
+                <ListItemText primary={artistFacet.name} />
+              </MenuItem>
+            ))}
+          </Select>
+        </Grid>
       </Grid>
-      <Grid item>
-        <TextField id="search" label="Search tracks" value={searchQuery} onChange={(e) => search(e.target.value)} />
-      </Grid>
-    </Grid>
-    <ShowSearchResults />
-  </div>
+      <ShowSearchResults />
+    </div>
   );
 }
