@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import SearchIcon from '@material-ui/icons/Search';
 import TextField from '@material-ui/core/TextField';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Select from '@material-ui/core/Select';
-import Checkbox from '@material-ui/core/Checkbox';
+import FacetSelect from './FacetSelect';
+import SearchResults from './SearchResults';
 
 interface Facet {
   id: string,
@@ -45,18 +42,6 @@ export default function BasicTextFields() {
     results: []
   });
 
-  const ShowSearchResults = function() {
-    return (
-      <ul>
-        {results.results.map(item => (
-          <li key={item.title}>
-            {item.title}
-          </li>
-        ))}
-      </ul>
-    );
-  }
-
   const search = (query: string) => {
     setSearchQuery(query);
   }
@@ -90,21 +75,19 @@ export default function BasicTextFields() {
           <TextField id="search" label="Search tracks" value={searchQuery} onChange={(e) => search(e.target.value)} />
         </Grid>
         <Grid item>
-          <Select
-            multiple
-            value={artistFacets}
-            input={<Input />}
-          >
-            {results.artistFacets.map((artistFacet) => (
-              <MenuItem key={artistFacet.name} value={artistFacet.id}>
-                <Checkbox checked={false} />
-                <ListItemText primary={artistFacet.name} />
-              </MenuItem>
-            ))}
-          </Select>
+          <FacetSelect
+            facets={results.artistFacets}
+            label="Artists"
+          />
+        </Grid>
+        <Grid item>
+          <FacetSelect
+            facets={results.albumFacets}
+            label="Albums"
+          />
         </Grid>
       </Grid>
-      <ShowSearchResults />
+      <SearchResults results={results} />
     </div>
   );
 }

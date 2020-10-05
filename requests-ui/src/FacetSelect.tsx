@@ -1,9 +1,6 @@
 import React from 'react';
-import Input from '@material-ui/core/Input';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Select from '@material-ui/core/Select';
-import Checkbox from '@material-ui/core/Checkbox';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 
 interface Facet {
   id: string,
@@ -12,22 +9,24 @@ interface Facet {
 }
 
 interface FacetProps {
-  facets: Facet[]    
+  facets: Facet[],
+  label: string
 }
 
 export default function FacetSelect(props: FacetProps) {
   return (
-    <Select
+    <Autocomplete
       multiple
-      value={props.facets}
-      input={<Input />}
-    >
-      {props.facets.map((facet) => (
-        <MenuItem key={facet.name} value={facet.id}>
-          <Checkbox checked={false} />
-          <ListItemText primary={facet.name} />
-        </MenuItem>
-      ))}
-    </Select>
+      id="tags-standard"
+      options={props.facets}
+      getOptionLabel={(option) => option.name}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          variant="standard"
+          label={props.label}
+        />
+      )}
+    />
   );
 }
