@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export interface Facet {
   id: string,
@@ -42,27 +43,28 @@ export default function useTrackSearch() {
   }
 
   useEffect(() => {
-    const url = `/search?q=${searchQuery}`;
-    fetch(url)
-      .then(res => res.json())
-      .then(
-        (result) => {
-          setIsLoaded(true);
-          setResults(result);
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      );
-    }, [searchQuery]);
+    axios.get<Results>('/search', {
+      params: {
+        q: searchQuery
+      }
+    }).then(
+      (result) => {
+        setIsLoaded(true);
+        setResults(result.data);
+      },
+      // Note: it's important to handle errors here
+      // instead of a catch() block so that we don't swallow
+      // exceptions from actual bugs in components.
+      (error) => {
+        setIsLoaded(true);
+        setError(error);
+      }
+    );
+  }, [searchQuery]);
 
-    return {
-      searchQuery,
-      setSearchQuery,
-      results,
-    };
+  return {
+    searchQuery,
+    setSearchQuery,
+    results,
+  };
 }
