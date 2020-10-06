@@ -1,16 +1,12 @@
 import React from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
-
-interface Facet {
-  id: string,
-  name: string,
-  numMatches: number
-}
+import { Facet } from './useTrackSearch';
 
 interface FacetProps {
   facets: Facet[],
-  label: string
+  label: string,
+  onChange?: (selectedFacets: Facet[]) => void
 }
 
 export default function FacetSelect(props: FacetProps) {
@@ -27,6 +23,7 @@ export default function FacetSelect(props: FacetProps) {
           label={props.label}
         />
       )}
+      onChange={(e, v) => { if (props.onChange) props.onChange(v) }}
     />
   );
 }

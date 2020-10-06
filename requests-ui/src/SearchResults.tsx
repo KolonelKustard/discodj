@@ -1,16 +1,5 @@
 import React from 'react';
-
-interface Result {
-  id: string,
-  artist: string,
-  title: string
-}
-
-interface Results {
-  page: number,
-  numPages: number,
-  results: Result[]
-}
+import { Results } from './useTrackSearch';
 
 interface SearchResultsProps {
   results: Results
@@ -20,7 +9,7 @@ export default function SearchResults(props: SearchResultsProps) {
   return (
     <ul>
       {props.results.results.map(item => (
-        <li key={item.title}>
+        <li key={item.id}>
           {item.title}
         </li>
       ))}
