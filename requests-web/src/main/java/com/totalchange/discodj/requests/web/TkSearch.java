@@ -43,7 +43,7 @@ public class TkSearch implements Take {
         final Href href = new RqHref.Base(request).href();
         return new SearchQuery.Builder()
                 .withKeywords(concatQuery(href.param("q")))
-                .withFacetIds(facetsToList(href.param("facet")))
+                .withFacetIds(facetsToList(href.param("facet[]")))
                 .withStart(workOutTheStart(href.param("page")))
                 .withRows(PAGE_SIZE)
                 .build();

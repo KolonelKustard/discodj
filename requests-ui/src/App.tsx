@@ -7,10 +7,10 @@ import SearchResults from './SearchResults';
 import useTrackService from './useTrackSearch';
 
 export default function BasicTextFields() {
-  const { searchQuery, setSearchQuery, results } = useTrackService();
+  const { searchText, setSearchText, setSearchArtistFacets, setSearchAlbumFacets, results } = useTrackService();
 
   const searchTextChangedTo = (searchText: string) => {
-    setSearchQuery(searchText);
+    setSearchText(searchText);
   }
 
   return (
@@ -20,19 +20,20 @@ export default function BasicTextFields() {
           <SearchIcon />
         </Grid>
         <Grid item>
-          <TextField id="search" label="Search tracks" value={searchQuery} onChange={(e) => searchTextChangedTo(e.target.value)} />
+          <TextField id="search" label="Search tracks" value={searchText} onChange={(e) => searchTextChangedTo(e.target.value)} />
         </Grid>
         <Grid item>
           <FacetSelect
             facets={results.artistFacets}
             label="Artists"
+            onChange={(selectedFacets) => setSearchArtistFacets(selectedFacets)}
           />
         </Grid>
         <Grid item>
           <FacetSelect
             facets={results.albumFacets}
             label="Albums"
-            onChange={(selectedFacets) => console.log(selectedFacets)}
+            onChange={(selectedFacets) => setSearchAlbumFacets(selectedFacets)}
           />
         </Grid>
       </Grid>

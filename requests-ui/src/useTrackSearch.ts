@@ -24,8 +24,9 @@ export interface Results {
 }
 
 export default function useTrackSearch() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [artistFacets, setArtistFacets] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [searchArtistFacets, setSearchArtistFacets] = useState<Facet[]>([]);
+  const [searchAlbumFacets, setSearchAlbumFacets] = useState<Facet[]>([]);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [results, setResults] = useState<Results>({
@@ -38,14 +39,13 @@ export default function useTrackSearch() {
     results: []
   });
 
-  const search = (query: string) => {
-    setSearchQuery(query);
-  }
-
   useEffect(() => {
     axios.get<Results>('/search', {
       params: {
-        q: searchQuery
+        q: searchText,
+        facet: searchArtistFacets
+          .concat(searchAlbumFacets)
+          .map((facet) => facet.id)
       }
     }).then(
       (result) => {
@@ -60,11 +60,13 @@ export default function useTrackSearch() {
         setError(error);
       }
     );
-  }, [searchQuery]);
+  }, [searchText, searchArtistFacets, searchAlbumFacets]);
 
   return {
-    searchQuery,
-    setSearchQuery,
+    searchText,
+    setSearchText,
+    setSearchArtistFacets,
+    setSearchAlbumFacets,
     results,
   };
 }
