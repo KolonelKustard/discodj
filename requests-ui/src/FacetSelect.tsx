@@ -6,16 +6,15 @@ import { Facet } from './useTrackSearch';
 interface FacetProps {
   facets: Facet[],
   label: string,
-  onChange?: (selectedFacets: Facet[]) => void
+  onChange?: (selectedFacets: Facet | null) => void
 }
 
 export default function FacetSelect(props: FacetProps) {
   return (
     <Autocomplete
-      multiple
-      id="tags-standard"
       options={props.facets}
       getOptionLabel={(option) => option.name}
+      style={{ width: 200 }}
       renderInput={(params) => (
         <TextField
           {...params}

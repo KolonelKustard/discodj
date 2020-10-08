@@ -25,8 +25,8 @@ export interface Results {
 
 export default function useTrackSearch() {
   const [searchText, setSearchText] = useState('');
-  const [searchArtistFacets, setSearchArtistFacets] = useState<Facet[]>([]);
-  const [searchAlbumFacets, setSearchAlbumFacets] = useState<Facet[]>([]);
+  const [searchArtistFacet, setSearchArtistFacet] = useState<Facet | null>(null);
+  const [searchAlbumFacet, setSearchAlbumFacet] = useState<Facet | null>(null);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [results, setResults] = useState<Results>({
@@ -43,9 +43,7 @@ export default function useTrackSearch() {
     axios.get<Results>('/search', {
       params: {
         q: searchText,
-        facet: searchArtistFacets
-          .concat(searchAlbumFacets)
-          .map((facet) => facet.id)
+        facet: facetsToParam(searchArtistFacet, searchAlbumFacet)
       }
     }).then(
       (result) => {
@@ -60,13 +58,27 @@ export default function useTrackSearch() {
         setError(error);
       }
     );
-  }, [searchText, searchArtistFacets, searchAlbumFacets]);
+  }, [searchText, searchArtistFacet, searchAlbumFacet]);
 
   return {
     searchText,
     setSearchText,
-    setSearchArtistFacets,
-    setSearchAlbumFacets,
+    setSearchArtistFacet,
+    setSearchAlbumFacet,
     results,
   };
+}
+
+function facetsToParam(searchArtistFacet: Facet | null, searchAlbumFacet: Facet | null): string[] {
+  const params = [];
+
+  if (searchArtistFacet) {
+    params.push(searchArtistFacet.id);
+  }
+
+  if (searchAlbumFacet) {
+    params.push(searchAlbumFacet.id);
+  }
+
+  return params;
 }
