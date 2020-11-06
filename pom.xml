@@ -16,6 +16,7 @@
     <module>test-utils</module>
     <module>file-source</module>
     <module>lucene</module>
+    <module>playlist</module>
     <module>catalogue</module>
     <module>requests-ui</module>
     <module>requests-web</module>
