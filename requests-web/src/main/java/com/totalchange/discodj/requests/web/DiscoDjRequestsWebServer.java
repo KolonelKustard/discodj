@@ -1,11 +1,12 @@
 package com.totalchange.discodj.requests.web;
 
+import com.totalchange.discodj.server.playlist.Playlist;
 import com.totalchange.discodj.server.search.SearchProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.takes.facets.fork.FkMethods;
 import org.takes.facets.fork.FkRegex;
 import org.takes.facets.fork.TkFork;
-import org.takes.http.Exit;
 import org.takes.http.FtBasic;
 
 import java.io.IOException;
@@ -20,8 +21,8 @@ public class DiscoDjRequestsWebServer {
     private final FtBasic ftBasic;
     private boolean exit;
 
-    public DiscoDjRequestsWebServer(final SearchProvider searchProvider) throws IOException {
-        this.ftBasic = new FtBasic(makeTkFork(searchProvider), 8080);
+    public DiscoDjRequestsWebServer(final SearchProvider searchProvider, final Playlist playlist) throws IOException {
+        this.ftBasic = new FtBasic(makeTkFork(searchProvider, playlist), 8080);
     }
 
     public void start() throws IOException {
@@ -48,9 +49,13 @@ public class DiscoDjRequestsWebServer {
         }
     }
 
-    private static TkFork makeTkFork(final SearchProvider searchProvider) {
+    private static TkFork makeTkFork(final SearchProvider searchProvider, final Playlist playlist) {
         return new TkFork(
                 new FkRegex("/search", new TkSearch(searchProvider)),
+                new FkRegex("/playlist", new TkFork(
+                        new FkMethods("GET", new TkGetPlaylist(playlist)),
+                        new FkMethods("POST", new TkAddToPlaylist(searchProvider, playlist))
+                )),
                 new FkRegex("/.*", new TkResources("/META-INF/com.totalchange.discodj.requests.ui"))
         );
     }

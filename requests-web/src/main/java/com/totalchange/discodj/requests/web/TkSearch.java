@@ -90,25 +90,21 @@ public class TkSearch implements Take {
 
     private JsonStructure facetsToJson(final List<SearchFacet> searchFacets) {
         final JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-        searchFacets.forEach((searchFacet -> {
-            jsonArrayBuilder.add(Json.createObjectBuilder()
-                    .add("id", searchFacet.getId())
-                    .add("name", searchFacet.getName())
-                    .add("numMatches", searchFacet.getNumMatches())
-                    .build());
-        }));
+        searchFacets.forEach(searchFacet -> jsonArrayBuilder.add(Json.createObjectBuilder()
+                .add("id", searchFacet.getId())
+                .add("name", searchFacet.getName())
+                .add("numMatches", searchFacet.getNumMatches())
+                .build()));
         return jsonArrayBuilder.build();
     }
 
     private JsonStructure resultsToJson(final List<Media> results) {
         final JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-        results.forEach((result -> {
-            jsonArrayBuilder.add(Json.createObjectBuilder()
-                    .add("id", result.getId())
-                    .add("artist", result.getArtist())
-                    .add("title", result.getTitle())
-                    .build());
-        }));
+        results.forEach(result -> jsonArrayBuilder.add(Json.createObjectBuilder()
+                .add("id", result.getId())
+                .add("artist", result.getArtist())
+                .add("title", result.getTitle())
+                .build()));
         return jsonArrayBuilder.build();
     }
 }

@@ -236,6 +236,11 @@
       </dependency>
       <dependency>
         <groupId>com.totalchange.discodj</groupId>
+        <artifactId>discodj-playlist</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.totalchange.discodj</groupId>
         <artifactId>discodj-requests-ui</artifactId>
         <version>${project.version}</version>
       </dependency>
