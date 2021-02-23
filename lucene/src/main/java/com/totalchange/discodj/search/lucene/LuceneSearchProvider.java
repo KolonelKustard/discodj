@@ -3,11 +3,13 @@ package com.totalchange.discodj.search.lucene;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.totalchange.discodj.server.media.Media;
 import com.totalchange.discodj.server.media.MediaEntity;
 import com.totalchange.discodj.server.search.SearchPopulator;
 import com.totalchange.discodj.server.search.SearchProvider;
@@ -23,12 +25,10 @@ import org.apache.lucene.facet.sortedset.SortedSetDocValuesFacetCounts;
 import org.apache.lucene.facet.sortedset.SortedSetDocValuesReaderState;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexNotFoundException;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.MatchAllDocsQuery;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.util.NamedThreadFactory;
@@ -88,6 +88,22 @@ public class LuceneSearchProvider implements SearchProvider {
             return new LuceneSearchResults();
         } catch (ParseException ex) {
             throw new LuceneSearchException(ex);
+        } catch (IOException ex) {
+            throw new LuceneSearchException(ex);
+        }
+    }
+
+    @Override
+    public Optional<Media> getMediaById(final String id) {
+        try (final DirectoryReader reader = DirectoryReader.open(directory)) {
+            final IndexSearcher searcher = new IndexSearcher(reader);
+            final TermQuery query = new TermQuery(new Term(F_ID, id));
+            final TopDocs docs = searcher.search(query, 1);
+            if (docs.scoreDocs.length > 0) {
+                return Optional.of(new LuceneSearchMedia(searcher.doc(docs.scoreDocs[0].doc)));
+            } else {
+                return Optional.empty();
+            }
         } catch (IOException ex) {
             throw new LuceneSearchException(ex);
         }

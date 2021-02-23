@@ -5,10 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 import com.totalchange.discodj.server.media.Media;
@@ -59,6 +56,7 @@ public class LuceneSearchProviderTest {
         searchWithDifferentStartPoints();
         searchCantGoPastEnd();
         searchOnACoupleOfFacets();
+        findSomeMediaByTheirId();
 
         searchPopulator = luceneSearchProvider.createPopulator();
         deleteTheStuff(searchPopulator);
@@ -197,6 +195,14 @@ public class LuceneSearchProviderTest {
 
         SearchResults res = luceneSearchProvider.search(query);
         assertEquals(NUM_TRACKS_PER_ALBUM, res.getResults().size());
+    }
+    
+    private void findSomeMediaByTheirId() {
+        final Optional<Media> media1 = luceneSearchProvider.getMediaById("0000000724");
+        assertTrue("Media with id 0000000724 should exist", media1.isPresent());
+
+        final Optional<Media> media2 = luceneSearchProvider.getMediaById("0000000632");
+        assertFalse("Media with id 0000000632 should NOT exist", media2.isPresent());
     }
 
     private void deleteTheStuff(SearchPopulator searchPopulator) {

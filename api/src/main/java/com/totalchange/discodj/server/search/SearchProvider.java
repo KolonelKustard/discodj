@@ -15,14 +15,17 @@
  */
 package com.totalchange.discodj.server.search;
 
+import com.totalchange.discodj.server.media.Media;
 import com.totalchange.discodj.server.media.MediaEntity;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public interface SearchProvider {
     CompletableFuture<List<MediaEntity>> getAllMediaEntities(String mediaSourceId);
     SearchPopulator createPopulator();
     SearchResults search(SearchQuery query);
+    Optional<Media> getMediaById(String id);
     void close();
 }
