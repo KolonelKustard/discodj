@@ -10,7 +10,7 @@ export default function SearchResults(props: SearchResultsProps) {
     <ul>
       {props.results.results.map(item => (
         <li key={item.id}>
-          {item.title}
+          {item.title} by {item.artist}
         </li>
       ))}
     </ul>
