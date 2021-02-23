@@ -95,7 +95,7 @@ public class LuceneSearchProvider implements SearchProvider {
 
     @Override
     public Optional<Media> getMediaById(final String id) {
-        try (final DirectoryReader reader = DirectoryReader.open(directory)) {
+        try (DirectoryReader reader = DirectoryReader.open(directory)) {
             final IndexSearcher searcher = new IndexSearcher(reader);
             final TermQuery query = new TermQuery(new Term(F_ID, id));
             final TopDocs docs = searcher.search(query, 1);
