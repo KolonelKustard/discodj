@@ -15,7 +15,6 @@
  */
 package com.totalchange.discodj.server.media;
 
-import java.io.Closeable;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
