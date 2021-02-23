@@ -34,6 +34,10 @@
     </dependency>
     <dependency>
       <groupId>com.totalchange.discodj</groupId>
+      <artifactId>discodj-playlist</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.totalchange.discodj</groupId>
       <artifactId>discodj-requests-web</artifactId>
     </dependency>
     <dependency>

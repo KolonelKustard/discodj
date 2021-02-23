@@ -3,6 +3,7 @@ package com.totalchange.discodj;
 import com.totalchange.discodj.catalogue.Catalogue;
 import com.totalchange.discodj.catalogue.CatalogueSource;
 import com.totalchange.discodj.media.file.FileMediaSource;
+import com.totalchange.discodj.playlist.PlaylistQueue;
 import com.totalchange.discodj.requests.web.DiscoDjRequestsWebServer;
 import com.totalchange.discodj.search.lucene.LuceneSearchProvider;
 import com.totalchange.discodj.server.media.MediaSource;
@@ -26,7 +27,7 @@ public class DiscoDjApplication {
             System.out.println("Refreshed");
         }
 
-        DiscoDjRequestsWebServer server = new DiscoDjRequestsWebServer(searchProvider);
+        DiscoDjRequestsWebServer server = new DiscoDjRequestsWebServer(searchProvider, new PlaylistQueue());
         server.start();
 
         System.in.read();
