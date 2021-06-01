@@ -55,6 +55,9 @@
             <phase>verify</phase>
             <configuration>
               <arguments>test</arguments>
+              <environmentVariables>
+                <CI>true</CI>
+              </environmentVariables>
             </configuration>
           </execution>
         </executions>
