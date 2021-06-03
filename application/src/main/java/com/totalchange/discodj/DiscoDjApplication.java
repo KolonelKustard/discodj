@@ -8,23 +8,27 @@ import com.totalchange.discodj.requests.web.DiscoDjRequestsWebServer;
 import com.totalchange.discodj.search.lucene.LuceneSearchProvider;
 import com.totalchange.discodj.server.media.MediaSource;
 import com.totalchange.discodj.server.search.SearchProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.file.Paths;
 
 public class DiscoDjApplication {
+    private static final Logger logger = LoggerFactory.getLogger(DiscoDjApplication.class);
+    
     public static void main(String[] args) throws Exception {
-        System.out.println("Starting");
+        logger.info("Starting");
         final SearchProvider searchProvider = new LuceneSearchProvider(
-                Paths.get("/home/kolonelkustard/discodj-search-index"));
+                Paths.get(DiscoDjConfiguration.getInstance().getSearchIndex()));
 
-        final Catalogue catalogue = new Catalogue(
-                new MediaSource[] { new FileMediaSource(Paths.get("/home/kolonelkustard/discodj-sample-media")) },
-                searchProvider);
+        final MediaSource[] mediaSources = new MediaSource[] { new FileMediaSource(
+                Paths.get(DiscoDjConfiguration.getInstance().getMediaSource())) };
+        final Catalogue catalogue = new Catalogue(mediaSources, searchProvider);
 
         for (CatalogueSource src : catalogue.getCatalogueSources()) {
-            System.out.println("Refreshing");
+            logger.info("Refreshing catalogue");
             src.refresh().get();
-            System.out.println("Refreshed");
+            logger.info("Refreshed catalogue");
         }
 
         DiscoDjRequestsWebServer server = new DiscoDjRequestsWebServer(searchProvider, new PlaylistQueue());
@@ -32,11 +36,11 @@ public class DiscoDjApplication {
 
         System.in.read();
 
-        System.out.println("Closing");
+        logger.info("Shutting down");
         server.close();
         catalogue.close();
         searchProvider.close();
 
-        System.out.println("Done");
+        logger.info("Shut down");
     }
 }
