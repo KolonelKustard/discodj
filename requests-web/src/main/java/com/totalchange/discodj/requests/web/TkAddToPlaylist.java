@@ -6,6 +6,7 @@ import com.totalchange.discodj.server.search.SearchProvider;
 import org.takes.Request;
 import org.takes.Response;
 import org.takes.Take;
+import org.takes.rs.RsJson;
 import org.takes.rs.RsText;
 import org.takes.rs.RsWithStatus;
 
@@ -29,7 +30,8 @@ public class TkAddToPlaylist implements Take {
         final Optional<Media> toAdd = searchProvider.getMediaById(reqJson.getString("id"));
 
         if (toAdd.isPresent()) {
-            return null;
+            playlist.add(toAdd.get());
+            return new RsJson(TkGetPlaylist.playlistToJson(playlist));
         } else {
             return new RsWithStatus(new RsText("Media " + reqJson.getString("id") + " not found"), 404);
         }

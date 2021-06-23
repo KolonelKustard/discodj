@@ -25,7 +25,7 @@ public class TkGetPlaylist implements Take {
         return new RsJson(playlistToJson(playlist));
     }
 
-    private JsonStructure playlistToJson(final Playlist playlist) {
+    public static JsonStructure playlistToJson(final Playlist playlist) {
         final JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder()
                 .add("playlist", playlistToJson(playlist.getPlaylist()));
 
@@ -35,13 +35,13 @@ public class TkGetPlaylist implements Take {
         return jsonObjectBuilder.build();
     }
 
-    private JsonStructure playlistToJson(final List<Media> media) {
+    private static JsonStructure playlistToJson(final List<Media> media) {
         final JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
         media.forEach(result -> jsonArrayBuilder.add(mediaToObject(result)));
         return jsonArrayBuilder.build();
     }
 
-    private JsonStructure mediaToObject(final Media media) {
+    private static JsonStructure mediaToObject(final Media media) {
         return Json.createObjectBuilder()
                 .add("id", media.getId())
                 .add("artist", media.getArtist())
