@@ -5,6 +5,7 @@ import Box from '@material-ui/core/Box';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Search from './Search';
+import Playlist from './Playlist';
 
 export default function BasicTextFields() {
   const [selectedTab, setSelectedTab] = React.useState(0);
@@ -21,10 +22,9 @@ export default function BasicTextFields() {
         </Tabs>
       </AppBar>
       <div hidden={selectedTab !== 0}>
-        <Box p={3}>
-          <Search />
-        </Box>
+        <Box p={3}><Search /></Box>
       </div>
+      {selectedTab === 1 && <Box p={3}><Playlist /></Box>}
     </Container>
   );
 }
